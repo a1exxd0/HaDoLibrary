@@ -13,7 +13,7 @@ Small, lightweight, and optimised library for custon CNN for image classificatio
  # Message to Haaris
  I don't know if your VSCode auto-configures but do a ctrlshift-P then look for edit configuration JSON and set it to:
 
-```cpp
+```json
  {
     "configurations": [
         {
