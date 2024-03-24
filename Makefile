@@ -13,7 +13,7 @@ EIGENDIR = Eigen
 SRCFILES = $(wildcard $(SRCDIR)/*.cpp)
 EIGENFILES = $(wildcard $(EIGENDIR)/*)
 OBJFILES = $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
-LIBRARY = $(BINDIR)/libTest.a
+LIBRARY = $(BINDIR)/libhado.a
 EXECUTABLE = $(BINDIR)/main
 
 # Targets
@@ -33,7 +33,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(EIGENFILES)
 
 # Compile the executable
 $(EXECUTABLE): $(SRCDIR)/main.cpp $(LIBRARY)
-	$(CXX) $(CXXFLAGS) $< -I$(INCDIR) -I ./ -L$(BINDIR) -lTest -o $@
+	$(CXX) $(CXXFLAGS) $< -I$(INCDIR) -I ./ -L$(BINDIR) -lhado -o $@
 
 # Clean
 clean:
