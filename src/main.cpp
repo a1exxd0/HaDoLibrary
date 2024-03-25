@@ -1,13 +1,10 @@
-#include "init.hpp"
-#include <Eigen/Core>
+#include "Layer.hpp"
+#include "DenseLayer.hpp"
+#include <Eigen/Dense>
 
-int func2() {
-  Eigen::Vector3d v(1, 2, 3);
-  return 0;
-}
 int main() {
-  func2();
-  func();
+  Eigen::Matrix<float, 2, 2> m;
+  DenseLayer<float, 2, 2> dl;
   return 0;
 }
 
