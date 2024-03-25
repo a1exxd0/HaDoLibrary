@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "dense": "cpp",
+        "type_traits": "cpp"
+    }
+}

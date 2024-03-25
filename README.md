@@ -2,7 +2,7 @@
 Small, lightweight, and optimised library for custon CNN for image classification.
 
 # TODO
- - Image -> Bitmap formatting
+ - Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
  - Create basic layers
  - Pooling layers
  - Activation layers
