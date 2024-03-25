@@ -7,6 +7,11 @@
 
 using Eigen::Matrix;
 using std::array;
+using std::unique_ptr;
+
+#ifndef endl
+    #define endl '\n'
+#endif
 
 /**
  * @brief Base layer class. T will only work for float, double,
@@ -40,20 +45,21 @@ private:
 public:
 
     // Input tensor
-    array<std::unique_ptr<Matrix<T, RI, CI>>, I> inp;
+    array<unique_ptr<Matrix<T, RI, CI>>, I> inp;
 
     // Output tensor
-    array<std::unique_ptr<Matrix<T, RO, CO>>, O> out;
+    array<unique_ptr<Matrix<T, RO, CO>>, O> out;
     
     // Default constructor
     Layer() : inp(), out() {}
 
     // Forward propagation
     virtual array
-        <std::unique_ptr<Matrix<T, RO, CO>>, O> forward(
-            array<std::unique_ptr<Matrix<T, RI, CI>>, I> input_tensor) = 0;
-
-    virtual T backward(T output_gradient, T learning_rate) = 0;
+        <unique_ptr<Matrix<T, RO, CO>>, O> forward(
+            array<unique_ptr<Matrix<T, RI, CI>>, I> input_tensor) = 0;
+    
+    virtual array<unique_ptr<Matrix<T, RI, CI>>, I> backward(
+        array<unique_ptr<Matrix<T, RO, CO>>, O> output_gradient, T learning_rate) = 0;
 
 };
 
