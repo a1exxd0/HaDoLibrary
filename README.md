@@ -2,13 +2,14 @@
 Small, lightweight, and optimised library for custon CNN for image classification.
 
 # TODO
- - Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
- - Create basic layers
- - Pooling layers
- - Activation layers
- - Saving a model (JSON or binary?)
- - Getting it running on a GPU
- - Getting it running on a cluster
+ [] Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
+ [x] Dense Layers
+ [x] Activation Layers
+ [] Convolutional Layers
+ [] Pooling Layers
+ [] Saving a model (JSON or binary?)
+ [] Getting it running on a GPU
+ [] Getting it running on a cluster
 
  # Message to Haaris
  I don't know if your VSCode auto-configures but do a ctrlshift-P then look for edit configuration JSON and set it to:

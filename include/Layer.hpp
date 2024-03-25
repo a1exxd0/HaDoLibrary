@@ -58,6 +58,7 @@ public:
         <unique_ptr<Matrix<T, RO, CO>>, O> forward(
             array<unique_ptr<Matrix<T, RI, CI>>, I> input_tensor) = 0;
     
+    // Backward propagation
     virtual array<unique_ptr<Matrix<T, RI, CI>>, I> backward(
         array<unique_ptr<Matrix<T, RO, CO>>, O> output_gradient, T learning_rate) = 0;
 

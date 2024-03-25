@@ -10,10 +10,22 @@
 using Eigen::Matrix;
 using std::array;
 
-
+/**
+ * @brief Activation layer class.
+ * 
+ * @details Activation layer class that applies an activation function
+ * 
+ * @tparam T Data type (float for speed, double accuracy)
+ * @tparam D Depth of input tensor
+ * @tparam Activation Activation function
+ * @tparam ActivationPrime Derivative of activation function
+ 
+*/
 template<typename T, int D, typename Activation, typename ActivationPrime>
 class ActivationLayer : public Layer<T, 1, 1, D, 1, D, 1> {
 private:
+
+    // Assert that T is either float, double, or long double at compiler time
     static_assert(
         std::is_same<T, float>::value 
         || std::is_same<T, double>::value
@@ -21,20 +33,33 @@ private:
         "T must be either float, double, or long double."
     );
 
+    // Assert that Activation and ActivationPrime are functions that take a scalar and return a scalar
     static_assert(
         std::is_invocable_r<T, Activation, T>::value,
         "Activation must be a function that takes a scalar and returns a scalar."
     );
-
     static_assert(
         std::is_invocable_r<T, ActivationPrime, T>::value,
         "ActivationPrime must be a function that takes a scalar and returns a scalar."
     );
 
 public:
+
+    /**
+     * @brief Construct a new Activation Layer object
+    */
     ActivationLayer() : Layer<T, 1, 1, D, 1, D, 1>() {}
+
+    // Destructor
     ~ActivationLayer() {}
 
+    /**
+     * @brief Forward pass of the activation layer. Input tensor must be a size 1 std::array
+     * of std::unique_ptr<Matrix<T, D, 1>>. Output tensor is the same size.
+     * 
+     * @param input_tensor Input tensor (one dimensional, must have right size)
+     * @return array<std::unique_ptr<Matrix<T, D, 1>>, 1> Output tensor
+    */
     array<std::unique_ptr<Matrix<T, D, 1>>, 1> forward(
         array<std::unique_ptr<Matrix<T, D, 1>>, 1> input_tensor) {
             this->inp = std::move(input_tensor);
@@ -47,6 +72,14 @@ public:
             return (out_copy);
         }
 
+    /**
+     * @brief Backward pass of the activation layer. Output gradient tensor must be a size 1 std::array
+     * of std::unique_ptr<Matrix<T, D, 1>>. Input gradient tensor (returned) is the same size.
+     * 
+     * @param output_gradient Output gradient tensor (one dimensional, must have right size)
+     * @param learning_rate Learning rate
+     * @return array<std::unique_ptr<Matrix<T, D, 1>>, 1> Input gradient tensor
+     */
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     array<std::unique_ptr<Matrix<T, D, 1>>, 1> backward(
         array<std::unique_ptr<Matrix<T, D, 1>>, 1> output_gradient, T learning_rate) {
