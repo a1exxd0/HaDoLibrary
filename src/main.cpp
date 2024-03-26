@@ -45,7 +45,7 @@ int main() {
     ActivationLayer<1, 3, 3, relu<>, relu_prime<>> al2;
     auto pass = al2.forward({std::move(uptr)});
 
-    cout << "\n\nRelu:\n" << *pass[0] << endl;
+    //cout << "\n\nRelu:\n" << *pass[0] << endl;
     
     return 0;
 }

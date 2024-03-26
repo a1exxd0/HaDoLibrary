@@ -29,11 +29,11 @@ $(LIBRARY): $(OBJFILES)
 # Compile each source file into an object file
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(EIGENFILES)
 	@mkdir -p $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -c $< -I$(INCDIR) -I ./ -o $@
+	$(CXX) $(CXXFLAGS) -c $< -I$(INCDIR)/base -I$(INCDIR)/layers -I ./ -o $@
 
 # Compile the executable
 $(EXECUTABLE): $(SRCDIR)/main.cpp $(LIBRARY)
-	$(CXX) $(CXXFLAGS) $< -I$(INCDIR) -I ./ -L$(BINDIR) -lhado -o $@
+	$(CXX) $(CXXFLAGS) $< -I$(INCDIR)/base -I$(INCDIR)/layers -I ./ -L$(BINDIR) -lhado -o $@
 
 # Clean
 clean:
