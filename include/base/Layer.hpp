@@ -29,7 +29,7 @@ using std::unique_ptr;
  * @tparam T Data type (float for speed, double accuracy) (optional)
 */
 template<int I, int O, int RI, int CI, int RO, int CO, typename T=float>
-class Layer {
+class Layer{
 private:
 
     // Assert that T is either float, double, or long double at compiler time
