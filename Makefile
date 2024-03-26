@@ -33,7 +33,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(EIGENFILES)
 
 # Compile the executable
 $(EXECUTABLE): $(SRCDIR)/main.cpp $(LIBRARY)
-	$(CXX) $(CXXFLAGS) $< -I$(INCDIR)/base -I$(INCDIR)/layers -I ./ -L$(BINDIR) -lhado -o $@
+	$(CXX) $(CXXFLAGS) $< -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I ./ -L$(BINDIR) -lhado -o $@
 
 # Clean
 clean:

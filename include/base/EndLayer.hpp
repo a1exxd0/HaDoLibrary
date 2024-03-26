@@ -30,13 +30,12 @@ private:
         "T must be either float, double, or long double."
     );
 
-public:
+protected:
 
     // Default constructor
     EndLayer() {}
 
-    // Destructor
-    ~EndLayer() {}
+public:
 
     // Calculate error w.r.t results
     virtual T forward(

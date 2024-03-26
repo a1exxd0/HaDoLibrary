@@ -4,7 +4,8 @@ Small, lightweight, and optimised library for custon CNN for image classificatio
 # TODO
   - [ ] Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
   - [x] Dense Layers
-  - [x] Activation Layers
+  - [x] Activation Layers (tanh, sigmoid, ReLu so far)
+  - [X] Mean Squared Error implemented
   - [ ] Convolutional Layers
   - [ ] Pooling Layers
   - [ ] Saving a model (JSON or binary?)

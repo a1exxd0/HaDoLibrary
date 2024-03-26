@@ -42,6 +42,11 @@ private:
         "T must be either float, double, or long double.\nRest must be positive integers."
     );
 
+protected:
+
+    // Default constructor
+    Layer() : inp(), out() {}
+
 public:
 
     // Input tensor
@@ -49,9 +54,14 @@ public:
 
     // Output tensor
     array<unique_ptr<Matrix<T, RO, CO>>, O> out;
-    
-    // Default constructor
-    Layer() : inp(), out() {}
+
+    // Trivial getters and setters
+    int getInputDepth() { return I; }
+    int getOutputDepth() { return O; }
+    int getInputRows() { return RI; }
+    int getInputCols() { return CI; }
+    int getOutputRows() { return RO; }
+    int getOutputCols() { return CO; }
 
     // Forward propagation
     virtual array
