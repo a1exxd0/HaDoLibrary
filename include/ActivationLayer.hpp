@@ -15,14 +15,13 @@ using std::array;
  * 
  * @details Activation layer class that applies an activation function
  * 
- * @tparam T Data type (float for speed, double accuracy)
  * @tparam D Depth of input tensor
  * @tparam Activation Activation function
  * @tparam ActivationPrime Derivative of activation function
- 
+ * @tparam T Data type (float for speed, double accuracy)
 */
-template<typename T, int D, typename Activation, typename ActivationPrime>
-class ActivationLayer : public Layer<T, 1, 1, D, 1, D, 1> {
+template<int D, typename Activation, typename ActivationPrime, typename T=float>
+class ActivationLayer : public Layer<1, 1, D, 1, D, 1, T> {
 private:
 
     // Assert that T is either float, double, or long double at compiler time
@@ -48,7 +47,7 @@ public:
     /**
      * @brief Construct a new Activation Layer object
     */
-    ActivationLayer() : Layer<T, 1, 1, D, 1, D, 1>() {}
+    ActivationLayer() : Layer<1, 1, D, 1, D, 1, T>() {}
 
     // Destructor
     ~ActivationLayer() {}

@@ -11,10 +11,10 @@ using std::cout, std::array, std::unique_ptr;
 
 
 int main() {
-    DenseLayer<float, 5, 4> dl1;
-    DenseLayer<float, 4, 3> dl2;
-    DenseLayer<float, 3, 2> dl3;
-    ActivationLayer<float, 2, struct_tanh<float>, tanh_prime<float>> al1;
+    DenseLayer<5, 4> dl1;
+    DenseLayer<4, 3> dl2;
+    DenseLayer<3, 2> dl3;
+    ActivationLayer<2, struct_tanh<>, tanh_prime<>> al1;
     Eigen::Matrix<float, 5, 1> input = Eigen::Matrix<float, 5, 1>::Random();
     cout << "made input:\n" << input << endl;
     auto res = dl1.forward({std::make_unique<Eigen::Matrix<float, 5, 1>>(input)});

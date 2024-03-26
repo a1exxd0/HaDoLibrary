@@ -15,12 +15,12 @@ using std::cout;
  * @brief Dense layer class. T will only work for float, double,
  * or long double.
  * 
- * @tparam T Data type (float for speed, double accuracy)
  * @tparam I Input vector length
  * @tparam O Output vector length
+ * @tparam T Data type (float for speed, double accuracy)
 */
-template<typename T, int I, int O> 
-class DenseLayer : public Layer<T, 1, 1, I, 1, O, 1>{
+template<int I, int O, typename T=float> 
+class DenseLayer : public Layer<1, 1, I, 1, O, 1, T>{
 private:
 
     // Check if T is float, double, or long double
@@ -42,7 +42,7 @@ public:
      * 
      * Initializes weights and bias with random values for this layer.
     */
-    DenseLayer() : Layer<T, 1, 1, I, 1, O, 1>(){
+    DenseLayer() : Layer<1, 1, I, 1, O, 1, T>(){
         this->weights = Matrix<T, O, I>::Random();
         this->bias = Matrix<T, O, 1>::Random();
     }

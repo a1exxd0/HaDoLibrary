@@ -20,15 +20,15 @@ using std::unique_ptr;
  * @details operator[] Overloaded operator to access output matrix. Matrices
  * stored in an array, so access by index.
  * 
- * @tparam T Data type (float for speed, double accuracy)
  * @tparam I Input tensor depth
  * @tparam O Output tensor depth
  * @tparam RI Rows in input tensor
  * @tparam CI Columns in input tensor
  * @tparam RO Rows in output tensor
  * @tparam CO Columns in output tensor
+ * @tparam T Data type (float for speed, double accuracy)
 */
-template<typename T, int I, int O, int RI, int CI, int RO, int CO>
+template<int I, int O, int RI, int CI, int RO, int CO, typename T=float>
 class Layer {
 private:
 

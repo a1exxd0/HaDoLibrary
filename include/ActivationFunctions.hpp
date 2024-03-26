@@ -9,7 +9,7 @@
  * 
  * @tparam T Data type (float, double, long double)
 */
-template<typename T, typename = 
+template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct relu {
     T operator()(T x) const {
@@ -22,7 +22,7 @@ struct relu {
  * 
  * @tparam T Data type (float, double, long double)
 */
-template<typename T, typename = 
+template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct relu_prime {
     T operator()(T x) const {
@@ -35,7 +35,7 @@ struct relu_prime {
  * 
  * @tparam T Data type (float, double, long double)
 */
-template<typename T, typename = 
+template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct sigmoid {
     T operator()(T x) const {
@@ -48,7 +48,7 @@ struct sigmoid {
  * 
  * @tparam T Data type (float, double, long double)
 */
-template<typename T, typename = 
+template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct sigmoid_prime {
     T operator()(T x) const {
@@ -61,7 +61,7 @@ struct sigmoid_prime {
  * 
  * @tparam T Data type (float, double, long double)
 */
-template<typename T, typename = 
+template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct struct_tanh {
     T operator()(T x) const {
@@ -74,7 +74,7 @@ struct struct_tanh {
  * 
  * @tparam T Data type (float, double, long double)
 */
-template<typename T, typename = 
+template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct tanh_prime {
     T operator()(T x) const {
