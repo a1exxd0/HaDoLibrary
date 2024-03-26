@@ -63,7 +63,7 @@ struct sigmoid_prime {
 */
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-struct struct_tanh {
+struct f_tanh {
     T operator()(T x) const {
         return std::tanh(x);
     }
@@ -76,7 +76,7 @@ struct struct_tanh {
 */
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-struct tanh_prime {
+struct f_tanh_prime {
     T operator()(T x) const {
         T tanhx = std::tanh(x);
         return 1 - tanhx * tanhx;

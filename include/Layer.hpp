@@ -10,7 +10,7 @@ using std::array;
 using std::unique_ptr;
 
 #ifndef endl
-    #define endl '\n'
+    #define endl "\n"
 #endif
 
 /**

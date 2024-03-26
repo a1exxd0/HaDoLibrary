@@ -55,21 +55,19 @@ public:
     ~ActivationLayer() {}
 
     /**
-     * @brief Forward pass of the activation layer. Input tensor must be a size 1 std::array
-     * of std::unique_ptr<Matrix<T, D, 1>>. Output tensor is the same size.
+     * @brief Forward pass of the activation layer.
      * 
-     * @param input_tensor Input tensor (one dimensional, must have right size)
-     * @return array<std::unique_ptr<Matrix<T, D, 1>>, 1> Output tensor
+     * @param input_tensor Input tensor
+     * @return Output tensor of same size as input tensor
     */
     array<std::unique_ptr<Matrix<T, R, C>>, D> forward(
         array<std::unique_ptr<Matrix<T, R, C>>, D> input_tensor) {
-            const int n = input_tensor.size();
 
             // Get copy because we need to pass one forward, and one stays in layer
             array<std::unique_ptr<Matrix<T, R, C>>, D> out_copy;
 
             // Iterate through depth of tensor
-            for (int i = 0; i < n; i++){
+            for (int i = 0; i < D; i++){
 
                 // Move input matrix into layer attribute inp
                 this->inp[i] = std::move(input_tensor[i]);
@@ -84,7 +82,7 @@ public:
                 this->out[i] = std::move(res);
             }
 
-            return (std::move(out_copy));
+            return (out_copy);
         }
 
     /**
@@ -96,15 +94,15 @@ public:
      * @return array<std::unique_ptr<Matrix<T, D, 1>>, 1> Input gradient tensor
      */
     #pragma GCC diagnostic ignored "-Wunused-parameter"
+    #pragma GCC optimize("O3")
     array<std::unique_ptr<Matrix<T, R, C>>, D> backward(
         array<std::unique_ptr<Matrix<T, R, C>>, D> output_gradient, T learning_rate) {
-            const int n = output_gradient.size();
 
             // Array to store input gradient (not the input)
             array<std::unique_ptr<Matrix<T, R, C>>, D> input_gradient;
 
             // Iterate through depth of tensor
-            for (int i = 0; i < n; i++){
+            for (int i = 0; i < D; i++){
 
                 // Calculate input gradient for single layer
                 auto res = std::make_unique<Matrix<T, R, C>>(
