@@ -17,7 +17,7 @@ using std::cout;
  * 
  * @tparam I Input vector length
  * @tparam O Output vector length
- * @tparam T Data type (float for speed, double accuracy)
+ * @tparam T Data type (float for speed, double accuracy) (optional)
 */
 template<int I, int O, typename T=float> 
 class DenseLayer : public Layer<1, 1, I, 1, O, 1, T>{
@@ -59,12 +59,20 @@ public:
     */
     array<std::unique_ptr<Matrix<T, O, 1>>, 1> forward(
         array<std::unique_ptr<Matrix<T, I, 1>>, 1> input_tensor) {
+
+            // Move input tensor into layer attribute inp
             this->inp = std::move(input_tensor);
+
+            // Calculate output tensor
             auto res = std::make_unique<Matrix<T, O, 1>>((weights * (*(this->inp[0])) + bias));
 
+            // Copy output tensor to return
             array<std::unique_ptr<Matrix<T, O, 1>>, 1> out_copy;
+
+            // Make a unique pointer for the copy
             out_copy[0] = std::make_unique<Matrix<T, O, 1>>(*res);
 
+            // Store a copy of the output tensor in layer attribute out
             this->out[0] = std::move(res);
             return (out_copy); 
         }
@@ -79,14 +87,18 @@ public:
     */
     array<unique_ptr<Matrix<T, I, 1>>, 1> backward(
         array<unique_ptr<Matrix<T, O, 1>>, 1> output_gradient, T learning_rate){
+
+            // Calculate weight gradient, bias gradient, and input gradient
             auto weight_gradient = (*(output_gradient[0])) * (*(this->inp[0])).transpose();
             auto bias_gradient = *(output_gradient[0]);
             auto input_gradient = std::make_unique<Matrix<T, I, 1>>(
                 this->weights.transpose() * (*(output_gradient[0])));
 
+            // Update weights and bias
             this->weights -= learning_rate * weight_gradient;
             this->bias -= learning_rate * bias_gradient;
 
+            // Return input gradient
             return {std::move(input_gradient)};
         }
 };

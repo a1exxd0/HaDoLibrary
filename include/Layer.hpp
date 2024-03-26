@@ -26,7 +26,7 @@ using std::unique_ptr;
  * @tparam CI Columns in input tensor
  * @tparam RO Rows in output tensor
  * @tparam CO Columns in output tensor
- * @tparam T Data type (float for speed, double accuracy)
+ * @tparam T Data type (float for speed, double accuracy) (optional)
 */
 template<int I, int O, int RI, int CI, int RO, int CO, typename T=float>
 class Layer {

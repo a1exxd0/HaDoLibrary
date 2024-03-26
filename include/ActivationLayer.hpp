@@ -16,12 +16,14 @@ using std::array;
  * @details Activation layer class that applies an activation function
  * 
  * @tparam D Depth of input tensor
+ * @tparam R Rows in input tensor
+ * @tparam C Columns in input tensor
  * @tparam Activation Activation function
  * @tparam ActivationPrime Derivative of activation function
- * @tparam T Data type (float for speed, double accuracy)
+ * @tparam T Data type (float for speed, double accuracy) (optional)
 */
-template<int D, typename Activation, typename ActivationPrime, typename T=float>
-class ActivationLayer : public Layer<1, 1, D, 1, D, 1, T> {
+template<int D, int R, int C, typename Activation, typename ActivationPrime, typename T=float>
+class ActivationLayer : public Layer<D, D, R, C, R, C, T> {
 private:
 
     // Assert that T is either float, double, or long double at compiler time
@@ -47,7 +49,7 @@ public:
     /**
      * @brief Construct a new Activation Layer object
     */
-    ActivationLayer() : Layer<1, 1, D, 1, D, 1, T>() {}
+    ActivationLayer() : Layer<D, D, R, C, R, C, T>() {}
 
     // Destructor
     ~ActivationLayer() {}
@@ -59,16 +61,30 @@ public:
      * @param input_tensor Input tensor (one dimensional, must have right size)
      * @return array<std::unique_ptr<Matrix<T, D, 1>>, 1> Output tensor
     */
-    array<std::unique_ptr<Matrix<T, D, 1>>, 1> forward(
-        array<std::unique_ptr<Matrix<T, D, 1>>, 1> input_tensor) {
-            this->inp = std::move(input_tensor);
-            auto res = std::make_unique<Matrix<T, D, 1>>(this->inp[0]->unaryExpr(Activation()));
+    array<std::unique_ptr<Matrix<T, R, C>>, D> forward(
+        array<std::unique_ptr<Matrix<T, R, C>>, D> input_tensor) {
+            const int n = input_tensor.size();
 
-            array<std::unique_ptr<Matrix<T, D, 1>>, 1> out_copy;
-            out_copy[0] = std::make_unique<Matrix<T, D, 1>>(*res);
+            // Get copy because we need to pass one forward, and one stays in layer
+            array<std::unique_ptr<Matrix<T, R, C>>, D> out_copy;
 
-            this->out[0] = std::move(res);
-            return (out_copy);
+            // Iterate through depth of tensor
+            for (int i = 0; i < n; i++){
+
+                // Move input matrix into layer attribute inp
+                this->inp[i] = std::move(input_tensor[i]);
+
+                // Calculate output tensor for single layer
+                auto res = std::make_unique<Matrix<T, R, C>>(this->inp[i]->unaryExpr(Activation()));
+
+                // Copy output tensor to return
+                out_copy[i] = std::make_unique<Matrix<T, R, C>>(*res);
+
+                // Store a copy of the output tensor in layer attribute out
+                this->out[i] = std::move(res);
+            }
+
+            return (std::move(out_copy));
         }
 
     /**
@@ -80,11 +96,24 @@ public:
      * @return array<std::unique_ptr<Matrix<T, D, 1>>, 1> Input gradient tensor
      */
     #pragma GCC diagnostic ignored "-Wunused-parameter"
-    array<std::unique_ptr<Matrix<T, D, 1>>, 1> backward(
-        array<std::unique_ptr<Matrix<T, D, 1>>, 1> output_gradient, T learning_rate) {
-            auto input_gradient = std::make_unique<Matrix<T, D, 1>>(
-                this->out[0]->unaryExpr(ActivationPrime())
-                    .cwiseProduct(*(output_gradient[0])));
+    array<std::unique_ptr<Matrix<T, R, C>>, D> backward(
+        array<std::unique_ptr<Matrix<T, R, C>>, D> output_gradient, T learning_rate) {
+            const int n = output_gradient.size();
+
+            // Array to store input gradient (not the input)
+            array<std::unique_ptr<Matrix<T, R, C>>, D> input_gradient;
+
+            // Iterate through depth of tensor
+            for (int i = 0; i < n; i++){
+
+                // Calculate input gradient for single layer
+                auto res = std::make_unique<Matrix<T, R, C>>(
+                    this->out[i]->unaryExpr(ActivationPrime())
+                        .cwiseProduct(*(output_gradient[i])));
+
+                // Store input gradient
+                input_gradient[i] = std::move(res);
+            }
 
             return {std::move(input_gradient)};
         }

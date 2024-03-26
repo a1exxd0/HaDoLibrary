@@ -7,7 +7,7 @@
 /**
  * @brief ReLU activation function
  * 
- * @tparam T Data type (float, double, long double)
+ * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -20,7 +20,7 @@ struct relu {
 /**
  * @brief Derivative of ReLU activation function
  * 
- * @tparam T Data type (float, double, long double)
+ * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -33,7 +33,7 @@ struct relu_prime {
 /**
  * @brief Sigmoid activation function
  * 
- * @tparam T Data type (float, double, long double)
+ * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -46,7 +46,7 @@ struct sigmoid {
 /**
  * @brief Derivative of sigmoid activation function
  * 
- * @tparam T Data type (float, double, long double)
+ * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -59,7 +59,7 @@ struct sigmoid_prime {
 /**
  * @brief Tanh activation function (namespace collision with cmath)
  * 
- * @tparam T Data type (float, double, long double)
+ * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -72,7 +72,7 @@ struct struct_tanh {
 /**
  * @brief Derivative of tanh activation function
  * 
- * @tparam T Data type (float, double, long double)
+ * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
