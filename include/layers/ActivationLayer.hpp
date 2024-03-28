@@ -18,9 +18,6 @@ using std::unique_ptr;
  * 
  * @details Activation layer class that applies an activation function
  * 
- * @tparam D Depth of input tensor
- * @tparam R Rows in input tensor
- * @tparam C Columns in input tensor
  * @tparam Activation Activation function
  * @tparam ActivationPrime Derivative of activation function
  * @tparam T Data type (float for speed, double accuracy) (optional)
@@ -32,6 +29,7 @@ private:
     // Convenience typedef
     typedef Matrix<T, Dynamic, Dynamic> MatrixD;
 
+    // Convenience variables inaccessible from outside
     int D, R, C;
 
     // Assert that T is either float, double, or long double at compiler time
@@ -55,7 +53,12 @@ private:
 public:
 
     /**
-     * @brief Construct a new Activation Layer object
+     * @brief Construct a new Activation Layer object. Input and output
+     * tensors are same dimesions.
+     * 
+     * @param D Depth of input/output tensor
+     * @param R Rows in input/output tensor
+     * @param C Columns in input/output tensor
     */
     ActivationLayer(int D, int R, int C) : Layer<T>(D, D, R, C, R, C) {
         this->D = D;
@@ -84,7 +87,13 @@ public:
      * @return Output tensor of same dimensions as input tensor
     */
     vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
-        if (input_tensor.size() != (size_t) D || input_tensor[0].rows() != R || input_tensor[0].cols() != C) {
+        if (input_tensor.size() != (size_t) D               // Incorrect depth
+            || input_tensor[0].rows() != R                  // Incorrect rows
+            || input_tensor[0].cols() != C) {               // Incorrect columns
+
+            std::cerr << "Expected depth " << D << " but got depth " << input_tensor.size() << endl;
+            std::cerr << "Expected rows " << R << " but got rows " << input_tensor[0].rows() << endl;
+            std::cerr << "Expected cols " << C << " but got cols " << input_tensor[0].cols() << endl;
             throw std::invalid_argument("Input tensor must have depth D.");
         }
 
@@ -112,11 +121,11 @@ public:
 
     /**
      * @brief Backward pass of the activation layer. Output gradient tensor must be a size 1 std::vector
-     * of std::unique_ptr<MatrixD>. Input gradient tensor (returned) is the same size.
+     * of MatrixD. Input gradient tensor (returned) is the same size.
      * 
      * @param output_gradient Output gradient tensor (one dimensional, must have right size)
      * @param learning_rate Learning rate
-     * @return vector<std::unique_ptr<MatrixD>> Input gradient tensor
+     * @return vector<MatrixD> Input gradient tensor
      */
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     #pragma GCC optimize("O3")

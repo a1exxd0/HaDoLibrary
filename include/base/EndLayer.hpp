@@ -33,10 +33,16 @@ private:
 
 protected:
 
-    // Enforce that this be used
+    // Enforce that these are constructed
     int D, R, C;
 
-    // Default constructor
+    /**
+     * @brief Constructor for basic end layer of neural network
+     * 
+     * @param D Depth of end node
+     * @param R Number of rows of end node
+     * @param C Number of columns of end node
+    */
     EndLayer(int D, int R, int C) {
         this->D = D;
         this->R = R;

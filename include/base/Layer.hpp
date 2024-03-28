@@ -17,8 +17,8 @@ using std::cout;
 
 /**
  * @brief Base layer class. T will only work for float, double,
- * or long double.
- * 
+ * or long double. Can't construct this directly, must derive a 
+ * child class to use.
  * 
  * @tparam T Data type (float for speed, double accuracy) (optional)
 */
@@ -26,6 +26,7 @@ template<typename T=float>
 class Layer{
 private:
 
+    // Layer dimensions
     int I, O, RI, CI, RO, CO;
 
     // Convenience typedef
@@ -41,7 +42,16 @@ private:
 
 protected:
 
-    // Default constructor
+    /**
+     * @brief Layer constructor to instantiate input and output vectors
+     * 
+     * @param I Depth of input tensor
+     * @param O Depth of output tensor
+     * @param RI Rows in input tensor
+     * @param CI Columns in input tensor
+     * @param RO Rows in output tensor
+     * @param CO Columns in output tensor
+    */
     Layer(int I, int O, int RI, int CI, int RO, int CO) : inp(I), out(O) {
         this->I = I;
         this->O = O;

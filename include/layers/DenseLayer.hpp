@@ -6,6 +6,8 @@
 #include "Layer.hpp"
 #include <memory>
 #include <iostream>
+#include <chrono>
+#include <random>
 
 using Eigen::Matrix;
 using std::vector;
@@ -17,8 +19,6 @@ using std::unique_ptr;
  * @brief Dense layer class. T will only work for float, double,
  * or long double.
  * 
- * @tparam I Input vector length
- * @tparam O Output vector length
  * @tparam T Data type (float for speed, double accuracy) (optional)
 */
 template<typename T=float> 
@@ -28,6 +28,7 @@ private:
     // Convenience typedef
     typedef Matrix<T, Dynamic, Dynamic> MatrixD;
 
+    // Convenience private variables
     int I, O;
 
     // Check if T is float, double, or long double
@@ -48,10 +49,24 @@ public:
      * @brief Construct a new Dense Layer object
      * 
      * Initializes weights and bias with random values for this layer.
+     * 
+     * @param 
     */
     DenseLayer(int I, int O) : Layer<T>(1, 1, I, 1, O, 1){
-        this->weights = MatrixD::Random(O, I);
-        this->bias = MatrixD::Random(O, 1);
+
+        // Get the current time as a seed
+        auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+        
+        // Seed the random number generator
+        std::mt19937 rng(seed);
+
+        // Use the seeded RNG with Eigen::Random
+        Eigen::MatrixXf matrix(3, 3);
+        Eigen::Random<std::mt19937> random(rng);
+        matrix = random.normal();
+
+        this->weights = MatrixD(O, I); this->weights = random.normal()
+        this->bias = MatrixD(O, 1);
         this->inp = vector<MatrixD>(1);
         this->out = vector<MatrixD>(1);
         this->I = I;
