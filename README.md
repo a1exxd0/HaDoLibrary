@@ -1,5 +1,12 @@
-# A library for implementing Convolutional Neural Networks
-Lightweight, templated, and optimised library for custom CNN for image classification.
+# A library for implementing Neural Networks in C++
+Lightweight, templated, and optimised library for a variety of neural networks.
+
+Supports models for:
+ - Deep Neural Networks
+
+Will support soon:
+ - Convolutional Neural Networks
+ - LSTM Networks
 
 # Usage
 You'll need the Eigen library inside of your project, as well as everything in the include/ subdirectory. See the Makefile for a general idea of how to compile it all.
