@@ -2,14 +2,16 @@
 #define DENSE_LAYER_HPP
 
 #include <Eigen/Dense>
-#include <array>
+#include <vector>
 #include "Layer.hpp"
 #include <memory>
 #include <iostream>
 
 using Eigen::Matrix;
-using std::array;
+using std::vector;
 using std::cout;
+using Eigen::Dynamic;
+using std::unique_ptr;
 
 /**
  * @brief Dense layer class. T will only work for float, double,
@@ -19,9 +21,14 @@ using std::cout;
  * @tparam O Output vector length
  * @tparam T Data type (float for speed, double accuracy) (optional)
 */
-template<int I, int O, typename T=float> 
-class DenseLayer : public Layer<1, 1, I, 1, O, 1, T>{
+template<typename T=float> 
+class DenseLayer : public Layer<T>{
 private:
+
+    // Convenience typedef
+    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
+
+    int I, O;
 
     // Check if T is float, double, or long double
     static_assert(
@@ -32,8 +39,8 @@ private:
     );
 
     // Weights and bias tensors
-    Matrix<T, O, I> weights;
-    Matrix<T, O, 1> bias;
+    MatrixD weights;
+    MatrixD bias;
 
 public:
 
@@ -42,40 +49,61 @@ public:
      * 
      * Initializes weights and bias with random values for this layer.
     */
-    DenseLayer() : Layer<1, 1, I, 1, O, 1, T>(){
-        this->weights = Matrix<T, O, I>::Random();
-        this->bias = Matrix<T, O, 1>::Random();
+    DenseLayer(int I, int O) : Layer<T>(1, 1, I, 1, O, 1){
+        this->weights = MatrixD::Random(O, I);
+        this->bias = MatrixD::Random(O, 1);
+        this->inp = vector<MatrixD>(1);
+        this->out = vector<MatrixD>(1);
+        this->I = I;
+        this->O = O;
+    }
+
+    // Copy constructor
+    DenseLayer(const DenseLayer<T>& other) : Layer<T>(1, 1, other.I, 1, other.O, 1){
+        this->weights = other.weights;
+        this->bias = other.bias;
+        this->inp = other.inp;
+        this->out = other.out;
+        this->I = other.I;
+        this->O = other.O;
     }
 
     // Destructor
     ~DenseLayer() {}
 
     /**
-     * @brief Forward pass of the dense layer. Input tensor must be a size 1 std::array
-     * of std::unique_ptr<Matrix<T, I, 1>>.
+     * @brief Forward pass of the dense layer. Input tensor must be a size 1 vector
+     * of dimensions I x 1.
      * 
      * @param input_tensor Input tensor (one dimensional, must have right size)
-     * @return array<std::unique_ptr<Matrix<T, O, 1>>, 1> Output tensor
+     * @return vector<unique_ptr<MatrixD>> Output tensor
     */
-    array<std::unique_ptr<Matrix<T, O, 1>>, 1> forward(
-        array<std::unique_ptr<Matrix<T, I, 1>>, 1> input_tensor) {
+    vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
 
-            // Move input tensor into layer attribute inp
-            this->inp = std::move(input_tensor);
-
-            // Calculate output tensor
-            auto res = std::make_unique<Matrix<T, O, 1>>((weights * (*(this->inp[0])) + bias));
-
-            // Copy output tensor to return
-            array<std::unique_ptr<Matrix<T, O, 1>>, 1> out_copy;
-
-            // Make a unique pointer for the copy
-            out_copy[0] = std::make_unique<Matrix<T, O, 1>>(*res);
-
-            // Store a copy of the output tensor in layer attribute out
-            this->out[0] = std::move(res);
-            return (out_copy); 
+        // Validity check
+        if (input_tensor.size() != 1 || (input_tensor[0]).cols() != 1 || (input_tensor[0]).rows() != I){
+            cout << "Input tensor must be a size 1 vector of dimensions I x 1." << endl;
+            exit(1);
         }
+
+        // Move input tensor into layer attribute inp
+        this->inp = input_tensor;
+
+        // Calculate output tensor
+        auto res = (weights * (this->inp[0]) + bias);
+
+        // Copy output tensor to return
+        vector<MatrixD> out_copy;
+
+        // Make a unique pointer for the copy
+        out_copy.push_back(res);
+
+        // Store a copy of the output tensor in layer attribute out
+        this->out[0] = res;
+
+        // Return output tensor
+        return (out_copy); 
+    }
 
     /**
      * @brief Backward pass of the dense layer. Output gradient tensor must be a size 1 std::array
@@ -85,22 +113,26 @@ public:
      * @param learning_rate Learning rate for gradient descent (0 < learning_rate < 1)
      * @return array<std::unique_ptr<Matrix<T, I, 1>>, 1> Input gradient tensor
     */
-    array<unique_ptr<Matrix<T, I, 1>>, 1> backward(
-        array<unique_ptr<Matrix<T, O, 1>>, 1> output_gradient, T learning_rate){
+    vector<MatrixD> backward(vector<MatrixD>& output_gradient, T learning_rate) {
 
-            // Calculate weight gradient, bias gradient, and input gradient
-            auto weight_gradient = (*(output_gradient[0])) * (*(this->inp[0])).transpose();
-            auto bias_gradient = *(output_gradient[0]);
-            auto input_gradient = std::make_unique<Matrix<T, I, 1>>(
-                this->weights.transpose() * (*(output_gradient[0])));
-
-            // Update weights and bias
-            this->weights -= learning_rate * weight_gradient;
-            this->bias -= learning_rate * bias_gradient;
-
-            // Return input gradient
-            return {std::move(input_gradient)};
+        // Validity check
+        if (output_gradient.size() != 1 || (output_gradient[0]).rows() != O || (output_gradient[0]).cols() != 1){
+            cout << "Output gradient tensor must be a size 1 vector of dimensions O x 1." << endl;
+            exit(1);
         }
+
+        // Calculate weight gradient, bias gradient, and input gradient
+        auto weight_gradient = (output_gradient[0]) * (this->inp[0]).transpose();
+        auto bias_gradient = output_gradient[0];
+        auto input_gradient = this->weights.transpose() * (output_gradient[0]);
+
+        // Update weights and bias
+        this->weights -= learning_rate * weight_gradient;
+        this->bias -= learning_rate * bias_gradient;
+
+        // Return input gradient
+        return {input_gradient};
+    }
 };
 
 #endif // DENSE_LAYER_HPP

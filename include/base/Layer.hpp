@@ -2,12 +2,14 @@
 #define LAYER_HPP
 
 #include <Eigen/Dense>
-#include <array>
+#include <vector>
 #include <memory>
+#include <iostream>
 
 using Eigen::Matrix;
-using std::array;
-using std::unique_ptr;
+using std::vector;
+using Eigen::Dynamic;
+using std::cout;
 
 #ifndef endl
     #define endl "\n"
@@ -17,20 +19,17 @@ using std::unique_ptr;
  * @brief Base layer class. T will only work for float, double,
  * or long double.
  * 
- * @details operator[] Overloaded operator to access output matrix. Matrices
- * stored in an array, so access by index.
  * 
- * @tparam I Input tensor depth
- * @tparam O Output tensor depth
- * @tparam RI Rows in input tensor
- * @tparam CI Columns in input tensor
- * @tparam RO Rows in output tensor
- * @tparam CO Columns in output tensor
  * @tparam T Data type (float for speed, double accuracy) (optional)
 */
-template<int I, int O, int RI, int CI, int RO, int CO, typename T=float>
+template<typename T=float>
 class Layer{
 private:
+
+    int I, O, RI, CI, RO, CO;
+
+    // Convenience typedef
+    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
 
     // Assert that T is either float, double, or long double at compiler time
     #pragma GCC diagnostic ignored "-Wparentheses"
@@ -38,39 +37,46 @@ private:
         std::is_same<T, float>::value 
         || std::is_same<T, double>::value
         || std::is_same<T, long double>::value
-        && (I > 0 && O > 0 && RI > 0 && CI > 0 && RO > 0 && CO > 0),
-        "T must be either float, double, or long double.\nRest must be positive integers."
     );
 
 protected:
 
     // Default constructor
-    Layer() : inp(), out() {}
+    Layer(int I, int O, int RI, int CI, int RO, int CO) : inp(I), out(O) {
+        this->I = I;
+        this->O = O;
+        this->RI = RI;
+        this->CI = CI;
+        this->RO = RO;
+        this->CO = CO;
+    }
 
 public:
 
     // Input tensor
-    array<unique_ptr<Matrix<T, RI, CI>>, I> inp;
+    vector<MatrixD> inp;
 
     // Output tensor
-    array<unique_ptr<Matrix<T, RO, CO>>, O> out;
+    vector<MatrixD> out;
 
-    // Trivial getters and setters
-    int getInputDepth() { return I; }
-    int getOutputDepth() { return O; }
-    int getInputRows() { return RI; }
-    int getInputCols() { return CI; }
-    int getOutputRows() { return RO; }
-    int getOutputCols() { return CO; }
+    // Virtual Destructor
+    virtual ~Layer(){}
+
+    // Trivial getters
+    int getInputDepth() {return I;}
+    int getOutputDepth() {return O;}
+    int getInputRows() {return RI;}
+    int getInputCols() {return CI;}
+    int getOutputRows() {return RO;}
+    int getOutputCols() {return CO;}
 
     // Forward propagation
-    virtual array
-        <unique_ptr<Matrix<T, RO, CO>>, O> forward(
-            array<unique_ptr<Matrix<T, RI, CI>>, I> input_tensor) = 0;
+    virtual vector<MatrixD> forward(
+        vector<MatrixD>& input_tensor) = 0;
     
     // Backward propagation
-    virtual array<unique_ptr<Matrix<T, RI, CI>>, I> backward(
-        array<unique_ptr<Matrix<T, RO, CO>>, O> output_gradient, T learning_rate) = 0;
+    virtual vector<MatrixD> backward(
+        vector<MatrixD>& output_gradient, T learning_rate) = 0;
 
 };
 

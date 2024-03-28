@@ -2,28 +2,28 @@
 #define MEAN_SQUARED_ERROR_HPP
 
 #include <Eigen/Dense>
-#include <array>
+#include <vector>
 #include "Layer.hpp"
 #include "EndLayer.hpp"
 #include <memory>
 #include <iostream>
 
 using Eigen::Matrix;
-using std::array;
-using std::unique_ptr;
+using std::vector;
+using Eigen::Dynamic;
 
 /**
  * @brief Mean squared error class. T will only work for float, double,
  * or long double.
  * 
- * @tparam D Depth of input tensor
- * @tparam R Rows in input tensor
- * @tparam C Columns in input tensor
  * @tparam T Data type (float for speed, double accuracy) (optional)
 */
-template<int D, int R, int C, typename T=float>
-class MeanSquaredError : public EndLayer<D, R, C, T> {
+template<typename T=float>
+class MeanSquaredError : public EndLayer<T> {
 private:
+
+    // Convenience typedef
+    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
 
     // Assert that T is either float, double, or long double at compiler time
     static_assert(
@@ -36,7 +36,7 @@ private:
 public:
 
     // Default constructor
-    MeanSquaredError() : EndLayer<D, R, C, T>() {}
+    MeanSquaredError(int D, int R, int C) : EndLayer<T>(D, R, C) {}
 
     // Destructor
     ~MeanSquaredError() {}
@@ -47,35 +47,46 @@ public:
      * @param res Result tensor
      * @param true_res True result tensor
     */
-    T forward(array<unique_ptr<Matrix<T, R, C>>, D> res, array<unique_ptr<Matrix<T, R, C>>, D> true_res) {
+    T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) {
+
+        // Check they must be of same size & dimensions
+        if (res.size() != true_res.size()) {
+            throw std::invalid_argument("Result and true result must be of same size.");
+        }
+        if ((res[0]).rows() != (true_res[0]).rows() || (res[0]).cols() != (true_res[0]).cols()) {
+            throw std::invalid_argument("Result and true result must be of same dimensions.");
+        }
+
         T error = 0;
 
-        // For each layer of depth
-        for (int i = 0; i < D; i++) {
-
-            // Sum of squared differences
-            error += (res[i]->array() - true_res[i]->array()).square().sum();
+        for (int i = 0; i < this->D; i++) {
+            error += (res[i].array() - true_res[i].array()).square().sum();
         }
-
-        // Return mean squared error
-        return (error / (D*R*C));
+        return (error / ((this->D)*(this->R)*(this->C)));
     }
 
-    array<unique_ptr<Matrix<T, R, C>>, D> backward(
-        array<unique_ptr<Matrix<T, R, C>>, D> res, array<unique_ptr<Matrix<T, R, C>>, D> true_res) {
-            array<unique_ptr<Matrix<T, R, C>>, D> grad;
+    vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) {
 
-            // For each layer of depth in tensor
-            for (int i = 0; i < D; i++){
-
-                // Calculate gradient (derivative of mse)
-                grad[i] = std::make_unique<Matrix<T, R, C>>(
-                    2*(res[i]->array() - true_res[i]->array()));
-            }
-
-            // Return gradient matrix
-            return (grad);
+        // Check they must be of same size & dimensions
+        if (res.size() != true_res.size()) {
+            throw std::invalid_argument("Result and true result must be of same size.");
         }
+        if ((res[0]).rows() != (true_res[0]).rows() || (res[0]).cols() != (true_res[0]).cols()) {
+            throw std::invalid_argument("Result and true result must be of same dimensions.");
+        }
+
+        vector<MatrixD> grad(this->D);
+
+        // For each layer of depth in tensor
+        for (int i = 0; i < this->D; i++){
+
+            // Calculate gradient (derivative of mse)
+            grad[i] = 2*(res[i].array() - true_res[i].array());
+        }
+
+        // Return gradient matrix
+        return (grad);
+    }
 };
 
 

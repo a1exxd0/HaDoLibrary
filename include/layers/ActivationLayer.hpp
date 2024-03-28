@@ -2,13 +2,16 @@
 #define ACTIVATION_LAYER_HPP
 
 #include <Eigen/Dense>
-#include <array>
+#include <vector>
 #include "Layer.hpp"
 #include <memory>
 #include <iostream>
 
 using Eigen::Matrix;
-using std::array;
+using std::vector;
+using std::cout;
+using Eigen::Dynamic;
+using std::unique_ptr;
 
 /**
  * @brief Activation layer class.
@@ -22,9 +25,14 @@ using std::array;
  * @tparam ActivationPrime Derivative of activation function
  * @tparam T Data type (float for speed, double accuracy) (optional)
 */
-template<int D, int R, int C, typename Activation, typename ActivationPrime, typename T=float>
-class ActivationLayer : public Layer<D, D, R, C, R, C, T> {
+template<typename Activation, typename ActivationPrime, typename T=float>
+class ActivationLayer : public Layer<T> {
 private:
+
+    // Convenience typedef
+    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
+
+    int D, R, C;
 
     // Assert that T is either float, double, or long double at compiler time
     static_assert(
@@ -49,7 +57,22 @@ public:
     /**
      * @brief Construct a new Activation Layer object
     */
-    ActivationLayer() : Layer<D, D, R, C, R, C, T>() {}
+    ActivationLayer(int D, int R, int C) : Layer<T>(D, D, R, C, R, C) {
+        this->D = D;
+        this->R = R;
+        this->C = C;
+        this->inp = vector<MatrixD>(D);
+        this->out = vector<MatrixD>(D);
+    }
+
+    // Copy constructor
+    ActivationLayer(const ActivationLayer<Activation, ActivationPrime, T>& other) : Layer<T>(other.D, other.D, other.R, other.C, other.R, other.C) {
+        this->D = other.D;
+        this->R = other.R;
+        this->C = other.C;
+        this->inp = other.inp;
+        this->out = other.out;
+    }
 
     // Destructor
     ~ActivationLayer() {}
@@ -58,63 +81,69 @@ public:
      * @brief Forward pass of the activation layer.
      * 
      * @param input_tensor Input tensor
-     * @return Output tensor of same size as input tensor
+     * @return Output tensor of same dimensions as input tensor
     */
-    array<std::unique_ptr<Matrix<T, R, C>>, D> forward(
-        array<std::unique_ptr<Matrix<T, R, C>>, D> input_tensor) {
-
-            // Get copy because we need to pass one forward, and one stays in layer
-            array<std::unique_ptr<Matrix<T, R, C>>, D> out_copy;
-
-            // Iterate through depth of tensor
-            for (int i = 0; i < D; i++){
-
-                // Move input matrix into layer attribute inp
-                this->inp[i] = std::move(input_tensor[i]);
-
-                // Calculate output tensor for single layer
-                auto res = std::make_unique<Matrix<T, R, C>>(this->inp[i]->unaryExpr(Activation()));
-
-                // Copy output tensor to return
-                out_copy[i] = std::make_unique<Matrix<T, R, C>>(*res);
-
-                // Store a copy of the output tensor in layer attribute out
-                this->out[i] = std::move(res);
-            }
-
-            return (out_copy);
+    vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
+        if (input_tensor.size() != (size_t) D || input_tensor[0].rows() != R || input_tensor[0].cols() != C) {
+            throw std::invalid_argument("Input tensor must have depth D.");
         }
 
+        // Get copy because we need to pass one forward, and one stays in layer
+        vector<MatrixD> out_copy(D);
+
+        // Iterate through depth of tensor
+        for (int i = 0; i < D; i++){
+
+            // Move input matrix into layer attribute inp
+            this->inp[i] = input_tensor[i];
+
+            // Calculate output tensor for single layer
+            auto res = this->inp[i].unaryExpr(Activation());
+
+            // Copy output tensor to return
+            out_copy[i] = res;
+
+            // Store a copy of the output tensor in layer attribute out
+            this->out[i] = res;
+        }
+
+        return (out_copy);
+    }
+
     /**
-     * @brief Backward pass of the activation layer. Output gradient tensor must be a size 1 std::array
-     * of std::unique_ptr<Matrix<T, D, 1>>. Input gradient tensor (returned) is the same size.
+     * @brief Backward pass of the activation layer. Output gradient tensor must be a size 1 std::vector
+     * of std::unique_ptr<MatrixD>. Input gradient tensor (returned) is the same size.
      * 
      * @param output_gradient Output gradient tensor (one dimensional, must have right size)
      * @param learning_rate Learning rate
-     * @return array<std::unique_ptr<Matrix<T, D, 1>>, 1> Input gradient tensor
+     * @return vector<std::unique_ptr<MatrixD>> Input gradient tensor
      */
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     #pragma GCC optimize("O3")
-    array<std::unique_ptr<Matrix<T, R, C>>, D> backward(
-        array<std::unique_ptr<Matrix<T, R, C>>, D> output_gradient, T learning_rate) {
+    vector<MatrixD> backward(vector<MatrixD>& output_gradient, T learning_rate) {
 
-            // Array to store input gradient (not the input)
-            array<std::unique_ptr<Matrix<T, R, C>>, D> input_gradient;
-
-            // Iterate through depth of tensor
-            for (int i = 0; i < D; i++){
-
-                // Calculate input gradient for single layer
-                auto res = std::make_unique<Matrix<T, R, C>>(
-                    this->out[i]->unaryExpr(ActivationPrime())
-                        .cwiseProduct(*(output_gradient[i])));
-
-                // Store input gradient
-                input_gradient[i] = std::move(res);
-            }
-
-            return {std::move(input_gradient)};
+        // Assert that output gradient tensor is the same size as the input tensor
+        if (output_gradient.size() != (size_t) D || output_gradient[0].rows() != R || output_gradient[0].cols() != C) {
+            throw std::invalid_argument("Output gradient tensor must have depth D.");
         }
+
+        // Array to store input gradient (not the input)
+        vector<MatrixD> input_gradient(D);
+
+        // Iterate through depth of tensor
+        for (int i = 0; i < D; i++){
+
+            // Calculate input gradient for single layer
+            auto res = 
+                this->out[i].unaryExpr(ActivationPrime())
+                    .cwiseProduct(output_gradient[i]);
+
+            // Store input gradient
+            input_gradient[i] = res;
+        }
+
+        return {input_gradient};
+    }
 
 };
 
