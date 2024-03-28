@@ -8,7 +8,9 @@ You'll need the Eigen library inside of your project, as well as everything in t
   - [ ] Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
   - [x] Dense Layers
   - [x] Activation Layers (tanh, sigmoid, ReLu so far)
-  - [X] Mean Squared Error implemented
+  - [X] Mean Squared Error implementation
+  - [X] Method to pass through and verify layer setup
+  - [ ] Pipeline class
   - [ ] Convolutional Layers
   - [ ] Pooling Layers
   - [ ] Saving a model (JSON or binary?)
