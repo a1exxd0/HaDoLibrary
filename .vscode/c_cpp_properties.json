@@ -4,6 +4,8 @@
       "name": "windows-gcc-x64",
       "includePath": [
         "${workspaceFolder}/**"
+        "${workspaceFolder}/Eigen"
+        "${workspaceFolder}/stb"
       ],
       "defines": [],
       "compilerPath": "C:/Program Files (x86)/mingw64/bin/gcc.exe",
