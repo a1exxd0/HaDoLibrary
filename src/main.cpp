@@ -4,6 +4,7 @@
 #include "ActivationFunctions.hpp"
 #include "MeanSquaredError.hpp"
 #include "LayerVector.hpp"
+#include "LoadImage.hpp"
 #include <Eigen/Dense>
 #include <iostream>
 #include <vector>
@@ -13,7 +14,6 @@ using std::cout, std::vector, std::unique_ptr;
 using Eigen::Matrix, Eigen::Dynamic;
 
 int main() {
-
     // Seed the random number generator
     std::random_device rd;
     std::mt19937 gen(rd());
