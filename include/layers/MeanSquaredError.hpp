@@ -57,14 +57,20 @@ public:
             throw std::invalid_argument("Result and true result must be of same dimensions.");
         }
 
+        // Calculate statistical mean square sum of all matrices in tensor
         T error = 0;
-
         for (int i = 0; i < this->D; i++) {
             error += (res[i].array() - true_res[i].array()).square().sum();
         }
         return (error / ((this->D)*(this->R)*(this->C)));
     }
 
+    /**
+     * @brief Get derivative of error w.r.t mean squared error for every element in result.
+     * 
+     * @param res Result vector from model
+     * @param true_res True value (label for data)
+    */
     vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) {
 
         // Check they must be of same size & dimensions

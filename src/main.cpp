@@ -28,14 +28,31 @@ int main() {
 
 
     LayerVector<float> lv;
+
+
     DenseLayer<float> dl1(2, 3);
     lv.pushLayer<DenseLayer<float>>(dl1);
+
     ActivationLayer<f_tanh<>, f_tanh_prime<>, float> al1(1, 3, 1);
     lv.pushLayer<ActivationLayer<f_tanh<>, f_tanh_prime<>, float>>(al1);
-    DenseLayer<float> dl2(3, 1);
+
+    DenseLayer<float> dl2(3, 5);
     lv.pushLayer<DenseLayer<float>>(dl2);
-    ActivationLayer<f_tanh<>, f_tanh_prime<>, float> al2(1, 1, 1);
+
+    ActivationLayer<f_tanh<>, f_tanh_prime<>, float> al2(1, 5, 1);
     lv.pushLayer<ActivationLayer<f_tanh<>, f_tanh_prime<>, float>>(al2);
+
+    DenseLayer<float> dl3(5, 3);
+    lv.pushLayer<DenseLayer<float>>(dl3);
+
+    ActivationLayer<f_tanh<>, f_tanh_prime<>, float> al3(1, 3, 1);
+    lv.pushLayer<ActivationLayer<f_tanh<>, f_tanh_prime<>, float>>(al3);
+
+    DenseLayer<float> dl4(3, 1);
+    lv.pushLayer<DenseLayer<float>>(dl4);
+
+    ActivationLayer<f_tanh<>, f_tanh_prime<>, float> al4(1, 1, 1);
+    lv.pushLayer<ActivationLayer<f_tanh<>, f_tanh_prime<>, float>>(al4);
     
 
     MeanSquaredError<float> mse(1, 1, 1);
@@ -66,13 +83,13 @@ int main() {
     true_res.push_back(true_res2);
     true_res.push_back(true_res1);
 
-    int epochs = 3000;
+    int epochs = 500;
     for (int j = 0; j < epochs; j++) {
         for (int i = 0; i < 4; i++){
             auto out = lv.forward({input[i]});
             vector<Matrix<float, Dynamic, Dynamic>> x = {true_res[i]};
             float error = mse.forward(out, x);
-            if(j % 300 == 0){
+            if(j % 100 == 0){
                 cout << "Error on " << j << ", " << i << ": " << error << endl;
             }
             lv.backward(mse.backward(out, x), 0.01);

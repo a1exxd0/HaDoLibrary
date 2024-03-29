@@ -50,23 +50,12 @@ public:
      * 
      * Initializes weights and bias with random values for this layer.
      * 
-     * @param 
+     * @param I rows/nodes in input tensor
+     * @param O rows/nodes in output tensor
     */
     DenseLayer(int I, int O) : Layer<T>(1, 1, I, 1, O, 1){
-
-        // Get the current time as a seed
-        auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-        
-        // Seed the random number generator
-        std::mt19937 rng(seed);
-
-        // Use the seeded RNG with Eigen::Random
-        Eigen::MatrixXf matrix(3, 3);
-        Eigen::Random<std::mt19937> random(rng);
-        matrix = random.normal();
-
-        this->weights = MatrixD(O, I); this->weights = random.normal()
-        this->bias = MatrixD(O, 1);
+        this->weights = MatrixD::Random(O, I);
+        this->bias = MatrixD::Random(O, 1);
         this->inp = vector<MatrixD>(1);
         this->out = vector<MatrixD>(1);
         this->I = I;
@@ -91,7 +80,7 @@ public:
      * of dimensions I x 1.
      * 
      * @param input_tensor Input tensor (one dimensional, must have right size)
-     * @return vector<unique_ptr<MatrixD>> Output tensor
+     * @return vector<MatrixD> Output tensor
     */
     vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
 
@@ -121,12 +110,12 @@ public:
     }
 
     /**
-     * @brief Backward pass of the dense layer. Output gradient tensor must be a size 1 std::array
-     * of std::unique_ptr<Matrix<T, O, 1>>.
+     * @brief Backward pass of the dense layer. Output gradient tensor (input param) must be a size 1
+     * vector<MatrixD> matching O rows.
      * 
      * @param output_gradient Output gradient tensor (one dimensional, must have right size)
      * @param learning_rate Learning rate for gradient descent (0 < learning_rate < 1)
-     * @return array<std::unique_ptr<Matrix<T, I, 1>>, 1> Input gradient tensor
+     * @return vector<MatrixD> Input gradient tensor
     */
     vector<MatrixD> backward(vector<MatrixD>& output_gradient, T learning_rate) {
 
