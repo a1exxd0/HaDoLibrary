@@ -6,6 +6,7 @@
 #include "LayerVector.hpp"
 #include "LoadImage.hpp"
 #include "Pipeline.hpp"
+#include "Model.hpp"
 #include <Eigen/Dense>
 #include <iostream>
 #include <vector>
@@ -54,64 +55,32 @@ int main() {
         MeanSquaredError<>(1,1,1)
     );
 
-    // XOR MODEL
-    vector<vector<Matrix<float, Dynamic, Dynamic>>> input;
+    Model<> model(pipeline);
+
     Matrix<float, Dynamic, Dynamic> input1(2, 1);
     input1 << 0, 0;
-    input.push_back({input1});
     Matrix<float, Dynamic, Dynamic> input2(2, 1);
     input2 << 0, 1;
-    input.push_back({input2});
     Matrix<float, Dynamic, Dynamic> input3(2, 1);
     input3 << 1, 0;
-    input.push_back({input3});
     Matrix<float, Dynamic, Dynamic> input4(2, 1);
     input4 << 1, 1;
-    input.push_back({input4});
 
     
-    vector<vector<Matrix<float, Dynamic, Dynamic>>> true_res;
     Matrix<float, Dynamic, Dynamic> true_res1(1, 1);
     true_res1 << 0;
-    true_res.push_back({true_res1});
     Matrix<float, Dynamic, Dynamic> true_res2(1, 1);
     true_res2 << 1;
-    true_res.push_back({true_res2});
-    true_res.push_back({true_res2});
-    true_res.push_back({true_res1});
 
-    int epochs = 200;
-    for (int j = 0; j < epochs; j++) {
-        for (int i = 0; i < 4; i++){
-            float error = pipeline.trainPipeline(input[i], true_res[i], 0.01);
-            if(j % 10 == 0){
-                cout << "Error on " << j << ", " << i << ": " << error << endl;
-            }
-        }
-    }
 
-    {// predict
-    pair<float, vector<Matrix<float, Dynamic, Dynamic>>> res1 = pipeline.testPipeline(
-        input[1], true_res[1]
-    );
+    model.add_training_data({input1}, {true_res1});
+    model.add_training_data({input2}, {true_res2});
+    model.add_training_data({input3}, {true_res2});
+    model.add_training_data({input4}, {true_res1});
 
-    cout << "Error: " << res1.first << endl;
-    cout << "Pred: " << res1.second[0] << endl;}
-    {// predict
-    pair<float, vector<Matrix<float, Dynamic, Dynamic>>> res1 = pipeline.testPipeline(
-        input[2], true_res[2]
-    );
+    model.run_epochs(50, 0.01, 50);
 
-    cout << "Error: " << res1.first << endl;
-    cout << "Pred: " << res1.second[0] << endl;}
-    {// predict
-    pair<float, vector<Matrix<float, Dynamic, Dynamic>>> res1 = pipeline.testPipeline(
-        input[3], true_res[3]
-    );
-
-    cout << "Error: " << res1.first << endl;
-    cout << "Pred: " << res1.second[0] << endl;}
-    
+    cout << "Hekko";
     return 0;
 }
 

@@ -17,7 +17,7 @@ using std::vector;
  * 
  * @tparam T Data type (float for speed, double accuracy) (optional)
 */
-template <typename T>
+template <typename T=float>
 class LayerVector {
 private:
 

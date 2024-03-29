@@ -20,7 +20,7 @@ using Eigen::Matrix, Eigen::Dynamic;
  * 
  * @tparam T numeric type: float, double, long double
 */
-template <typename T>
+template <typename T=float>
 class Pipeline {
     
     // Convenience typedef
