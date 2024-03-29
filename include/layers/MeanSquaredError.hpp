@@ -38,6 +38,9 @@ public:
     // Default constructor
     MeanSquaredError(int D, int R, int C) : EndLayer<T>(D, R, C) {}
 
+    // Copy constructor
+    MeanSquaredError(const MeanSquaredError& mse) : EndLayer<T>(mse.getDepth(), mse.getRows(), mse.getCols()) {}
+
     // Destructor
     ~MeanSquaredError() {}
 

@@ -52,9 +52,12 @@ protected:
 public:
 
     // Getters
-    int getDepth() { return D; }
-    int getRows() { return R; }
-    int getCols() { return C; }
+    int getDepth() const { return D; }
+    int getRows() const { return R; }
+    int getCols() const { return C; }
+
+    // Virtual destructor
+    virtual ~EndLayer(){}
 
     // Calculate error w.r.t results
     virtual T forward(

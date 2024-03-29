@@ -57,6 +57,11 @@ private:
     
 public:
 
+    // Getters
+    int getFinalDepth() { return final_depth; }
+    int getFinalRows() { return final_rows; }
+    int getFinalCols() { return final_cols; }
+
     // Default constructor
     LayerVector() {};
 
