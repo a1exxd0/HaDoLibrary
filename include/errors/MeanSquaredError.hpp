@@ -41,6 +41,11 @@ public:
     // Copy constructor
     MeanSquaredError(const MeanSquaredError& mse) : EndLayer<T>(mse.getDepth(), mse.getRows(), mse.getCols()) {}
 
+    // Clone returning unique ptr
+    std::unique_ptr<EndLayer<T>> clone() const {
+        return std::make_unique<MeanSquaredError>(*this);
+    }
+
     // Destructor
     ~MeanSquaredError() {}
 

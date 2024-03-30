@@ -72,6 +72,11 @@ public:
         this->O = other.O;
     }
 
+    // Clone returning unique ptr
+    unique_ptr<Layer<T>> clone() const override {
+        return unique_ptr<DenseLayer<T>>(new DenseLayer<T>(*this));
+    }
+
     // Destructor
     ~DenseLayer() {}
 

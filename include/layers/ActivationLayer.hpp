@@ -77,8 +77,13 @@ public:
         this->out = other.out;
     }
 
+    // Clone returning unique pointer
+    unique_ptr<Layer<T>> clone() const override {
+        return std::make_unique<ActivationLayer<Activation, ActivationPrime, T>>(*this);
+    }
+
     // Destructor
-    ~ActivationLayer() {}
+    ~ActivationLayer() override {}
 
     /**
      * @brief Forward pass of the activation layer.

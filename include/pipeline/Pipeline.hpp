@@ -35,24 +35,32 @@ class Pipeline {
     );
 
     // Vector for layer passing
-    LayerVector<T>* layervector;
+    std::unique_ptr<LayerVector<T>> layervector;
 
     // Error/ error gradient calculation layer
-    EndLayer<T>* endlayer;
+    std::unique_ptr<EndLayer<T>> endlayer;
 
 public:
 
     // Default constructor
     Pipeline() {
-        layervector = new LayerVector<T>();
+        layervector = std::unique_ptr<LayerVector<T>>(new LayerVector<T>());
         endlayer = nullptr;
     }
 
-    // Default destructor
-    ~Pipeline() {
-        delete layervector;
-        delete endlayer;
+    // Copy constructor
+    Pipeline(const Pipeline& p) {
+        layervector = p.layervector->clone();
+        endlayer = p.endlayer->clone();
     }
+
+    // Clone returning unique ptr
+    std::unique_ptr<Pipeline<T>> clone() const {
+        return std::make_unique<Pipeline<T>>(*this);
+    }
+
+    // Default destructor
+    ~Pipeline() {}
 
     /**
      * @brief Add a layer to the pipeline. Must match dimensions of previous
@@ -81,10 +89,6 @@ public:
     */
     template <typename EndLayerType>
     void pushEndLayer(EndLayerType end) {
-        
-        if (endlayer != nullptr) {
-            delete endlayer;
-        }
 
         // Must match dimensions
         if ((*layervector).getFinalDepth() != end.getDepth() 
@@ -102,8 +106,7 @@ public:
             }
 
         // Allocate memory and push
-        EndLayerType* temp = new EndLayerType(end);
-        this->endlayer = temp;
+        this->endlayer = std::unique_ptr<EndLayerType>(new EndLayerType(end));
     }
 
     /**

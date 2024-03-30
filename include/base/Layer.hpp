@@ -69,6 +69,9 @@ public:
     // Output tensor
     vector<MatrixD> out;
 
+    // Virtual clone
+    virtual std::unique_ptr<Layer<T>> clone() const = 0;
+
     // Virtual Destructor
     virtual ~Layer(){}
 

@@ -5,9 +5,12 @@
 #include <vector>
 #include "Layer.hpp"
 #include "EndLayer.hpp"
+#include <memory>
+#include <type_traits>
 
 using Eigen::Matrix;
 using std::vector;
+using std::unique_ptr;
 
 
 /**
@@ -33,8 +36,7 @@ private:
     int final_cols;
 
     // List of pointers to layers, using type erasure
-    // Can't use smart pointers here so must be careful
-    vector<Layer<T>*> layers;
+    vector<unique_ptr<Layer<T>>> layers;
 
     /**
      * @brief Push a layer onto the empty container
@@ -45,14 +47,13 @@ private:
     */
     template<typename LayerType>
     void pushEmpty(LayerType layer1) {
-        LayerType* temp = new LayerType(layer1);
-        layers.push_back(temp);
-        entry_depth = temp->getInputDepth();
-        entry_rows = temp->getInputRows();
-        entry_cols = temp->getInputCols();
-        final_depth = temp->getOutputDepth();
-        final_rows = temp->getOutputRows();
-        final_cols = temp->getOutputCols();
+        layers.push_back(std::make_unique<LayerType>(layer1));
+        entry_depth = layers[0]->getInputDepth();
+        entry_rows = layers[0]->getInputRows();
+        entry_cols = layers[0]->getInputCols();
+        final_depth = layers[0]->getOutputDepth();
+        final_rows = layers[0]->getOutputRows();
+        final_cols = layers[0]->getOutputCols();
     }
     
 public:
@@ -65,12 +66,23 @@ public:
     // Default constructor
     LayerVector() {};
 
-    // Destructor
-    ~LayerVector() {
-        for (auto layer : layers) {
-            delete layer;
+    // Clone returning unique pointer of class
+    unique_ptr<LayerVector<T>> clone() const {
+        unique_ptr<LayerVector<T>> res(new LayerVector<T>());
+        for (auto& layer : layers) {
+            res->layers.push_back(layer->clone());
+            res->entry_depth = entry_depth;
+            res->entry_rows = entry_rows;
+            res->entry_cols = entry_cols;
+            res->final_depth = final_depth;
+            res->final_rows = final_rows;
+            res->final_cols = final_cols;
         }
+        return res;
     }
+
+    // Destructor
+    ~LayerVector() {};
 
     /**
      * @brief Push a layer onto the end of the vector
@@ -81,6 +93,8 @@ public:
     */
     template<typename LayerType>
     void pushLayer(LayerType layer){
+        static_assert(std::is_base_of<Layer<T>, LayerType>::value,
+                  "LayerType must derive from Layer<T>");
 
         // Call empty adder if empty pipeline
         if (layers.size() == 0) {
@@ -102,25 +116,9 @@ public:
             }
 
         // Allocate memory and push onto vector
-        LayerType* temp = new LayerType(layer);
-        layers.push_back(temp);
+        layers.push_back(std::make_unique<LayerType>(layer));
 
         // Update attributes
-        final_depth = layer.getOutputDepth();
-        final_rows = layer.getOutputRows();
-        final_cols = layer.getOutputCols();
-    }
-
-    /**
-     * @brief Safe removal method to get rid of a layer at the end
-     * of the data structure
-    */
-    void popLayer(){
-        // Free a layer allocated in pushLayer
-        delete (layers.back());
-
-        // Update attributes
-        layers.pop_back();
         final_depth = layers.back()->getOutputDepth();
         final_rows = layers.back()->getOutputRows();
         final_cols = layers.back()->getOutputCols();
@@ -135,9 +133,9 @@ public:
     vector<MatrixD> forward(vector<MatrixD> input){
 
         // Dimension check
-        if (input.size() != (size_t) entry_depth 
-            || input[0].rows() != entry_rows 
-            || input[0].cols() != entry_cols) {
+        if (input.size() != (size_t) this->entry_depth 
+            || input[0].rows() != this->entry_rows 
+            || input[0].cols() != this->entry_cols) {
                 cout << "Input tensor must have depth " << entry_depth 
                     << " but got depth " << input.size() << endl;
 

@@ -33,6 +33,19 @@ public:
         initializeFilters(outputDepth, inputDepth, kernelSize);
     }
 
+    // Copy constructor
+    ConvolutionalLayer(const ConvolutionalLayer &convLayer)
+        : Layer<T>(convLayer.getDepth(), convLayer.getDepth(), convLayer.getRows(), convLayer.getCols(),
+                   convLayer.getOutRows(), convLayer.getOutCols()),
+          kernelSize(convLayer.kernelSize), stride(convLayer.stride), padding(convLayer.padding),
+          filters(convLayer.filters) {}
+
+    // Clone returning unique ptr
+    std::unique_ptr<Layer<T>> clone() const override
+    {
+        return std::make_unique<ConvolutionalLayer>(*this);
+    }
+
     // Initialize filters with random values
     void initializeFilters(int numFilters, int depth, int size)
     {

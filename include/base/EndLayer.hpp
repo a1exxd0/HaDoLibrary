@@ -56,6 +56,9 @@ public:
     int getRows() const { return R; }
     int getCols() const { return C; }
 
+    // Virtual clone
+    virtual std::unique_ptr<EndLayer<T>> clone() const = 0;
+
     // Virtual destructor
     virtual ~EndLayer(){}
 
