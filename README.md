@@ -8,16 +8,18 @@ Will support soon:
  - Convolutional Neural Networks
  - LSTM Networks
 
+Example usages are stored in src folder to run.
+
 # Usage
 You'll need the Eigen library inside of your project, as well as everything in the include/ subdirectory. See the Makefile for a general idea of how to compile it all.
 
 # TODO
-  - [ ] Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
+  - [X] Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
   - [x] Dense Layers
   - [x] Activation Layers (tanh, sigmoid, ReLu so far)
   - [X] Mean Squared Error implementation
   - [X] Method to pass through and verify layer setup
-  - [ ] Pipeline class
+  - [X] Pipeline class
   - [ ] Convolutional Layers
   - [ ] Pooling Layers
   - [ ] Saving a model (JSON or binary?)
