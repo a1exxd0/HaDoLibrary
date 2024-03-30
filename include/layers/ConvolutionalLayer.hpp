@@ -7,6 +7,8 @@
 #include <memory>
 #include <iostream>
 
+using std::vector;
+
 template <typename T>
 class ConvolutionalLayer : public Layer<T>
 {
@@ -16,10 +18,10 @@ public:
     using Layer<T>::out;
 
 private:
-    int kernelSize; // Size of the square kernel
-    int stride; // Stride of the convolution
-    int padding; // Padding applied to the input
-    std::vector<std::vector<MatrixD>> filters; // Filters used for the convolution
+    int kernelSize;                  // Size of the square kernel
+    int stride;                      // Stride of the convolution
+    int padding;                     // Padding applied to the input
+    vector<vector<MatrixD>> filters; // Filters used for the convolution
 
 public:
     // Constructor
@@ -62,12 +64,55 @@ public:
 
     virtual vector<MatrixD> forward(vector<MatrixD> &input_tensor) override
     {
-        // Placeholder
+        // Plan:
+        // Iterate over filters, apply (convolve) each filter matrix within a filter to it's respective matrix in the input
+        // Sum up convolved matrices to get output matrix for the current vector of filters
+        // Output vector will be same length as number of filters
     }
 
     virtual vector<MatrixD> backward(vector<MatrixD> &output_gradient, T learning_rate) override
     {
         // Placeholder
+    }
+
+private:
+    MatrixD convolve(const MatrixD &input, const MatrixD &kernel)
+    {
+        // Calculate modified input dimensions
+        int modifiedRows = input.rows() + 2 * padding;
+        int modifiedCols = input.cols() + 2 * padding;
+
+        // Initialize modified input with zeros
+        MatrixD modifiedInput = MatrixD::Zero(modifiedRows, modifiedCols);
+        // Copy input into the center of modifiedInput
+        modifiedInput.block(padding, padding, input.rows(), input.cols()) = input;
+
+        // Determine output dimensions
+        int outputRows = 1 + (modifiedRows - kernel.rows()) / stride;
+        int outputCols = 1 + (modifiedCols - kernel.cols()) / stride;
+        MatrixD output = MatrixD::Zero(outputRows, outputCols);
+
+        // Perform convolution
+        for (int y = 0; y < outputRows; ++y)
+        {
+            for (int x = 0; x < outputCols; ++x)
+            {
+                // For each position in the output, calculate the convolution
+                // over the kernel size
+                for (int ky = 0; ky < kernel.rows(); ++ky)
+                {
+                    for (int kx = 0; kx < kernel.cols(); ++kx)
+                    {
+                        // Calculate the indices on the modified input
+                        int iy = y * stride + ky;
+                        int ix = x * stride + kx;
+                        output(y, x) += modifiedInput(iy, ix) * kernel(ky, kx);
+                    }
+                }
+            }
+        }
+
+        return output;
     }
 };
 
