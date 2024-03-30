@@ -31,11 +31,11 @@ $(LIBRARY): $(OBJFILES)
 # Compile each source file into an object file
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(EIGENFILES) $(STBFILES) $(JSONFILES)
 	@mkdir -p $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -c $< -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./ -o $@
+	$(CXX) $(CXXFLAGS) -c $< -I$(INCDIR) -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./ -o $@
 
 # Compile the executable
 $(EXECUTABLE): $(SRCDIR)/main.cpp $(LIBRARY)
-	$(CXX) $(CXXFLAGS) $< -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./ -L$(BINDIR) -lhado -o $@
+	$(CXX) $(CXXFLAGS) $< -I$(INCDIR) -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./ -L$(BINDIR) -lhado -o $@
 
 # Clean
 clean:
