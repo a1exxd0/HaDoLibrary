@@ -5,11 +5,13 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <json/json.hpp>
 
 using Eigen::Matrix;
 using std::vector;
 using Eigen::Dynamic;
 using std::cout;
+using nlohmann::json;
 
 #ifndef endl
     #define endl "\n"
@@ -90,6 +92,7 @@ public:
     // Backward propagation
     virtual vector<MatrixD> backward(
         vector<MatrixD>& output_gradient, T learning_rate) = 0;
+
 
 };
 

@@ -13,6 +13,7 @@ EIGENDIR = Eigen
 SRCFILES = $(wildcard $(SRCDIR)/*.cpp)
 EIGENFILES = $(wildcard $(EIGENDIR)/*)
 STBFILES = $(wildcard stb/*.h)
+JSONFILES = $(wildcard json/*.hpp)
 OBJFILES = $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
 LIBRARY = $(BINDIR)/libhado.a
 EXECUTABLE = $(BINDIR)/main
@@ -28,7 +29,7 @@ $(LIBRARY): $(OBJFILES)
 	ar rcs $@ $^
 
 # Compile each source file into an object file
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(EIGENFILES) $(STBFILES)
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(EIGENFILES) $(STBFILES) $(JSONFILES)
 	@mkdir -p $(OBJDIR)
 	$(CXX) $(CXXFLAGS) -c $< -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./ -o $@
 
