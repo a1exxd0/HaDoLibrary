@@ -35,7 +35,7 @@ int main() {
 
     model.add_training_data(data, data);
 
-    model.run_epochs(30000, 0.01, 10);
+    model.run_epochs(100, 0.01, 10);
     return 0;
 }
 
