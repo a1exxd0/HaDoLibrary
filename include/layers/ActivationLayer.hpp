@@ -7,6 +7,7 @@
 #include <memory>
 #include <thread>
 #include <iostream>
+#include <omp.h>
 
 using Eigen::Matrix;
 using std::vector;
@@ -130,25 +131,13 @@ public:
         // Get copy because we need to pass one forward, and one stays in layer
         vector<MatrixD> out_copy(D);
 
-        // If depth is greater than 3, use threads to avoid pointless overhead
         if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
-            vector<std::thread> threads;
-
+            omp_set_num_threads(D);
+            #pragma omp parallel for
             for (int i = 0; i < D; i++){
-                threads.push_back(
-                    std::thread(ActivationLayer::forward_function, 
-                    std::ref(input_tensor[i]), 
-                    std::ref(this->out[i]), 
-                    std::ref(out_copy[i]))
-                );
+                forward_function(input_tensor[i], this->out[i], out_copy[i]);
             }
-
-            for (auto& thread : threads){
-                thread.join();
-            }
-
         } else{
-
             // Iterate through depth of tensor
             for (int i = 0; i < D; i++){
                 forward_function(input_tensor[i], this->out[i], out_copy[i]);
@@ -182,23 +171,12 @@ public:
         vector<MatrixD> input_gradient(D);
 
         if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
-            vector<std::thread> threads;
-
+            omp_set_num_threads(D);
+            #pragma omp parallel for
             for (int i = 0; i < D; i++){
-                threads.push_back(
-                    std::thread(ActivationLayer::backward_function, 
-                    std::ref(output_gradient[i]), 
-                    std::ref(this->out[i]), 
-                    std::ref(input_gradient[i]))
-                );
+                backward_function(output_gradient[i], this->out[i], input_gradient[i]);
             }
-
-            for (auto& thread : threads){
-                thread.join();
-            }
-
         } else{
-
             // Iterate through depth of tensor
             for (int i = 0; i < D; i++){
                 backward_function(output_gradient[i], this->out[i], input_gradient[i]);

@@ -13,29 +13,29 @@ int main() {
 
     Pipeline<double> pipeline;
     pipeline.pushLayer(
-        ActivationLayer<f_tanh<double>, f_tanh_prime<double>, double>(5,50, 50)
+        ActivationLayer<f_tanh<double>, f_tanh_prime<double>, double>(10,100, 100)
     );
     pipeline.pushLayer(
-        ActivationLayer<sigmoid<double>, sigmoid_prime<double>, double>(5,50,50)
+        ActivationLayer<sigmoid<double>, sigmoid_prime<double>, double>(10,100,100)
     );
     pipeline.pushLayer(
-        ActivationLayer<f_tanh<double>, f_tanh_prime<double>, double>(5,50,50)
+        ActivationLayer<f_tanh<double>, f_tanh_prime<double>, double>(10,100,100)
     );
     pipeline.pushEndLayer(
-        MeanSquaredError<double>(5,50,50)
+        MeanSquaredError<double>(10,100,100)
     );
 
     // add data
     vector<Matrix<double, Dynamic, Dynamic>> data;
-    for (int i = 0; i < 5; i++) {
-        data.push_back(Matrix<double, Dynamic, Dynamic>::Random(50,50));
+    for (int i = 0; i < 10; i++) {
+        data.push_back(Matrix<double, Dynamic, Dynamic>::Random(100,100));
     }
 
     Model<double> model(pipeline);
 
     model.add_training_data(data, data);
 
-    model.run_epochs(100, 0.01, 10);
+    model.run_epochs(1000, 0.01, 10);
     return 0;
 }
 

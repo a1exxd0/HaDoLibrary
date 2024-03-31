@@ -179,6 +179,7 @@ public:
 
         // Run test data set
         T cumulative_error = 0;
+
         for(int i = 0; i < n; i++){
             // Calculate individual errors and add to total
             auto individual_error = pipeline->testPipeline(
