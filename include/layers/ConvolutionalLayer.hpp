@@ -22,6 +22,31 @@ private:
     ActivationFunc activate;                     // Activation function
     ActivationFuncPrime activatePrime;           // Derivative of the activation function
 
+    // Assert that T is either float, double, or long double at compiler time
+    static_assert(
+        std::is_same<T, float>::value 
+        || std::is_same<T, double>::value
+        || std::is_same<T, long double>::value,
+        "T must be either float, double, or long double."
+    );
+
+    // Assert that Activation and ActivationPrime are functions that take a scalar and return a scalar
+    static_assert(
+        std::is_invocable_r<T, Activation, T>::value,
+        "Activation must be a function that takes a scalar and returns a scalar."
+    );
+    static_assert(
+        std::is_invocable_r<T, ActivationPrime, T>::value,
+        "ActivationPrime must be a function that takes a scalar and returns a scalar."
+    );
+
+    // Assert that kernelSize, stride, and padding are positive and nonzero
+    // Assertions for dimensions are in layer class
+    static_assert(kernelSize > 0, "kernelSize must be positive and nonzero.");
+    static_assert(stride > 0, "stride must be positive and nonzero.");
+    static_assert(padding >= 0, "padding must be positive.");
+
+
 public:
     using Layer<T>::inp;
     using Layer<T>::out;
