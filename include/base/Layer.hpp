@@ -1,7 +1,7 @@
 #ifndef LAYER_HPP
 #define LAYER_HPP
 
-#define _MAX_DEPTH_UNTIL_THREADING 2
+#define _MAX_DEPTH_UNTIL_THREADING 1
 #define _MAX_PROD_UNTIL_THREADING 2000
 
 #include <Eigen/Dense>

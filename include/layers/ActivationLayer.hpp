@@ -84,7 +84,7 @@ public:
         this->D = D;
         this->R = R;
         this->C = C;
-        this->prod = R*C;
+        this->prod = R * C;
         this->inp = vector<MatrixD>(D);
         this->out = vector<MatrixD>(D);
     }
@@ -98,6 +98,7 @@ public:
             this->D = other.getInputDepth();
             this->R = other.getInputRows();
             this->C = other.getInputCols();
+            this->prod = other.getInputRows() * other.getInputCols();
             this->inp = other.inp;
             this->out = other.out;
         }
@@ -131,7 +132,6 @@ public:
 
         // Get copy because we need to pass one forward, and one stays in layer
         vector<MatrixD> out_copy(D);
-
         #ifdef _OPENMP
             #include <omp.h>
             if (D > _MAX_DEPTH_UNTIL_THREADING && prod >= _MAX_PROD_UNTIL_THREADING){

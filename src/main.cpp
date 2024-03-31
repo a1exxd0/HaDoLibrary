@@ -9,9 +9,8 @@ int main() {
     // Run test model
     // DNNExample::xorModel();
 
-    // 3d test
     #ifdef _OPENMP
-    cout << "OpenMP enabled" << endl;
+    cout << "OpenMP is supported" << endl;
     #endif
 
     Pipeline<double> pipeline;
