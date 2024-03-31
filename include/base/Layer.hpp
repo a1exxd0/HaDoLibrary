@@ -1,6 +1,9 @@
 #ifndef LAYER_HPP
 #define LAYER_HPP
 
+#define _MAX_DEPTH_UNTIL_THREADING 2
+#define _MAX_PROD_UNTIL_THREADING 500
+
 #include <Eigen/Dense>
 #include <vector>
 #include <memory>
@@ -90,7 +93,7 @@ public:
 
     // Backward propagation
     virtual vector<MatrixD> backward(
-        vector<MatrixD> &output_gradient, T learning_rate) = 0;
+        vector<MatrixD> &output_gradient, const T learning_rate) = 0;
 };
 
 #endif // LAYER_HPP

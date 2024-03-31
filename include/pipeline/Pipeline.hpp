@@ -70,7 +70,7 @@ public:
      * @param layer LayerType layer to be added
     */
     template <typename LayerType>
-    void pushLayer(LayerType layer) {
+    void pushLayer(const LayerType layer) {
 
         // must push normal layers first
         if (endlayer != nullptr) {
@@ -88,7 +88,7 @@ public:
      * @param end EndLayerType error function to add
     */
     template <typename EndLayerType>
-    void pushEndLayer(EndLayerType end) {
+    void pushEndLayer(const EndLayerType end) {
 
         // Must match dimensions
         if ((*layervector).getFinalDepth() != end.getDepth() 
@@ -117,7 +117,7 @@ public:
      * @param learning_rate Learning rate for model
      * @return Error of this forward propagation
     */
-    T trainPipeline(vector<MatrixD>& input, vector<MatrixD>& true_res, T learning_rate) {
+    T trainPipeline(vector<MatrixD>& input, vector<MatrixD>& true_res, const T learning_rate) {
 
         // Send through network forward
         auto x = (*layervector).forward(input);

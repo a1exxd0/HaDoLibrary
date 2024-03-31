@@ -135,7 +135,7 @@ public:
      * @param learning_rate learning rate for model
      * @param to_print number of epochs to print error for. Default 100.
     */
-    void run_epochs(int epochs, T learning_rate, int to_print=100){
+    void run_epochs(const int epochs, const T learning_rate, int to_print=100){
         if(to_print < 0) to_print = 100;
         cout << "Running " << epochs << " epochs with learning rate ";
         cout << learning_rate << ":" << endl << endl;

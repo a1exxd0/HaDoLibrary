@@ -57,7 +57,7 @@ public:
      * @param I rows/nodes in input tensor
      * @param O rows/nodes in output tensor
     */
-    DenseLayer(int I, int O) : Layer<T>(1, 1, I, 1, O, 1){
+    DenseLayer(const int I, const int O) : Layer<T>(1, 1, I, 1, O, 1){
         this->weights = MatrixD::Random(O, I);
         this->bias = MatrixD::Random(O, 1);
         this->inp = vector<MatrixD>(1);
@@ -96,7 +96,8 @@ public:
 
         // Validity check
         if (input_tensor.size() != 1 || (input_tensor[0]).cols() != 1 || (input_tensor[0]).rows() != I){
-            cout << "Input tensor must be a size 1 vector of dimensions I x 1." << endl;
+            std::cerr << "Input tensor must be a size 1 vector of dimensions I x 1." << endl;
+            std::cerr << "But got: " << input_tensor.size() << " x " << (input_tensor[0]).rows() << " x " << (input_tensor[0]).cols() << endl;
             exit(1);
         }
 
@@ -106,17 +107,8 @@ public:
         // Calculate output tensor
         auto res = (weights * (this->inp[0]) + bias);
 
-        // Copy output tensor to return
-        vector<MatrixD> out_copy;
-
-        // Make a unique pointer for the copy
-        out_copy.push_back(res);
-
-        // Store a copy of the output tensor in layer attribute out
-        this->out[0] = res;
-
         // Return output tensor
-        return (out_copy); 
+        return {res}; 
     }
 
     /**
@@ -127,11 +119,11 @@ public:
      * @param learning_rate Learning rate for gradient descent (0 < learning_rate < 1)
      * @return vector<MatrixD> Input gradient tensor
     */
-    vector<MatrixD> backward(vector<MatrixD>& output_gradient, T learning_rate) {
+    vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) {
 
         // Validity check
         if (output_gradient.size() != 1 || (output_gradient[0]).rows() != O || (output_gradient[0]).cols() != 1){
-            cout << "Output gradient tensor must be a size 1 vector of dimensions O x 1." << endl;
+            std::cerr << "Output gradient tensor must be a size 1 vector of dimensions O x 1." << endl;
             exit(1);
         }
 

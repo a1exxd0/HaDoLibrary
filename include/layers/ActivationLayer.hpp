@@ -5,6 +5,7 @@
 #include <vector>
 #include "Layer.hpp"
 #include <memory>
+#include <thread>
 #include <iostream>
 
 using Eigen::Matrix;
@@ -49,6 +50,24 @@ private:
         std::is_invocable_r<T, ActivationPrime, T>::value,
         "ActivationPrime must be a function that takes a scalar and returns a scalar."
     );
+
+    // Private lambda for forward pass with threading
+    static constexpr auto forward_function = [](MatrixD& input, MatrixD& output, MatrixD& output_copy){
+
+        // Apply activation function to all input elements
+        output = input.unaryExpr(Activation());
+
+        // Copy output to output_copy
+        output_copy = output;
+    };
+
+    // Private lambda for backward pass with threading
+    static constexpr auto backward_function = [](MatrixD& output_gradient, MatrixD& output, MatrixD& input_gradient){
+        
+        // Calculate input gradient for single layer
+        input_gradient = output.unaryExpr(ActivationPrime())
+            .cwiseProduct(output_gradient);
+    };
 
 public:
 
@@ -95,6 +114,8 @@ public:
      * @param input_tensor Input tensor
      * @return Output tensor of same dimensions as input tensor
     */
+    #pragma GCC push_options
+    #pragma GCC optimize("O2")
     vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
         if (input_tensor.size() != (size_t) D               // Incorrect depth
             || input_tensor[0].rows() != R                  // Incorrect rows
@@ -109,24 +130,35 @@ public:
         // Get copy because we need to pass one forward, and one stays in layer
         vector<MatrixD> out_copy(D);
 
-        // Iterate through depth of tensor
-        for (int i = 0; i < D; i++){
+        // If depth is greater than 3, use threads to avoid pointless overhead
+        if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
+            vector<std::thread> threads;
 
-            // Move input matrix into layer attribute inp
-            this->inp[i] = input_tensor[i];
+            for (int i = 0; i < D; i++){
+                threads.push_back(
+                    std::thread(ActivationLayer::forward_function, 
+                    std::ref(input_tensor[i]), 
+                    std::ref(this->out[i]), 
+                    std::ref(out_copy[i]))
+                );
+            }
 
-            // Calculate output tensor for single layer
-            auto res = this->inp[i].array().unaryExpr(Activation());
+            for (auto& thread : threads){
+                thread.join();
+            }
 
-            // Copy output tensor to return
-            out_copy[i] = res;
+        } else{
 
-            // Store a copy of the output tensor in layer attribute out
-            this->out[i] = res;
+            // Iterate through depth of tensor
+            for (int i = 0; i < D; i++){
+                forward_function(input_tensor[i], this->out[i], out_copy[i]);
+            }
         }
 
         return (out_copy);
     }
+    #pragma GCC pop_options
+    
 
     /**
      * @brief Backward pass of the activation layer. Output gradient tensor must be a size 1 std::vector
@@ -137,8 +169,9 @@ public:
      * @return vector<MatrixD> Input gradient tensor
      */
     #pragma GCC diagnostic ignored "-Wunused-parameter"
-    #pragma GCC optimize("O3")
-    vector<MatrixD> backward(vector<MatrixD>& output_gradient, T learning_rate) {
+    #pragma GCC push_options
+    #pragma GCC optimize("O2")
+    vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) {
 
         // Assert that output gradient tensor is the same size as the input tensor
         if (output_gradient.size() != (size_t) D || output_gradient[0].rows() != R || output_gradient[0].cols() != C) {
@@ -148,20 +181,33 @@ public:
         // Array to store input gradient (not the input)
         vector<MatrixD> input_gradient(D);
 
-        // Iterate through depth of tensor
-        for (int i = 0; i < D; i++){
+        if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
+            vector<std::thread> threads;
 
-            // Calculate input gradient for single layer
-            auto res = 
-                this->out[i].unaryExpr(ActivationPrime())
-                    .cwiseProduct(output_gradient[i]);
+            for (int i = 0; i < D; i++){
+                threads.push_back(
+                    std::thread(ActivationLayer::backward_function, 
+                    std::ref(output_gradient[i]), 
+                    std::ref(this->out[i]), 
+                    std::ref(input_gradient[i]))
+                );
+            }
 
-            // Store input gradient
-            input_gradient[i] = res;
+            for (auto& thread : threads){
+                thread.join();
+            }
+
+        } else{
+
+            // Iterate through depth of tensor
+            for (int i = 0; i < D; i++){
+                backward_function(output_gradient[i], this->out[i], input_gradient[i]);
+            }
         }
 
         return {input_gradient};
     }
+    #pragma GCC pop_options
 
 };
 

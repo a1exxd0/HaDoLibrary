@@ -163,7 +163,7 @@ public:
      * @param output_gradient Gradient of error from result of error function
      * @param learning_rate Learning rate of model
     */
-    vector<MatrixD> backward(vector<MatrixD> output_gradient, T learning_rate){
+    vector<MatrixD> backward(vector<MatrixD> output_gradient, const T learning_rate){
 
         // Dimension check
         if (output_gradient.size() != (size_t) final_depth 
