@@ -49,7 +49,10 @@ public:
           inputDepth(other.inputDepth), outputDepth(other.outputDepth),
           inputRows(other.inputRows), inputCols(other.inputCols),
           outputRows(other.outputRows), outputCols(other.outputCols),
-          filters(other.filters), activate(other.activate), activatePrime(other.activatePrime) {}
+          filters(other.filters) {
+            activate = other.activate;
+            activatePrime = other.activatePrime;
+          }
 
     // Clone returning unique ptr
     std::unique_ptr<Layer<T>> clone() const override

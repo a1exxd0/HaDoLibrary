@@ -69,13 +69,17 @@ public:
     }
 
     // Copy constructor
-    ActivationLayer(const ActivationLayer<Activation, ActivationPrime, T>& other) : Layer<T>(other.D, other.D, other.R, other.C, other.R, other.C) {
-        this->D = other.D;
-        this->R = other.R;
-        this->C = other.C;
-        this->inp = other.inp;
-        this->out = other.out;
-    }
+    ActivationLayer(const ActivationLayer<Activation, ActivationPrime, T>& other) 
+        : Layer<T>(other.getInputDepth(), other.getOutputDepth(), 
+            other.getInputRows(), other.getInputCols(), 
+            other.getOutputRows(), other.getOutputCols()) {
+
+            this->D = other.getInputDepth();
+            this->R = other.getInputRows();
+            this->C = other.getInputCols();
+            this->inp = other.inp;
+            this->out = other.out;
+        }
 
     // Clone returning unique pointer
     unique_ptr<Layer<T>> clone() const override {

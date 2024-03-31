@@ -45,6 +45,10 @@ private:
 
 public:
 
+    // Getters
+    MatrixD getWeights() const { return weights; }
+    MatrixD getBias() const { return bias; }
+
     /**
      * @brief Construct a new Dense Layer object
      * 
@@ -63,14 +67,15 @@ public:
     }
 
     // Copy constructor
-    DenseLayer(const DenseLayer<T>& other) : Layer<T>(1, 1, other.I, 1, other.O, 1){
-        this->weights = other.weights;
-        this->bias = other.bias;
-        this->inp = other.inp;
-        this->out = other.out;
-        this->I = other.I;
-        this->O = other.O;
-    }
+    DenseLayer(const DenseLayer<T>& other) 
+        : Layer<T>(1, 1, other.getInputRows(), 1, other.getOutputRows(), 1){
+            this->weights = other.getWeights();
+            this->bias = other.getBias();
+            this->inp = other.inp;
+            this->out = other.out;
+            this->I = other.getInputRows();
+            this->O = other.getOutputRows();
+        }
 
     // Clone returning unique ptr
     unique_ptr<Layer<T>> clone() const override {
