@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -pedantic -fopenmp
+CXXFLAGS = -std=c++20 -Wall -Wextra -pedantic
 
 # Directories
 SRCDIR = src
@@ -17,6 +17,7 @@ JSONFILES = $(wildcard json/*.hpp)
 OBJFILES = $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
 LIBRARY = $(BINDIR)/libhado.a
 EXECUTABLE = $(BINDIR)/main
+INCLUDES = -I$(INCDIR) -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./
 
 # Targets
 all: lib $(EXECUTABLE)
@@ -31,14 +32,18 @@ $(LIBRARY): $(OBJFILES)
 # Compile each source file into an object file
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(EIGENFILES) $(STBFILES) $(JSONFILES)
 	@mkdir -p $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -c $< -I$(INCDIR) -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./ -o $@
+	$(CXX) $(CXXFLAGS) -c $< $(INCLUDES) -o $@
 
-# Compile the executable
+# Compile the executable without openmp
 $(EXECUTABLE): $(SRCDIR)/main.cpp $(LIBRARY)
-	$(CXX) $(CXXFLAGS) $< -I$(INCDIR) -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./ -L$(BINDIR) -lhado -o $@
+	$(CXX) $(CXXFLAGS) $< $(INCLUDES) -L$(BINDIR) -lhado -o $@
+
+# Compile the executable with openmp
+omp: CXXFLAGS += -fopenmp
+omp: $(EXECUTABLE)
 
 # Clean
 clean:
 	$(RM) -r $(OBJDIR) $(BINDIR)
 
-.PHONY: all lib clean
+.PHONY: all lib omp clean

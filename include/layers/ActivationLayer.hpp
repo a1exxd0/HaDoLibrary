@@ -7,7 +7,6 @@
 #include <memory>
 #include <thread>
 #include <iostream>
-#include <omp.h>
 
 using Eigen::Matrix;
 using std::vector;
@@ -131,18 +130,25 @@ public:
         // Get copy because we need to pass one forward, and one stays in layer
         vector<MatrixD> out_copy(D);
 
-        if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
-            omp_set_num_threads(D);
-            #pragma omp parallel for
+        #ifdef _OPENMP
+        #include <omp.h>
+            if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
+                omp_set_num_threads(D);
+                #pragma omp parallel for
+                for (int i = 0; i < D; i++){
+                    forward_function(input_tensor[i], this->out[i], out_copy[i]);
+                }
+            } else{
+                // Iterate through depth of tensor
+                for (int i = 0; i < D; i++){
+                    forward_function(input_tensor[i], this->out[i], out_copy[i]);
+                }
+            }
+        #else
             for (int i = 0; i < D; i++){
                 forward_function(input_tensor[i], this->out[i], out_copy[i]);
             }
-        } else{
-            // Iterate through depth of tensor
-            for (int i = 0; i < D; i++){
-                forward_function(input_tensor[i], this->out[i], out_copy[i]);
-            }
-        }
+        #endif
 
         return (out_copy);
     }
@@ -170,18 +176,26 @@ public:
         // Array to store input gradient (not the input)
         vector<MatrixD> input_gradient(D);
 
-        if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
-            omp_set_num_threads(D);
-            #pragma omp parallel for
-            for (int i = 0; i < D; i++){
-                backward_function(output_gradient[i], this->out[i], input_gradient[i]);
+        #ifdef _OPENMP
+        #include <omp.h>
+            if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
+                omp_set_num_threads(D);
+                #pragma omp parallel for
+                for (int i = 0; i < D; i++){
+                    backward_function(output_gradient[i], this->out[i], input_gradient[i]);
+                }
+            } else{
+                // Iterate through depth of tensor
+                for (int i = 0; i < D; i++){
+                    backward_function(output_gradient[i], this->out[i], input_gradient[i]);
+                }
             }
-        } else{
+        #else
             // Iterate through depth of tensor
             for (int i = 0; i < D; i++){
                 backward_function(output_gradient[i], this->out[i], input_gradient[i]);
             }
-        }
+        #endif
 
         return {input_gradient};
     }

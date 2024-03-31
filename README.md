@@ -1,7 +1,5 @@
 # A library for implementing Neural Networks in C++
-Lightweight, templated, highly vectorised, and optimised library for a variety of neural networks. To use, all you need are the header files - import the neural network *.hpp file of your choice (i.e. "DeepNeuralNetwork.hpp") to get access to the relevant templates for use.
-
-Since GPU support isn't yet available, we utilise multithreading instead.
+Lightweight, templated, highly vectorised, and optimised library for a variety of neural networks. To use, all you need are the header files - import the neural network *.hpp file of your choice (i.e. "DeepNeuralNetwork.hpp") to get access to the relevant templates for use. Utilises optional multithreading via OpenMP if it is installed in the user system and compiled with -fopenmp flag.
 
 Supports models for:
  - Deep Neural Networks

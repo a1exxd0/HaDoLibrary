@@ -10,6 +10,9 @@ int main() {
     // DNNExample::xorModel();
 
     // 3d test
+    #ifdef _OPENMP
+    cout << "OpenMP enabled" << endl;
+    #endif
 
     Pipeline<double> pipeline;
     pipeline.pushLayer(
