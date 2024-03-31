@@ -42,6 +42,13 @@ private:
 public:
     using Layer<T>::inp;
     using Layer<T>::out;
+
+    // Getters
+    int getKernelSize() const { return kernelSize; }
+    int getStride() const { return stride; }
+    int getPadding() const { return padding; }
+    vector<vector<MatrixD>> getFilters() const { return filters; }
+
     // Constructor
     ConvolutionalLayer(int inputDepth, int outputDepth, int inputRows, int inputCols,
                        int kernelSize, int stride, int padding)
@@ -60,16 +67,14 @@ public:
     }
 
     // Copy constructor
-    ConvolutionalLayer(const ConvolutionalLayer &other)
-        : Layer<T>(other.inputDepth, other.outputDepth, other.inputRows, other.inputCols, other.outputRows, other.outputCols),
-          kernelSize(other.kernelSize), stride(other.stride), padding(other.padding),
-          inputDepth(other.inputDepth), outputDepth(other.outputDepth),
-          inputRows(other.inputRows), inputCols(other.inputCols),
-          outputRows(other.outputRows), outputCols(other.outputCols),
-          filters(other.filters) {
-            activate = other.activate;
-            activatePrime = other.activatePrime;
-          }
+    ConvolutionalLayer(const ConvolutionalLayer &cl)
+        : Layer<T>(cl.getInputDepth(), cl.getOutputDepth(), cl.getInputRows(), cl.getInputCols(),
+        cl.getOutputRows(), cl.getOutputCols()){
+            this->kernelSize = cl.getKernelSize();
+            this->stride = cl.getStride();
+            this->padding = cl.getPadding();
+            this->filters = cl.getFilters();
+        }
 
     // Clone returning unique ptr
     std::unique_ptr<Layer<T>> clone() const override
