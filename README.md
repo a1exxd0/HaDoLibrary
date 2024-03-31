@@ -11,7 +11,7 @@ Will support soon:
 Example usages are stored in src folder to run. See "XorModel.cpp", for example. 
 
 # Usage
-You'll need the Eigen library inside of your project, as well as everything in the include/ subdirectory. See the Makefile for a general idea of how to compile it all.
+You'll need the Eigen library inside of your project, as well as everything in the include/ subdirectory. See the Makefile for a general idea of how to compile it all. Use "-fopenmp" for compilation with multithreading enabled, if you have OpenMP installed on your system.
 
 # TODO
   - [X] Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
