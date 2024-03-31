@@ -98,7 +98,7 @@ public:
 
     virtual vector<MatrixD> forward(vector<MatrixD> &input_tensor) override
     {
-        // Iterate over filters, apply (convolve) each filter matrix within a filter to it's respective matrix in the input
+        // Iterate over filters, apply (convolve) each filter matrix within a filter to its respective matrix in the input
         // Sum up convolved matrices to get output matrix for the current vector of filters
         // Apply activation function to each output matrix
         // Output vector will be same length as number of filters
