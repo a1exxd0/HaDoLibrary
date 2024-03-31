@@ -32,6 +32,7 @@ private:
 
     // Convenience variables inaccessible from outside
     int D, R, C;
+    int prod;
 
     // Assert that T is either float, double, or long double at compiler time
     static_assert(
@@ -83,6 +84,7 @@ public:
         this->D = D;
         this->R = R;
         this->C = C;
+        this->prod = R*C;
         this->inp = vector<MatrixD>(D);
         this->out = vector<MatrixD>(D);
     }
@@ -131,8 +133,8 @@ public:
         vector<MatrixD> out_copy(D);
 
         #ifdef _OPENMP
-        #include <omp.h>
-            if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
+            #include <omp.h>
+            if (D > _MAX_DEPTH_UNTIL_THREADING && prod >= _MAX_PROD_UNTIL_THREADING){
                 omp_set_num_threads(D);
                 #pragma omp parallel for
                 for (int i = 0; i < D; i++){
@@ -177,8 +179,8 @@ public:
         vector<MatrixD> input_gradient(D);
 
         #ifdef _OPENMP
-        #include <omp.h>
-            if (D > _MAX_DEPTH_UNTIL_THREADING && R*C > _MAX_PROD_UNTIL_THREADING){
+            #include <omp.h>
+            if (D > _MAX_DEPTH_UNTIL_THREADING && prod >= _MAX_PROD_UNTIL_THREADING){
                 omp_set_num_threads(D);
                 #pragma omp parallel for
                 for (int i = 0; i < D; i++){
