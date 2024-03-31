@@ -39,11 +39,6 @@ private:
     static_assert(
         std::is_same<T, float>::value || std::is_same<T, double>::value || std::is_same<T, long double>::value, "T must be either float, double, or long double.");
 
-    // Assert dimensions are positive
-    #pragma GCC diagnostic ignored "-Wparentheses"
-    static_assert(
-        I > 0 && O > 0 && RI > 0 && CI > 0 && RO > 0 && CO > 0, "All dimensions must be positive.");
-
 protected:
     /**
      * @brief Layer constructor to instantiate input and output vectors
@@ -57,6 +52,9 @@ protected:
      */
     Layer(int I, int O, int RI, int CI, int RO, int CO) : inp(I), out(O)
     {
+        // Assert positivity of dimensions
+        assert(I > 0 && O > 0 && RI > 0 && CI > 0 && RO > 0 && CO > 0);
+
         this->I = I;
         this->O = O;
         this->RI = RI;
@@ -79,12 +77,12 @@ public:
     virtual ~Layer() {}
 
     // Trivial getters
-    int getInputDepth() { return I; }
-    int getOutputDepth() { return O; }
-    int getInputRows() { return RI; }
-    int getInputCols() { return CI; }
-    int getOutputRows() { return RO; }
-    int getOutputCols() { return CO; }
+    int getInputDepth() const { return I; }
+    int getOutputDepth() const { return O; }
+    int getInputRows() const { return RI; }
+    int getInputCols() const { return CI; }
+    int getOutputRows() const { return RO; }
+    int getOutputCols() const { return CO; }
 
     // Forward propagation
     virtual vector<MatrixD> forward(

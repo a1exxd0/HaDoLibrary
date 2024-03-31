@@ -82,6 +82,9 @@ public:
         return std::make_unique<ConvolutionalLayer>(*this);
     }
 
+    // Destructor
+    ~ConvolutionalLayer() override {}
+
     // Initialize filters with random values
     void initializeFilters(int numFilters, int depth, int size)
     {
@@ -173,6 +176,11 @@ private:
         }
 
         return output;
+    }
+
+    // REWRITING CONVOLVE to utilisemore of the libr/ SIMD
+    MatrixD convolve(const MatrixD& input, const MatrixD& kernel){
+
     }
 };
 

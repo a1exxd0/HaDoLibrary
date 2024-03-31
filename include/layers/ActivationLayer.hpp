@@ -116,7 +116,7 @@ public:
             this->inp[i] = input_tensor[i];
 
             // Calculate output tensor for single layer
-            auto res = this->inp[i].unaryExpr(Activation());
+            auto res = this->inp[i].array().unaryExpr(Activation());
 
             // Copy output tensor to return
             out_copy[i] = res;

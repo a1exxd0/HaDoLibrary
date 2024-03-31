@@ -136,12 +136,12 @@ public:
      * @param to_print number of epochs to print error for. Default 100.
     */
     void run_epochs(int epochs, T learning_rate, int to_print=100){
-        if(to_print <= 0) to_print = 100;
+        if(to_print < 0) to_print = 100;
         cout << "Running " << epochs << " epochs with learning rate ";
         cout << learning_rate << ":" << endl << endl;
 
         // Set up print factor and data size
-        const int print_factor = epochs / to_print;
+        const int print_factor = (to_print == 0) ? 2147483647 : epochs / to_print;
         const int n = training_data.size();
 
         // Run epochs
@@ -170,12 +170,12 @@ public:
      * @param to_print number of tests to print error for. Defaults to all.
     */
     void run_tests(int to_print=-1){
-        if (to_print <= 0) to_print = test_data.size();
+        if (to_print < 0) to_print = test_data.size();
         cout << "\n\nRunning tests...\n\n";
 
         // Set up print factor and data size
         const int n = test_data.size();
-        const int print_factor = n / to_print;
+        const int print_factor = (to_print == 0) ? 2147483647 : n / to_print;
 
         // Run test data set
         T cumulative_error = 0;
