@@ -19,8 +19,6 @@ private:
     int inputDepth, outputDepth, inputRows, inputCols, outputRows, outputCols;
     typedef Matrix<T, Dynamic, Dynamic> MatrixD; // Convenience typedef
     vector<vector<MatrixD>> filters;             // Filters used for the convolution
-    ActivationFunc activate;                     // Activation function
-    ActivationFuncPrime activatePrime;           // Derivative of the activation function
 
     // Assert that Activation and ActivationPrime are functions that take a scalar and return a scalar
     static_assert(
@@ -123,7 +121,7 @@ public:
             }
 
             // Apply activation function to the output feature map
-            outputFeatureMap = outputFeatureMap.unaryExpr(activate);
+            outputFeatureMap = outputFeatureMap.unaryExpr(ActivationFunc());
 
             // Store the activated feature map
             this->out[filterIndex] = outputFeatureMap;
@@ -139,6 +137,8 @@ public:
     }
 
 private:
+    #pragma GCC push_options
+    #pragma GCC optimize("O3")
     MatrixD convolve(const MatrixD &input, const MatrixD &kernel)
     {
         // Calculate modified input dimensions
@@ -176,7 +176,8 @@ private:
         }
 
         return output;
-    }
+    } 
+    #pragma GCC pop_options
 
     // REWRITING CONVOLVE to utilisemore of the libr/ SIMD
     MatrixD convolve(const MatrixD& input, const MatrixD& kernel){
