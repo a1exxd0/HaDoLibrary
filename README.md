@@ -21,7 +21,7 @@ You'll need the Eigen library inside of your project, as well as everything in t
   - [X] Method to pass through and verify layer setup
   - [X] Pipeline class
   - [ ] Convolutional Layers
-  - [ ] Pooling Layers
+  - [X] Pooling Layers
   - [ ] Saving a model (JSON or binary?)
   - [ ] Getting it running on a GPU
   - [ ] Getting it running on a cluster
