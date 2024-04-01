@@ -28,7 +28,6 @@ private:
         std::is_invocable_r<T, ActivationPrime, T>::value,
         "ActivationPrime must be a function that takes a scalar and returns a scalar.");
 
-
 public:
     using Layer<T>::inp;
     using Layer<T>::out;
@@ -53,6 +52,33 @@ public:
         this->outputRows = (inputRows - kernelSize + 2 * padding) / stride + 1;
         this->outputCols = (inputCols - kernelSize + 2 * padding) / stride + 1;
 
+        // Assert stride is positive
+        if (stride <= 0)
+        {
+            std::cerr << "Stride must be positive and non-zero." << endl;
+            assert(stride > 0);
+        }
+
+        // Assert positive dimensions
+        if (inputDepth <= 0 || inputRows <= 0 || inputCols <= 0)
+        {
+            std::cerr << "Input dimensions must be positive and nonzero" << endl;
+            assert(inputDepth > 0 && inputRows > 0 && inputCols > 0);
+        }
+
+        // Assert padding is non-negative
+        if (padding < 0)
+        {
+            std::cerr << "Padding must be non-negative." << endl;
+            assert(padding >= 0);
+        }
+
+        // Assert kernel size is positive and not bigger than input size
+        if (kernelSize <= 0 || kernelSize >= inputRows || kernelSize >= inputCols)
+        {
+            std::cerr << "Kernel size must be positive and smaller than input size." << endl;
+            assert(kernelSize > 0 && kernelSize < inputRows && kernelSize < inputCols);
+        }
         initializeFilters(outputDepth, inputDepth, kernelSize);
     }
 
