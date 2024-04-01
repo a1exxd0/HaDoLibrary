@@ -95,11 +95,7 @@ public:
     vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
 
         // Validity check
-        if (input_tensor.size() != 1 || (input_tensor[0]).cols() != 1 || (input_tensor[0]).rows() != I){
-            std::cerr << "Input tensor must be a size 1 vector of dimensions I x 1." << endl;
-            std::cerr << "But got: " << input_tensor.size() << " x " << (input_tensor[0]).rows() << " x " << (input_tensor[0]).cols() << endl;
-            exit(1);
-        }
+        this->assertInputDimensions(input_tensor);
 
         // Move input tensor into layer attribute inp
         this->inp = input_tensor;
@@ -122,10 +118,7 @@ public:
     vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) {
 
         // Validity check
-        if (output_gradient.size() != 1 || (output_gradient[0]).rows() != O || (output_gradient[0]).cols() != 1){
-            std::cerr << "Output gradient tensor must be a size 1 vector of dimensions O x 1." << endl;
-            exit(1);
-        }
+        this->assertOutputDimensions(output_gradient);
 
         // Calculate weight gradient, bias gradient, and input gradient
         auto weight_gradient = (output_gradient[0]) * (this->inp[0]).transpose();

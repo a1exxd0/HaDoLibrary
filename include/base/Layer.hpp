@@ -90,6 +90,30 @@ public:
     // Virtual Destructor
     virtual ~Layer() {}
 
+    // Assert input tensor dimensions
+    void assertInputDimensions(const vector<MatrixD> &input_tensor) const {
+        if (input_tensor.size() != (size_t) this->getInputDepth() 
+            || input_tensor[0].rows() != this->getInputRows() 
+            || input_tensor[0].cols() != this->getInputCols()){
+            std::cerr << "Expected depth " << this->I << " but got depth " << input_tensor.size() << endl;
+            std::cerr << "Expected rows " << this->RI << " but got rows " << input_tensor[0].rows() << endl;
+            std::cerr << "Expected cols " << this->CI << " but got cols " << input_tensor[0].cols() << endl;
+            throw std::invalid_argument("Input tensor match dimensions of layer.");
+        }
+    }
+
+    // Assert output tensor dimensions
+    void assertOutputDimensions(const vector<MatrixD> &output_tensor) const {
+        if (output_tensor.size() != (size_t) this->getOutputDepth() 
+            || output_tensor[0].rows() != this->getOutputRows() 
+            || output_tensor[0].cols() != this->getOutputCols()){
+            std::cerr << "Expected depth " << this->O << " but got depth " << output_tensor.size() << endl;
+            std::cerr << "Expected rows " << this->RO << " but got rows " << output_tensor[0].rows() << endl;
+            std::cerr << "Expected cols " << this->CO << " but got cols " << output_tensor[0].cols() << endl;
+            throw std::invalid_argument("Output tensor match dimensions of layer.");
+        }
+    }
+
     // Trivial getters
     int getInputDepth() const { return I; }
     int getOutputDepth() const { return O; }

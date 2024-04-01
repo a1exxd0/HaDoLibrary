@@ -84,14 +84,10 @@ public:
     vector<MatrixD> forward(vector<MatrixD> &input_tensor){
 
         // Assert input tensor dimensions
-        if (input_tensor.size() != (size_t) this->getInputDepth() 
-            || input_tensor[0].rows() != this->getInputRows() 
-            || input_tensor[0].cols() != this->getInputCols()){
-            std::cerr << "Expected depth " << this->I << " but got depth " << input_tensor.size() << std::endl;
-            std::cerr << "Expected rows " << this->RI << " but got rows " << input_tensor[0].rows() << std::endl;
-            std::cerr << "Expected cols " << this->CI << " but got cols " << input_tensor[0].cols() << std::endl;
-            throw std::invalid_argument("Input tensor match dimensions of layer.");
-        }
+        this->assertInputDimensions(input_tensor);
+
+        // Place input tensor in layer attribute
+        this->inp = input_tensor;
 
         // Get depth
         const int depth = this->getInputDepth();
@@ -119,11 +115,29 @@ public:
             // Initialize output matrix for this channel
             MatrixD output(this->getOutputRows(), this->getOutputCols());
             
+            // Iterate over rows
+            for (int i = 0; i < this->getOutputRows(); i++){
+                // Iterate over columns
+                for (int j = 0; j < this->getOutputCols(); j++){
+                    // Get relevant input window
+                    MatrixD input_window = padded_input.block(i * stride, j * stride, kernelSize, kernelSize);
 
+                    // Find max value in window
+                    T max_val = input_window.maxCoeff();
+
+                    // Set max value in output matrix
+                    output(i, j) = max_val;
+                }
+            }
 
         }
 
         return output_tensor;
+    }
+
+    // Backward pass
+    vector<MatrixD> backward(vector<MatrixD> &output_gradient, const T learning_rate) override {
+        
     }
 
 

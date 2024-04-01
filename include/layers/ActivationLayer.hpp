@@ -120,15 +120,9 @@ public:
     #pragma GCC push_options
     #pragma GCC optimize("O2")
     vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
-        if (input_tensor.size() != (size_t) D               // Incorrect depth
-            || input_tensor[0].rows() != R                  // Incorrect rows
-            || input_tensor[0].cols() != C) {               // Incorrect columns
 
-            std::cerr << "Expected depth " << D << " but got depth " << input_tensor.size() << endl;
-            std::cerr << "Expected rows " << R << " but got rows " << input_tensor[0].rows() << endl;
-            std::cerr << "Expected cols " << C << " but got cols " << input_tensor[0].cols() << endl;
-            throw std::invalid_argument("Input tensor must have depth D.");
-        }
+        // Assert input tensor dimensions
+        this->assertInputDimensions(input_tensor);
 
         // Get copy because we need to pass one forward, and one stays in layer
         vector<MatrixD> out_copy(D);
@@ -171,9 +165,7 @@ public:
     vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) {
 
         // Assert that output gradient tensor is the same size as the input tensor
-        if (output_gradient.size() != (size_t) D || output_gradient[0].rows() != R || output_gradient[0].cols() != C) {
-            throw std::invalid_argument("Output gradient tensor must have depth D.");
-        }
+        this->assertOutputDimensions(output_gradient);
 
         // Array to store input gradient (not the input)
         vector<MatrixD> input_gradient(D);
