@@ -222,7 +222,6 @@ public:
                 backwards_max_pool(
                     this->inp[channel], 
                     output_gradient[channel], 
-                    this->out[channel], 
                     input_gradient[channel], 
                     padding, stride, kernelSize);
             }

@@ -44,31 +44,25 @@ int main() {
     model.run_epochs(1000, 0.01, 10);
     */
 
-    MaxPoolLayer<double> mp(3, 4, 4, 2, 2, 4);
+    MaxPoolLayer<double> mp(5, 10000, 10000, 2, 2, 0);
 
-    MatrixD input(4, 4);
-    input << 1, 2, 3, 4,
-             5, 6, 7, 8,
-             9, 10, 11, 12,
-             13, 14, 15, 16;
+    MatrixD input = MatrixD::Random(10000, 10000);
 
-    vector<MatrixD> x = {input, input, input};
-
-
+    vector<MatrixD> x = {input, input, input, input, input};
 
     vector<MatrixD> output = mp.forward(x);
 
-    cout << "Input: " << endl << input << endl;
-    cout << "Output: " << endl << output[0] << endl;
+    //cout << "Input: " << endl << input << endl;
+    //cout << "Output: " << endl << output[0] << endl;
 
-    MatrixD fake_res = MatrixD::Ones(6, 6);
+    MatrixD fake_res = MatrixD::Random(5000, 5000);
 
-    vector<MatrixD> output_grad = {fake_res, fake_res, fake_res};
+    vector<MatrixD> output_grad = {fake_res, fake_res, fake_res, fake_res, fake_res};
 
     vector<MatrixD> input_grad = mp.backward(output_grad, 0.01);
 
-    cout << "Output gradient: " << endl << output_grad[0] << endl;
-    cout << "Input gradient: " << endl << input_grad[0] << endl;
+    //cout << "Output gradient: " << endl << output_grad[0] << endl;
+    //cout << "Input gradient: " << endl << input_grad[0] << endl;
     
     return 0;
 } 
