@@ -66,6 +66,17 @@ protected:
         this->CO = CO;
     }
 
+    // Copy constructor
+    Layer(const Layer &other) : inp(other.inp), out(other.out)
+    {
+        I = other.getInputDepth();
+        O = other.getOutputDepth();
+        RI = other.getInputRows();
+        CI = other.getInputCols();
+        RO = other.getOutputRows();
+        CO = other.getOutputCols();
+    }
+
 public:
     // Input tensor
     vector<MatrixD> inp;
