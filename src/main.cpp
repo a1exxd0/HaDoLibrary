@@ -3,7 +3,7 @@
 // #include "ConvolutionalLayer.hpp"
 #include "MaxPoolLayer.hpp"
 using std::cout, std::vector, std::unique_ptr;
-using Eigen::Matrix, Eigen::Dynamic;
+using Eigen::Matrix, Eigen::Dynamic, Eigen::MatrixXd;;
 
 int main() {
     
@@ -60,7 +60,6 @@ int main() {
     vector<MatrixD> output_grad = {fake_res, fake_res, fake_res, fake_res, fake_res};
 
     vector<MatrixD> input_grad = mp.backward(output_grad, 0.01);
-
     //cout << "Output gradient: " << endl << output_grad[0] << endl;
     //cout << "Input gradient: " << endl << input_grad[0] << endl;
     
