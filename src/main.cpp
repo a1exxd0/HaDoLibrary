@@ -44,7 +44,7 @@ int main() {
     model.run_epochs(1000, 0.01, 10);
     */
 
-    MaxPoolLayer<double> mp(3, 4, 4, 2, 2, 0);
+    MaxPoolLayer<double> mp(3, 4, 4, 2, 2, 4);
 
     MatrixD input(4, 4);
     input << 1, 2, 3, 4,
@@ -61,9 +61,7 @@ int main() {
     cout << "Input: " << endl << input << endl;
     cout << "Output: " << endl << output[0] << endl;
 
-    MatrixD fake_res(2, 2);
-    fake_res << 1, 2,
-                   3, 4;
+    MatrixD fake_res = MatrixD::Ones(6, 6);
 
     vector<MatrixD> output_grad = {fake_res, fake_res, fake_res};
 
