@@ -33,14 +33,12 @@ class Layer
 private:
     // Layer dimensions
     int I, O, RI, CI, RO, CO;
-
-    // Convenience typedef
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
-
     // Assert that T is either float, double, or long double at compiler time
     #pragma GCC diagnostic ignored "-Wparentheses"
     static_assert(
         std::is_same<T, float>::value || std::is_same<T, double>::value || std::is_same<T, long double>::value, "T must be either float, double, or long double.");
+
+    typedef Matrix<T, Dynamic, Dynamic> MatrixD; // Convenience typedef
 
 protected:
     /**
@@ -91,10 +89,10 @@ public:
     virtual ~Layer() {}
 
     // Assert input tensor dimensions
-    void assertInputDimensions(const vector<MatrixD> &input_tensor) const {
-        if (input_tensor.size() != (size_t) this->getInputDepth() 
-            || input_tensor[0].rows() != this->getInputRows() 
-            || input_tensor[0].cols() != this->getInputCols()){
+    void constexpr assertInputDimensions(const vector<MatrixD> &input_tensor) const {
+        if (input_tensor.size() != (size_t) this->I 
+            || input_tensor[0].rows() != this->RI
+            || input_tensor[0].cols() != this->CI){
             std::cerr << "Expected depth " << this->I << " but got depth " << input_tensor.size() << endl;
             std::cerr << "Expected rows " << this->RI << " but got rows " << input_tensor[0].rows() << endl;
             std::cerr << "Expected cols " << this->CI << " but got cols " << input_tensor[0].cols() << endl;
@@ -103,10 +101,10 @@ public:
     }
 
     // Assert output tensor dimensions
-    void assertOutputDimensions(const vector<MatrixD> &output_tensor) const {
-        if (output_tensor.size() != (size_t) this->getOutputDepth() 
-            || output_tensor[0].rows() != this->getOutputRows() 
-            || output_tensor[0].cols() != this->getOutputCols()){
+    void constexpr assertOutputDimensions(const vector<MatrixD> &output_tensor) const {
+        if (output_tensor.size() != (size_t) this->O
+            || output_tensor[0].rows() != this->RO
+            || output_tensor[0].cols() != this->CO){
             std::cerr << "Expected depth " << this->O << " but got depth " << output_tensor.size() << endl;
             std::cerr << "Expected rows " << this->RO << " but got rows " << output_tensor[0].rows() << endl;
             std::cerr << "Expected cols " << this->CO << " but got cols " << output_tensor[0].cols() << endl;
