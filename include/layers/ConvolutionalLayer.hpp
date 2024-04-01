@@ -9,7 +9,7 @@
 
 using std::vector;
 
-template <typename T, typename ActivationFunc, typename ActivationFuncPrime>
+template <typename T, typename Activation, typename ActivationPrime>
 class ConvolutionalLayer : public Layer<T>
 {
 private:
@@ -23,18 +23,10 @@ private:
     // Assert that Activation and ActivationPrime are functions that take a scalar and return a scalar
     static_assert(
         std::is_invocable_r<T, Activation, T>::value,
-        "Activation must be a function that takes a scalar and returns a scalar."
-    );
+        "Activation must be a function that takes a scalar and returns a scalar.");
     static_assert(
         std::is_invocable_r<T, ActivationPrime, T>::value,
-        "ActivationPrime must be a function that takes a scalar and returns a scalar."
-    );
-
-    // Assert that kernelSize, stride, and padding are positive and nonzero
-    // Assertions for dimensions are in layer class
-    static_assert(kernelSize > 0, "kernelSize must be positive and nonzero.");
-    static_assert(stride > 0, "stride must be positive and nonzero.");
-    static_assert(padding >= 0, "padding must be positive.");
+        "ActivationPrime must be a function that takes a scalar and returns a scalar.");
 
 
 public:
@@ -67,12 +59,13 @@ public:
     // Copy constructor
     ConvolutionalLayer(const ConvolutionalLayer &cl)
         : Layer<T>(cl.getInputDepth(), cl.getOutputDepth(), cl.getInputRows(), cl.getInputCols(),
-        cl.getOutputRows(), cl.getOutputCols()){
-            this->kernelSize = cl.getKernelSize();
-            this->stride = cl.getStride();
-            this->padding = cl.getPadding();
-            this->filters = cl.getFilters();
-        }
+                   cl.getOutputRows(), cl.getOutputCols())
+    {
+        this->kernelSize = cl.getKernelSize();
+        this->stride = cl.getStride();
+        this->padding = cl.getPadding();
+        this->filters = cl.getFilters();
+    }
 
     // Clone returning unique ptr
     std::unique_ptr<Layer<T>> clone() const override
@@ -121,7 +114,7 @@ public:
             }
 
             // Apply activation function to the output feature map
-            outputFeatureMap = outputFeatureMap.unaryExpr(ActivationFunc());
+            outputFeatureMap = outputFeatureMap.unaryExpr(Activation());
 
             // Store the activated feature map
             this->out[filterIndex] = outputFeatureMap;
@@ -130,15 +123,63 @@ public:
         return this->out; // Return the vector of output feature maps
     }
 
+#pragma GCC push_options
+#pragma GCC optimize("O3")
     virtual vector<MatrixD> backward(vector<MatrixD> &output_gradient, T learning_rate) override
     {
-        // Placeholder
-        return vector<MatrixD>();
+        vector<MatrixD> input_gradient(this->inputDepth, MatrixD::Zero(this->inputRows, this->inputCols));
+        vector<vector<MatrixD>> filter_gradients(this->outputDepth, vector<MatrixD>(this->inputDepth, MatrixD::Zero(this->kernelSize, this->kernelSize)));
+
+        for (int od = 0; od < this->outputDepth; ++od)
+        {
+            for (int id = 0; id < this->inputDepth; ++id)
+            {
+                MatrixD paddedInput = MatrixD::Zero(this->inputRows + 2 * this->padding, this->inputCols + 2 * this->padding);
+                paddedInput.block(this->padding, this->padding, this->inputRows, this->inputCols) = this->inp[id];
+
+                for (int y = 0; y <= this->inputRows - this->kernelSize + 2 * this->padding; y += this->stride)
+                {
+                    for (int x = 0; x <= this->inputCols - this->kernelSize + 2 * this->padding; x += this->stride)
+                    {
+                        MatrixD subInput = paddedInput.block(y, x, this->kernelSize, this->kernelSize);
+                        filter_gradients[od][id] += subInput * output_gradient[od](y / this->stride, x / this->stride);
+                    }
+                }
+
+                this->filters[od][id] -= learning_rate * filter_gradients[od][id];
+            }
+        }
+
+        for (int id = 0; id < this->inputDepth; ++id)
+        {
+            for (int od = 0; od < this->outputDepth; ++od)
+            {
+                MatrixD rotated_filter = this->filters[od][id];
+                std::reverse(rotated_filter.data(), rotated_filter.data() + rotated_filter.size());
+
+                MatrixD padded_output_grad = MatrixD::Zero(output_gradient[od].rows() + 2 * this->padding, output_gradient[od].cols() + 2 * this->padding);
+                padded_output_grad.block(this->padding, this->padding, output_gradient[od].rows(), output_gradient[od].cols()) = output_gradient[od];
+
+                for (int y = 0; y <= padded_output_grad.rows() - this->kernelSize; ++y)
+                {
+                    for (int x = 0; x <= padded_output_grad.cols() - this->kernelSize; ++x)
+                    {
+                        MatrixD subGrad = padded_output_grad.block(y, x, this->kernelSize, this->kernelSize);
+                        input_gradient[id](y / this->stride, x / this->stride) += (subGrad.array() * rotated_filter.array()).sum();
+                    }
+                }
+
+                input_gradient[id] = input_gradient[id].unaryExpr(ActivationPrime());
+            }
+        }
+
+        return input_gradient;
     }
+#pragma GCC pop_options
 
 private:
-    #pragma GCC push_options
-    #pragma GCC optimize("O3")
+#pragma GCC push_options
+#pragma GCC optimize("O3")
     MatrixD convolve(const MatrixD &input, const MatrixD &kernel)
     {
         // Calculate modified input dimensions
@@ -176,13 +217,8 @@ private:
         }
 
         return output;
-    } 
-    #pragma GCC pop_options
-
-    // REWRITING CONVOLVE to utilisemore of the libr/ SIMD
-    MatrixD convolve(const MatrixD& input, const MatrixD& kernel){
-
     }
+#pragma GCC pop_options
 };
 
 #endif // CONVOLUTIONAL_LAYER_HPP
