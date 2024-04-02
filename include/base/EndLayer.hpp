@@ -56,6 +56,13 @@ public:
     int getRows() const { return R; }
     int getCols() const { return C; }
 
+    // Copy constructor
+    EndLayer(const EndLayer& el) {
+        D = el.getDepth();
+        R = el.getRows();
+        C = el.getCols();
+    }
+
     // Virtual clone
     virtual std::unique_ptr<EndLayer<T>> clone() const = 0;
 

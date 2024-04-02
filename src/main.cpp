@@ -3,13 +3,14 @@
 #include "ConvolutionalLayer.hpp"
 #include "MaxPoolLayer.hpp"
 #include "SoftmaxLayer.hpp"
+#include "CrossEntropyLoss.hpp"
 using std::cout, std::vector, std::unique_ptr;
 using Eigen::Matrix, Eigen::Dynamic, Eigen::MatrixXd;;
 
 int main() {
     
     // Run test model
-    // DNNExample::xorModel();
+    DNNExample::xorModel();
 
     #ifdef _OPENMP
     cout << "OpenMP is supported" << endl;
@@ -65,7 +66,7 @@ int main() {
     //cout << "Output gradient: " << endl << output_grad[0] << endl;
     //cout << "Input gradient: " << endl << input_grad[0] << endl;
     */
-
+   /*
     ConvolutionalLayer<double, sigmoid<double>, sigmoid_prime<double>> mp(3,2,6,6,2,1,0);
 
     MatrixD input = MatrixD::Random(6, 6);
@@ -83,7 +84,7 @@ int main() {
 
     vector<MatrixD> input_grad = mp.backward(output_grad, 0.01);
     cout << "Output gradient: " << endl << output_grad[0] << endl;
-    cout << "Input gradient: " << endl << input_grad[0] << endl;
+    cout << "Input gradient: " << endl << input_grad[0] << endl;*/
     
     return 0;
 } 

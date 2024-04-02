@@ -9,6 +9,8 @@
 #include "LayerVector.hpp"
 #include "Pipeline.hpp"
 #include "SequentialModel.hpp"
+#include "SoftmaxLayer.hpp"
+#include "CrossEntropyLoss.hpp"
 #include <Eigen/Dense>
 #include <vector>
 #include <memory>
