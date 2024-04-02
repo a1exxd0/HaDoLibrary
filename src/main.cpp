@@ -2,6 +2,7 @@
 #include "XorModel.cpp"
 #include "ConvolutionalLayer.hpp"
 #include "MaxPoolLayer.hpp"
+#include "SoftmaxLayer.hpp"
 using std::cout, std::vector, std::unique_ptr;
 using Eigen::Matrix, Eigen::Dynamic, Eigen::MatrixXd;;
 

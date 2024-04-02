@@ -71,7 +71,7 @@ public:
     vector<MatrixD> forward(vector<MatrixD> &input_tensor){
 
         // Assert that input tensor has the correct dimensions
-        assertInputDimensions(input_tensor);
+        this->assertInputDimensions(input_tensor);
 
         // Create output tensor location
         vector<MatrixD> output_tensor;
@@ -94,10 +94,10 @@ public:
      * @param grad_tensor Gradient tensor of derivatives of loss w.r.t. output
      * @return vector<MatrixD> Gradient tensor of derivatives of loss w.r.t. input
     */
-    vector<MatrixD> backward(vector<MatrixD> &grad_tensor){
+    vector<MatrixD> backward(vector<MatrixD> &grad_tensor, const T learning_rate){
 
         // Assert that gradient tensor has the correct dimensions
-        assertOutputDimensions(grad_tensor);
+        this->assertOutputDimensions(grad_tensor);
 
         // Get the vector of outputs from softmax and replicate to form matrix
         MatrixD tiled = this->out[0].replicate(1, rows);
