@@ -24,7 +24,7 @@ Utilises optional multithreading via OpenMP if it is installed in the user syste
   - [x] Dense Layers
   - [x] Activation Layers (tanh, sigmoid, ReLU, softmax so far)
   - [X] Mean Squared Error implementation
-  - [ ] Cross-Entropy Loss implementation
+  - [X] Cross-Entropy Loss implementation
   - [X] Method to pass through and verify layer setup
   - [X] Pipeline class
   - [ ] Convolutional Layers

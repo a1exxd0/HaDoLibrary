@@ -8,41 +8,27 @@ void xorModel() {
     // Instantiate pipeline and add layers
     Pipeline<float> pipeline;
 
-    pipeline.pushLayer<DenseLayer<>>(
-        DenseLayer<>(2, 3)
-    );
+    pipeline.pushLayer(DenseLayer<>(2, 3));
 
-    pipeline.pushLayer<ActivationLayer<f_tanh<>, f_tanh_prime<>>>(
-        ActivationLayer<f_tanh<>, f_tanh_prime<>>(1, 3, 1)
-    );
+    pipeline.pushLayer(ActivationLayer<f_tanh<>, f_tanh_prime<>>(1, 3, 1));
 
-    pipeline.pushLayer<DenseLayer<>>(
-        DenseLayer<>(3, 5)
-    );
+    pipeline.pushLayer(DenseLayer<>(3, 5));
 
-    pipeline.pushLayer<ActivationLayer<f_tanh<>, f_tanh_prime<>>>(
-        ActivationLayer<f_tanh<>, f_tanh_prime<>>(1, 5, 1)
-    );
 
-    pipeline.pushLayer<DenseLayer<>>(
-        DenseLayer<> (5, 3)
-    );
+    // You can optionally specify template for push if it isn't automatic
+    pipeline.pushLayer(ActivationLayer<f_tanh<>, f_tanh_prime<>>(1, 5, 1));
 
-    pipeline.pushLayer<ActivationLayer<f_tanh<>, f_tanh_prime<>>>(
-        ActivationLayer<f_tanh<>, f_tanh_prime<>>(1,3,1)
-    );
+    // You can also type deduce the DenseLayer template
+    pipeline.pushLayer(DenseLayer(5, 3));
 
-    pipeline.pushLayer<DenseLayer<>>(
-        DenseLayer<>(3, 1)
-    );
 
-    pipeline.pushLayer<ActivationLayer<f_tanh<>, f_tanh_prime<>, float>>(
-        ActivationLayer<f_tanh<>, f_tanh_prime<>>(1,1,1)
-    );
+    pipeline.pushLayer(ActivationLayer<f_tanh<>, f_tanh_prime<>>(1,3,1));
+
+    pipeline.pushLayer(DenseLayer(3, 1));
+
+    pipeline.pushLayer(ActivationLayer<f_tanh<>, f_tanh_prime<>>(1,1,1));
     
-    pipeline.pushEndLayer<MeanSquaredError<float>>(
-        MeanSquaredError<>(1,1,1)
-    );
+    pipeline.pushEndLayer(MeanSquaredError<>(1,1,1));
 
     /**
      * SUMMARY OF LAYERS:
@@ -70,10 +56,10 @@ void xorModel() {
     MatrixXf true_res1(1, 1); true_res1 << 0;
     MatrixXf true_res2(1, 1); true_res2 << 1;
 
-    model.add_training_data({input1}, {true_res1});
-    model.add_training_data({input2}, {true_res2});
-    model.add_training_data({input3}, {true_res2});
-    model.add_training_data({input4}, {true_res1});
+    model.add_training_data({input1}, {true_res1}); // 0 XOR 0 = 0
+    model.add_training_data({input2}, {true_res2}); // 0 XOR 1 = 1
+    model.add_training_data({input3}, {true_res2}); // 1 XOR 0 = 1
+    model.add_training_data({input4}, {true_res1}); // 1 XOR 1 = 0
 
     model.add_test_data({input1}, {true_res1});
     model.add_test_data({input2}, {true_res2});
@@ -83,7 +69,7 @@ void xorModel() {
     // Train and test model
     model.run_epochs(50000, 0.01, 10);
     //model.run_epochs(1000, 0.001, 0);
-    //model.run_tests();
+    model.run_tests();
 
 }
 

@@ -1,5 +1,6 @@
 #include "DeepNeuralNetwork.hpp"
 #include "XorModel.cpp"
+#include "DoubleOut.cpp"
 #include "ConvolutionalLayer.hpp"
 #include "MaxPoolLayer.hpp"
 #include "SoftmaxLayer.hpp"
@@ -10,7 +11,7 @@ using Eigen::Matrix, Eigen::Dynamic, Eigen::MatrixXd;;
 int main() {
     
     // Run test model
-    DNNExample::xorModel();
+    // DNNExample::doubleOutModel();
 
     #ifdef _OPENMP
     cout << "OpenMP is supported" << endl;
