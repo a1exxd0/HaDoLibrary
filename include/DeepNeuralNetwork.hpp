@@ -8,7 +8,7 @@
 #include "MeanSquaredError.hpp"
 #include "LayerVector.hpp"
 #include "Pipeline.hpp"
-#include "Model.hpp"
+#include "SequentialModel.hpp"
 #include <Eigen/Dense>
 #include <vector>
 #include <memory>

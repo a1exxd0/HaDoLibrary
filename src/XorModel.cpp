@@ -60,7 +60,7 @@ void xorModel() {
 
     // Instantiate model and add training and test data
     // Will predict the XOR of 2 inputs
-    Model<> model(pipeline);
+    SequentialModel<float> model(pipeline);
 
     MatrixXf input1(2, 1); input1 << 0, 0;
     MatrixXf input2(2, 1); input2 << 0, 1;

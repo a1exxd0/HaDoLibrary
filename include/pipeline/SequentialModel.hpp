@@ -21,7 +21,7 @@ using Eigen::Matrix, Eigen::Dynamic;
  * @tparam T scalar type (float, double, long double)
 */
 template<typename T=float>
-class Model {
+class SequentialModel {
 private:
 
     // Convenience typedef
@@ -48,12 +48,12 @@ public:
      * 
      * @param pipeline Pipeline object to use
     */
-    Model(Pipeline<T>& pipeline){
+    SequentialModel(Pipeline<T>& pipeline){
         this->pipeline = pipeline.clone();
     }
 
     // Copy constructor
-    Model(const Model& m){
+    SequentialModel(const SequentialModel& m){
         pipeline = m.pipeline->clone();
         training_data = m.training_data;
         training_results = m.training_results;
@@ -62,12 +62,12 @@ public:
     }
 
     // Clone returning unique ptr
-    unique_ptr<Model<T>> clone() const {
-        return std::make_unique<Model<T>>(*this);
+    unique_ptr<Layer<T>> clone() const {
+        return std::make_unique<SequentialModel<T>>(*this);
     }
 
     // Destructor
-    ~Model(){}
+    ~SequentialModel(){}
 
     // Pipeline object public for direct access
     unique_ptr<Pipeline<T>> pipeline;
