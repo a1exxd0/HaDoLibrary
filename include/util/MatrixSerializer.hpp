@@ -36,7 +36,7 @@ public:
         }
     }
 
-    static void write_to_file(const std::string& filename, const Matrix& matrix) {
+    static void write_to_file_test(const std::string& filename, const Matrix& matrix) {
         std::ofstream file(filename);
         json j;
         to_json(j, matrix);
@@ -44,7 +44,7 @@ public:
         file.close();
     }
 
-    static void read_from_file(const std::string& filename, Matrix& matrix) {
+    static void read_from_file_test(const std::string& filename, Matrix& matrix) {
         std::ifstream input(filename);
         json loaded_json;
         input >> loaded_json;

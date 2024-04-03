@@ -23,9 +23,9 @@ int main() {
     // Serialiser
 
     MatrixD matrix = MatrixD::Random(5, 5);
-    MatrixSerializer<double>::write_to_file("src/models/matrix.json", matrix);
+    MatrixSerializer<double>::write_to_file_test("src/models/matrix.json", matrix);
     MatrixD matrix2;
-    MatrixSerializer<double>::read_from_file("src/models/matrix.json", matrix2);
+    MatrixSerializer<double>::read_from_file_test("src/models/matrix.json", matrix2);
     cout << "Matrix: " << endl << matrix << endl;
 
 
