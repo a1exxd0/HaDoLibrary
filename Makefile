@@ -17,7 +17,7 @@ JSONFILES = $(wildcard json/*.hpp)
 OBJFILES = $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
 LIBRARY = $(BINDIR)/libhado.a
 EXECUTABLE = $(BINDIR)/main
-INCLUDES = -I$(INCDIR) -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I ./
+INCLUDES = -I ./ -I$(INCDIR) -I$(INCDIR)/base -I$(INCDIR)/layers -I$(INCDIR)/pipeline -I$(INCDIR)/image -I$(INCDIR)/errors -I$(INCDIR)/util
 
 # Targets
 all: lib $(EXECUTABLE)

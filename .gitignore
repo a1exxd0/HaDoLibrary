@@ -5,3 +5,5 @@ bin/libhado.a
 bin/main
 obj/XorModel.o
 obj/main.o
+obj/DoubleOut.o
+obj/TwoCategoryMNIST.o
