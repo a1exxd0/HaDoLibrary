@@ -5,7 +5,7 @@
 #include "MaxPoolLayer.hpp"
 #include "SoftmaxLayer.hpp"
 #include "CrossEntropyLoss.hpp"
-#include "MatrixSerializer.hpp"
+#include "TensorSerializer.hpp"
 using std::cout, std::vector, std::unique_ptr;
 using Eigen::Matrix, Eigen::Dynamic, Eigen::MatrixXd;;
 
@@ -23,10 +23,11 @@ int main() {
     // Serialiser
 
     MatrixD matrix = MatrixD::Random(5, 5);
-    MatrixSerializer<double>::write_to_file_test("src/models/matrix.json", matrix);
-    MatrixD matrix2;
-    MatrixSerializer<double>::read_from_file_test("src/models/matrix.json", matrix2);
-    cout << "Matrix: " << endl << matrix << endl;
+    vector<MatrixD> matrices = {matrix, matrix, matrix};
+    TensorSerializer<double>::write_to_file_test("src/models/matrix.json", matrices);
+    vector<MatrixD> matrix2;
+    TensorSerializer<double>::read_from_file_test("src/models/matrix.json", matrix2);
+    cout << "Matrix: " << endl << matrix2[0] << endl;
 
 
 
