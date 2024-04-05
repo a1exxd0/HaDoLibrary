@@ -22,7 +22,7 @@ class CrossEntropyLoss : public EndLayer<T> {
 private:
 
     // Convenience typedef
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
+    using typename EndLayer<T>::MatrixD;
 
     // Check if T is a valid type
     static_assert(
@@ -53,7 +53,7 @@ public:
     CrossEntropyLoss(const CrossEntropyLoss& cel) : EndLayer<T>(cel) {}
 
     // Clone
-    unique_ptr<EndLayer<T>> clone() const {
+    virtual unique_ptr<EndLayer<T>> clone() const override {
         return std::make_unique<CrossEntropyLoss<T>>(*this);
     }
 
@@ -68,7 +68,7 @@ public:
      * @param true_res vector of matrices containing the true output of the network
      * @return T loss for that input
     */
-    T forward(vector<MatrixD>& res, vector<MatrixD>& true_res){
+    virtual T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
         T loss = 0;
 
         // Essentially the difference between true_res and the log of res (cross entropy loss definition)
@@ -84,7 +84,7 @@ public:
      * @param true_res vector of matrices containing the true output of the network
      * @return vector<MatrixD> gradient of the loss with respect to the input
     */
-    vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res){
+    virtual vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
         vector<MatrixD> grad;
 
         // Provable derivative of loss w.r.t inputs into CrossEntropyLoss

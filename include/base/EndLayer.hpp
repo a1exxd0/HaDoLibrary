@@ -20,9 +20,6 @@ template<typename T=float>
 class EndLayer {
 private:
 
-    // Convenience typedef
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
-
     // Assert that T is either float, double, or long double at compiler time
     static_assert(
         std::is_same<T, float>::value 
@@ -32,6 +29,9 @@ private:
     );
 
 protected:
+
+    // Convenience typedef
+    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
 
     // Enforce that these are constructed
     int D, R, C;

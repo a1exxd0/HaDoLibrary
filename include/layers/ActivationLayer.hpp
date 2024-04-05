@@ -28,7 +28,7 @@ class ActivationLayer : public Layer<T> {
 private:
 
     // Convenience typedef
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
+    using typename Layer<T>::MatrixD;
 
     // Convenience variables inaccessible from outside
     int D, R, C;
@@ -51,24 +51,6 @@ private:
         std::is_invocable_r<T, ActivationPrime, T>::value,
         "ActivationPrime must be a function that takes a scalar and returns a scalar."
     );
-
-    // Private lambda for forward pass with threading
-    static constexpr auto forward_function = [](MatrixD& input, MatrixD& output, MatrixD& output_copy){
-
-        // Apply activation function to all input elements
-        output = input.unaryExpr(Activation());
-
-        // Copy output to output_copy
-        output_copy = output;
-    };
-
-    // Private lambda for backward pass with threading
-    static constexpr auto backward_function = [](MatrixD& output_gradient, MatrixD& output, MatrixD& input_gradient){
-        
-        // Calculate input gradient for single layer
-        input_gradient = output.unaryExpr(ActivationPrime())
-            .cwiseProduct(output_gradient);
-    };
 
 public:
 
@@ -104,7 +86,7 @@ public:
         }
 
     // Clone returning unique pointer
-    unique_ptr<Layer<T>> clone() const override {
+    virtual unique_ptr<Layer<T>> clone() const override {
         return std::make_unique<ActivationLayer<Activation, ActivationPrime, T>>(*this);
     }
 
@@ -119,7 +101,7 @@ public:
     */
     #pragma GCC push_options
     #pragma GCC optimize("O2")
-    vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
+    virtual vector<MatrixD> forward(vector<MatrixD>& input_tensor) override {
 
         // Assert input tensor dimensions
         this->assertInputDimensions(input_tensor);
@@ -162,7 +144,7 @@ public:
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     #pragma GCC push_options
     #pragma GCC optimize("O2")
-    vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) {
+    virtual vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) override{
 
         // Assert that output gradient tensor is the same size as the input tensor
         this->assertOutputDimensions(output_gradient);
@@ -194,6 +176,26 @@ public:
         return {input_gradient};
     }
     #pragma GCC pop_options
+
+private:
+
+    // Private lambda for forward pass with threading
+    static constexpr auto forward_function = [](MatrixD& input, MatrixD& output, MatrixD& output_copy){
+
+        // Apply activation function to all input elements
+        output = input.unaryExpr(Activation());
+
+        // Copy output to output_copy
+        output_copy = output;
+    };
+
+    // Private lambda for backward pass with threading
+    static constexpr auto backward_function = [](MatrixD& output_gradient, MatrixD& output, MatrixD& input_gradient){
+        
+        // Calculate input gradient for single layer
+        input_gradient = output.unaryExpr(ActivationPrime())
+            .cwiseProduct(output_gradient);
+    };
 
 };
 

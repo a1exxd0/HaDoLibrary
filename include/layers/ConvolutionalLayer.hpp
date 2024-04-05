@@ -17,7 +17,10 @@ private:
     int stride;     // Stride of the convolution
     int padding;    // Padding applied to the input
     int inputDepth, outputDepth, inputRows, inputCols, outputRows, outputCols;
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD; // Convenience typedef
+
+    // Convenience typedef
+    using typename Layer<T>::MatrixD;
+    
     vector<vector<MatrixD>> filters;             // Filters used for the convolution
 
     // Assert that Activation and ActivationPrime are functions that take a scalar and return a scalar
@@ -94,7 +97,7 @@ public:
     }
 
     // Clone returning unique ptr
-    std::unique_ptr<Layer<T>> clone() const override
+    virtual std::unique_ptr<Layer<T>> clone() const override
     {
         return std::make_unique<ConvolutionalLayer>(*this);
     }

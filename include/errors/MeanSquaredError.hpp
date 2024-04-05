@@ -22,8 +22,7 @@ template<typename T=float>
 class MeanSquaredError : public EndLayer<T> {
 private:
 
-    // Convenience typedef
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
+    using typename EndLayer<T>::MatrixD;
 
     // Assert that T is either float, double, or long double at compiler time
     static_assert(
@@ -42,7 +41,7 @@ public:
     MeanSquaredError(const MeanSquaredError& mse) : EndLayer<T>(mse.getDepth(), mse.getRows(), mse.getCols()) {}
 
     // Clone returning unique ptr
-    std::unique_ptr<EndLayer<T>> clone() const {
+    virtual std::unique_ptr<EndLayer<T>> clone() const override {
         return std::make_unique<MeanSquaredError>(*this);
     }
 
@@ -55,7 +54,7 @@ public:
      * @param res Result tensor
      * @param true_res True result tensor
     */
-    T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) {
+    virtual T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
 
         // Check they must be of same size & dimensions
         if (res.size() != true_res.size()) {
@@ -79,7 +78,7 @@ public:
      * @param res Result vector from model
      * @param true_res True value (label for data)
     */
-    vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) {
+    virtual vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
 
         // Check they must be of same size & dimensions
         if (res.size() != true_res.size()) {

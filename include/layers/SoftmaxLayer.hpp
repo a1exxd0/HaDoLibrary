@@ -24,7 +24,7 @@ class SoftmaxLayer : public Layer<T> {
 private:
 
     // Convenience typedef
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
+    using typename Layer<T>::MatrixD;
 
     // Number of rows in input tensor (and output)
     int rows;
@@ -55,7 +55,7 @@ public:
     }
 
     // Clone
-    unique_ptr<Layer<T>> clone() const {
+    virtual unique_ptr<Layer<T>> clone() const override {
         return std::make_unique<SoftmaxLayer<T>>(*this);
     }
 
@@ -68,7 +68,7 @@ public:
      * @param input_tensor Input tensor
      * @return vector<MatrixD> Output tensor
     */
-    vector<MatrixD> forward(vector<MatrixD> &input_tensor){
+    virtual vector<MatrixD> forward(vector<MatrixD> &input_tensor) override {
 
         // Assert that input tensor has the correct dimensions
         this->assertInputDimensions(input_tensor);
@@ -94,7 +94,7 @@ public:
      * @param grad_tensor Gradient tensor of derivatives of loss w.r.t. output
      * @return vector<MatrixD> Gradient tensor of derivatives of loss w.r.t. input
     */
-    vector<MatrixD> backward(vector<MatrixD> &grad_tensor, const T learning_rate){
+    virtual vector<MatrixD> backward(vector<MatrixD> &grad_tensor, const T learning_rate) override {
 
         // Assert that gradient tensor has the correct dimensions
         this->assertOutputDimensions(grad_tensor);

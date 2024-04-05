@@ -26,7 +26,7 @@ class DenseLayer : public Layer<T>{
 private:
 
     // Convenience typedef
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
+    using typename Layer<T>::MatrixD;
 
     // Convenience private variables
     int I, O;
@@ -78,7 +78,7 @@ public:
         }
 
     // Clone returning unique ptr
-    unique_ptr<Layer<T>> clone() const override {
+    virtual unique_ptr<Layer<T>> clone() const override {
         return unique_ptr<DenseLayer<T>>(new DenseLayer<T>(*this));
     }
 
@@ -92,7 +92,7 @@ public:
      * @param input_tensor Input tensor (one dimensional, must have right size)
      * @return vector<MatrixD> Output tensor
     */
-    vector<MatrixD> forward(vector<MatrixD>& input_tensor) {
+    virtual vector<MatrixD> forward(vector<MatrixD>& input_tensor) override {
 
         // Validity check
         this->assertInputDimensions(input_tensor);
@@ -115,7 +115,7 @@ public:
      * @param learning_rate Learning rate for gradient descent (0 < learning_rate < 1)
      * @return vector<MatrixD> Input gradient tensor
     */
-    vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) {
+    virtual vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) override {
 
         // Validity check
         this->assertOutputDimensions(output_gradient);

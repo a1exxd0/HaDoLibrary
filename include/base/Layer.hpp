@@ -38,9 +38,11 @@ private:
     static_assert(
         std::is_same<T, float>::value || std::is_same<T, double>::value || std::is_same<T, long double>::value, "T must be either float, double, or long double.");
 
-    typedef Matrix<T, Dynamic, Dynamic> MatrixD; // Convenience typedef
-
 protected:
+
+    // Convenience typedef
+    typedef Matrix<T, Dynamic, Dynamic> MatrixD;
+
     /**
      * @brief Layer constructor to instantiate input and output vectors
      *

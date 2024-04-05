@@ -27,7 +27,7 @@ private:
     int prod; // Convenience variable for input rows * input cols
 
     // Convenience typedef
-    typedef Matrix<T, Eigen::Dynamic, Eigen::Dynamic> MatrixD;
+    using typename Layer<T>::MatrixD;
 
 public:
 
@@ -104,7 +104,7 @@ public:
         kernelSize(other.getKernelSize()), stride(other.getStride()), padding(other.getPadding()), prod(other.getProd()){}
 
     // Clone
-    std::unique_ptr<Layer<T>> clone() const override {
+    virtual std::unique_ptr<Layer<T>> clone() const override {
         return std::make_unique<MaxPoolLayer>(*this);
     }
 
@@ -117,7 +117,7 @@ public:
      * @param input_tensor Input tensor
      * @return vector<MatrixD> Output tensor
     */
-    vector<MatrixD> forward(vector<MatrixD> &input_tensor){
+    virtual vector<MatrixD> forward(vector<MatrixD> &input_tensor) override {
 
         // Assert input tensor dimensions
         this->assertInputDimensions(input_tensor);
@@ -179,7 +179,7 @@ public:
      * @param learning_rate Learning rate (no effect here)
      * @return vector<MatrixD> Input gradient tensor
     */
-    vector<MatrixD> backward(vector<MatrixD> &output_gradient, const T learning_rate) override {
+    virtual vector<MatrixD> backward(vector<MatrixD> &output_gradient, const T learning_rate) override {
         
         // Dimension check
         this->assertOutputDimensions(output_gradient);
