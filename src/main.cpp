@@ -6,6 +6,7 @@
 #include "SoftmaxLayer.hpp"
 #include "CrossEntropyLoss.hpp"
 #include "TensorSerializer.hpp"
+#include "FlatteningLayer.hpp"
 using std::cout, std::vector, std::unique_ptr;
 using Eigen::Matrix, Eigen::Dynamic, Eigen::MatrixXd;;
 
