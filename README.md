@@ -15,7 +15,7 @@ Example usages are stored in src folder to run. See "XorModel.cpp", for example.
 Looking to properly integrate unit testing functionality for smoother scalability in future.
 
 # Usage
-You'll need the Eigen library inside of your project, as well as everything in the include/ subdirectory. See the Makefile for a general idea of how to compile it all. Use "-fopenmp" for compilation with multithreading enabled, if you have OpenMP installed on your system.
+You'll need the Eigen library inside of your project, as well as everything in the include/ subdirectory. See the Makefile for a general idea of how to compile it all. Use "-fopenmp" for compilation with multithreading enabled if you're a baddie.
 
 To use, all you need are the header files - import the neural network *.hpp file of your choice (i.e. "DeepNeuralNetwork.hpp") to get access to the relevant templates for use. Upcoming updates will enforce that you cant import modules that aren't top-level, i.e. individual layers - but can import types of networks, which provides you with the tools you need for that particular class of model.
 
