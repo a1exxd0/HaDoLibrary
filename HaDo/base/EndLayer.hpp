@@ -11,6 +11,8 @@ using Eigen::Matrix;
 using std::vector;
 using Eigen::Dynamic;
 
+namespace hado {
+
 /**
  * @brief End layer class for getting error gradient w.r.t results
  * 
@@ -77,5 +79,7 @@ public:
     virtual vector<MatrixD> backward(
         vector<MatrixD>& res, vector<MatrixD>& true_res) = 0;
 };
+
+}
 
 #endif // END_LAYER_HPP

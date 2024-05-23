@@ -1,4 +1,6 @@
-#include "ConvolutionalNeuralNetwork.hpp"
+#include <HaDo/ConvolutionalNeuralNetwork>
+
+using namespace hado;
 
 void TwoCategoryMNIST(){
     Pipeline<double> pipeline;

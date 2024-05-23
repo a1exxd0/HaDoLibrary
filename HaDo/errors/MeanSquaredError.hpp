@@ -12,6 +12,8 @@ using Eigen::Matrix;
 using std::vector;
 using Eigen::Dynamic;
 
+namespace hado {
+
 /**
  * @brief Mean squared error class. T will only work for float, double,
  * or long double.
@@ -102,5 +104,6 @@ public:
     }
 };
 
+}
 
 #endif // MEAN_SQUARED_ERROR_HPP

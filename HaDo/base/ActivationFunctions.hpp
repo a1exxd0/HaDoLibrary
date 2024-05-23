@@ -3,7 +3,8 @@
 
 #include <cmath>
 
-
+namespace hado {
+    
 /**
  * @brief ReLU activation function
  * 
@@ -83,4 +84,6 @@ struct f_tanh_prime {
     }
 };
 
-#endif
+}
+
+#endif // ACTIVATION_FUNCTIONS_HPP

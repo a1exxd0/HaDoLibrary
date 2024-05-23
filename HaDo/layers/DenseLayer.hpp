@@ -15,6 +15,8 @@ using std::cout;
 using Eigen::Dynamic;
 using std::unique_ptr;
 
+namespace hado {
+
 /**
  * @brief Dense layer class. T will only work for float, double,
  * or long double.
@@ -133,5 +135,8 @@ public:
         return {input_gradient};
     }
 };
+
+
+}
 
 #endif // DENSE_LAYER_HPP

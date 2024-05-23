@@ -9,6 +9,8 @@
 #include <string>
 using json = nlohmann::json;
 
+namespace hado {
+
 /**
  * Fully static class
 */
@@ -112,6 +114,9 @@ public:
         from_json(loaded_json, matrices);
     }
 };
+
+
+}
 
 
 #endif // TENSOR_SERIALIZER_HPP

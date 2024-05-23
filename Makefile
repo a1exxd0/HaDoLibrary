@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++20 -Wall -Wextra -pedantic
 
 # Directories
 SRCDIR = src
-INCDIR = include
+INCDIR = HaDo
 OBJDIR = obj
 BINDIR = bin
 EIGENDIR = Eigen

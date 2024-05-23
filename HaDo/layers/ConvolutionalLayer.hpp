@@ -9,6 +9,8 @@
 
 using std::vector;
 
+namespace hado {
+
 template <typename T, typename Activation, typename ActivationPrime>
 class ConvolutionalLayer : public Layer<T>
 {
@@ -249,5 +251,8 @@ private:
     }
 #pragma GCC pop_options
 };
+
+}
+
 
 #endif // CONVOLUTIONAL_LAYER_HPP

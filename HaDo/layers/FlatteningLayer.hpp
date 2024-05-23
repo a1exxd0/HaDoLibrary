@@ -2,6 +2,8 @@
 #define FLATTENING_LAYER_HPP
 #include "Layer.hpp"
 
+namespace hado {
+
 template <typename T = float>
 class FlatteningLayer : public Layer<T>
 {
@@ -59,5 +61,7 @@ public:
     }
 };
 #pragma GCC pop_options
+
+}
 
 #endif // FLATTENING_LAYER_HPP

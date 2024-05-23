@@ -12,6 +12,8 @@ using Eigen::Matrix;
 using std::vector;
 using std::unique_ptr;
 
+namespace hado {
+
 
 /**
  * @brief Layer vector class.
@@ -189,5 +191,8 @@ public:
         return output_gradient;
     }
 };
+
+
+}
 
 #endif // LAYER_VECTOR_HPP

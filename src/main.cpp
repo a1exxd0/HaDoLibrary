@@ -1,34 +1,29 @@
-#include "DeepNeuralNetwork.hpp"
+#include <HaDo/DeepNeuralNetwork>
 #include "XorModel.cpp"
-#include "DoubleOut.cpp"
-#include "ConvolutionalLayer.hpp"
-#include "MaxPoolLayer.hpp"
-#include "SoftmaxLayer.hpp"
-#include "CrossEntropyLoss.hpp"
-#include "TensorSerializer.hpp"
-#include "FlatteningLayer.hpp"
 using std::cout, std::vector, std::unique_ptr;
 using Eigen::Matrix, Eigen::Dynamic, Eigen::MatrixXd;;
 
 int main() {
     
-    // Run test model
-    // DNNExample::doubleOutModel();
+    
 
     #ifdef _OPENMP
     cout << "OpenMP is supported" << endl;
     #endif
 
-    typedef Matrix<double, Dynamic, Dynamic> MatrixD;
+    // Run test model
+    DNNExample::xorModel();
 
-    // Serialiser
+    // typedef Matrix<double, Dynamic, Dynamic> MatrixD;
 
-    MatrixD matrix = MatrixD::Random(5, 5);
-    vector<MatrixD> matrices = {matrix, matrix, matrix};
-    TensorSerializer<double>::write_to_file_test("src/models/matrix.json", matrices);
-    vector<MatrixD> matrix2;
-    TensorSerializer<double>::read_from_file_test("src/models/matrix.json", matrix2);
-    cout << "Matrix: " << endl << matrix2[0] << endl;
+    // // Serialiser
+
+    // MatrixD matrix = MatrixD::Random(5, 5);
+    // vector<MatrixD> matrices = {matrix, matrix, matrix};
+    // TensorSerializer<double>::write_to_file_test("src/models/matrix.json", matrices);
+    // vector<MatrixD> matrix2;
+    // TensorSerializer<double>::read_from_file_test("src/models/matrix.json", matrix2);
+    // cout << "Matrix: " << endl << matrix2[0] << endl;
 
 
 

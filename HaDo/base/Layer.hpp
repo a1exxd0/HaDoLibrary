@@ -20,6 +20,8 @@ using std::vector;
 #define endl "\n"
 #endif
 
+namespace hado {
+
 /**
  * @brief Base layer class. T will only work for float, double,
  * or long double. Can't construct this directly, must derive a
@@ -131,4 +133,6 @@ public:
         vector<MatrixD> &output_gradient, const T learning_rate) = 0;
 };
 
+}
 #endif // LAYER_HPP
+

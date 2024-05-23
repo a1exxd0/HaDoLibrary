@@ -12,6 +12,8 @@ using Eigen::Matrix;
 using std::vector;
 using Eigen::Dynamic;
 
+namespace hado {
+
 /**
  * @brief CrossEntropyLoss class - acts as a loss function for the neural network
  * 
@@ -93,5 +95,7 @@ public:
     }
 
 };
+
+}
 
 #endif

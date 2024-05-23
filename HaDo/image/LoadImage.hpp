@@ -15,6 +15,8 @@ using std::min;
 using std::string;
 using std::vector;
 
+namespace hado {
+
 /// @brief A template class for loading and resizing images into Eigen matrices.
 /// @tparam T The data type of the matrix elements (e.g., float, double).
 template <typename T>
@@ -117,5 +119,7 @@ public:
         return resizedMatrices;
     }
 };
+
+}
 
 #endif // IMAGELOADER_HPP

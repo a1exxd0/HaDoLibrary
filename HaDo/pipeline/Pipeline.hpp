@@ -13,6 +13,8 @@ using std::vector;
 using std::pair;
 using Eigen::Matrix, Eigen::Dynamic;
 
+namespace hado {
+
 
 /**
  * @brief Pipeline class for automatic handling of network structure.
@@ -167,5 +169,8 @@ public:
         return (*layervector).forward(input);
     }
 };
+
+}
+
 
 #endif // PIPELINE_HPP

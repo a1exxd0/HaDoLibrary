@@ -1,0 +1,18 @@
+#ifndef DEEP_NEURAL_NETWORK_HPP
+#define DEEP_NEURAL_NETWORK_HPP
+
+#include "base/Layer.hpp"
+#include "layers/DenseLayer.hpp"
+#include "layers/ActivationLayer.hpp"
+#include "base/ActivationFunctions.hpp"
+#include "errors/MeanSquaredError.hpp"
+#include "pipeline/LayerVector.hpp"
+#include "pipeline/Pipeline.hpp"
+#include "pipeline/SequentialModel.hpp"
+#include "layers/SoftmaxLayer.hpp"
+#include "errors/CrossEntropyLoss.hpp"
+#include <Eigen/Dense>
+#include <vector>
+#include <memory>
+
+#endif // DEEP_NEURAL_NETWORK_HPP

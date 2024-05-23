@@ -14,6 +14,8 @@ using std::cout;
 using Eigen::Dynamic;
 using std::unique_ptr;
 
+namespace hado {
+
 /**
  * @brief Softmax layer class.
  * 
@@ -107,5 +109,8 @@ public:
         return {(tiled.cwiseProduct(MatrixD::Identity(rows, rows) - tiled.transpose())) * grad_tensor[0]};
     }
 };
+
+}
+
 
 #endif

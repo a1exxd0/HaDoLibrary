@@ -15,6 +15,8 @@ using std::pair;
 using std::unique_ptr;
 using Eigen::Matrix, Eigen::Dynamic;
 
+namespace hado {
+
 /**
  * @brief Full model structure. Does NOT enforce data dimension correctness.
  * 
@@ -196,5 +198,9 @@ public:
     }
 
 };
+
+
+}
+
 
 #endif // MODEL_HPP

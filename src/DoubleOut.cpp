@@ -1,7 +1,8 @@
-#include "DeepNeuralNetwork.hpp"
+#include <HaDo/DeepNeuralNetwork>
 namespace DNNExample {
 
 using Eigen::Matrix, Eigen::MatrixXf;
+using namespace hado;
 
 // TEST PURPOSES
 void doubleOutModel() {

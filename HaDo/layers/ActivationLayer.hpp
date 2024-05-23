@@ -14,6 +14,8 @@ using std::cout;
 using Eigen::Dynamic;
 using std::unique_ptr;
 
+namespace hado {
+
 /**
  * @brief Activation layer class.
  * 
@@ -198,5 +200,7 @@ private:
     };
 
 };
+
+}
 
 #endif

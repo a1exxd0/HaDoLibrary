@@ -10,6 +10,8 @@
 
 using std::vector, Eigen::Matrix;
 
+namespace hado {
+
 
 /**
  * @brief Max pooling layer class.
@@ -346,5 +348,8 @@ private:
         }
 
 };
+
+
+}
 
 #endif
