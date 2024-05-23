@@ -19,7 +19,9 @@ You'll need the Eigen library inside of your project, as well as everything in t
 
 You could have for an example file structure:
 
-project
+```
+project  
+|   MakeFile
 |   
 └───src
 |   |   main.cpp
@@ -31,6 +33,7 @@ project
 └───HaDo
 |   ...
 |
+```
 
 Notably, you should include the Eigen and Hado files in your include flags when compiling.
 
