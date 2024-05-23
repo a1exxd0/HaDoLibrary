@@ -13,11 +13,45 @@ Will support soon:
 Example usages are stored in src folder to run. See "XorModel.cpp", for example. 
 
 # Usage
-You'll need the Eigen library inside of your project, as well as everything in the include/ subdirectory. See the Makefile for a general idea of how to compile it all. Use "-fopenmp" for compilation with multithreading enabled, if you have OpenMP installed on your system.
+You'll need the Eigen library inside of your project, as well as everything in the HaDo/ subdirectory. See the Makefile for a general idea of how to compile it all. Use "-fopenmp" for compilation with multithreading enabled, if you have OpenMP installed on your system. The MakeFile provided gives an example using 'make omp' as a target.
 
-To use, all you need are the header files - import the neural network *.hpp file of your choice (i.e. "DeepNeuralNetwork.hpp") to get access to the relevant templates for use. Upcoming updates will enforce that you cant import modules that aren't top-level, i.e. individual layers - but can import types of networks, which provides you with the tools you need for that particular class of model.
+You could have for an example file structure:
 
-Utilises optional multithreading via OpenMP if it is installed in the user system and compiled with -fopenmp flag.
+project
+|   
+└───src
+|   |   main.cpp
+|
+|
+└───Eigen
+|   ...
+|
+└───HaDo
+|   ...
+|
+
+Notably, you should include the Eigen and Hado files in your include flags when compiling.
+
+To use in your main program, simply import the desired module set available in the top level of the HaDo folder, for example:
+
+```cpp
+#include <HaDo/ConvolutionalNeuralNetwork>
+
+void TwoCategoryMNIST(){
+    hado::Pipeline<double> pipeline;
+
+    pipeline.pushLayer(
+        hado::ConvolutionalLayer<double, hado::relu<double>, hado::relu_prime<double>>(1, 2, 28, 28, 3, 1, 0)
+    );
+
+    pipeline.pushLayer(
+        hado::MaxPoolLayer<double>(2, 26, 26, 2, 2, 0)
+    );
+
+    ...
+}
+```
+
 
 # TODO
   - [X] Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
