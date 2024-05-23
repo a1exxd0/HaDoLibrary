@@ -12,6 +12,8 @@ Will support soon:
 
 Example usages are stored in src folder to run. See "XorModel.cpp", for example. 
 
+Looking to properly integrate unit testing functionality for smoother scalability in future.
+
 # Usage
 You'll need the Eigen library inside of your project, as well as everything in the HaDo/ subdirectory. See the Makefile for a general idea of how to compile it all. Use "-fopenmp" for compilation with multithreading enabled, if you have OpenMP installed on your system. The MakeFile provided gives an example using 'make omp' as a target.
 
