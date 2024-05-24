@@ -23,16 +23,16 @@ You could have for an example file structure:
 project  
 |   MakeFile
 |   
-└───src
+├───src
 |   |   main.cpp
 |
-|
-└───Eigen
+├───Eigen
 |   ...
 |
-└───HaDo
+├───HaDo
 |   ...
 |
+└───res.png
 ```
 
 Notably, you should include the Eigen and Hado files in your include flags when compiling.
