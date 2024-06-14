@@ -1,5 +1,5 @@
 # A library for implementing Neural Networks in C++
-Lightweight, templated, highly vectorised, and optimised library for a variety of neural networks.
+Lightweight, templated, highly vectorised (through Eigen backend), and optimised library for a variety of neural networks.
 
 Supports models for:
  - Deep Neural Networks
