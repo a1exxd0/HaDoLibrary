@@ -171,7 +171,7 @@ public:
      * 
      * @param to_print number of tests to print error for. Defaults to all.
     */
-    double run_tests(int to_print=-1){
+    T run_tests(int to_print=-1){
         if (to_print < 0) to_print = test_data.size();
         cout << "\n\nRunning tests...\n\n";
 
