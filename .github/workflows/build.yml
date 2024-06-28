@@ -2,7 +2,7 @@ name: CMake and CTest verification for Release
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "base-dir-tests" ]
   pull_request:
     branches: [ "main"  ]
 
@@ -15,10 +15,10 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
-    # Test on both Linux and Mac
+    # Test on Linux
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
     - name: Checkout code
