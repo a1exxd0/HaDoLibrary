@@ -66,6 +66,12 @@ cd ${PROJECT_SOURCE_DIR}/
 mkdir build && cd build
 cmake ..
 cmake  --build .
+
+# FOR THIS, IT MAY BE THE CASE THAT THERE ARE SOME "POTENTIAL MEMORY LEAKS"
+# After thorough research and profiling, we have deduced it is not from our
+# end, but instead from the use of OpenMP. We have suppressed these errors
+# such that the error code is 0. Any other (memory) error except this will
+# flag up.
 ctest -V -C -T memcheck
 # or just ctest -V -C if you want a quick check
 ```
