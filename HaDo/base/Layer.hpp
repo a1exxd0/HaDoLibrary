@@ -58,7 +58,12 @@ protected:
     Layer(int I, int O, int RI, int CI, int RO, int CO) : inp(I), out(O)
     {
         // Assert positivity of dimensions
-        assert(I > 0 && O > 0 && RI > 0 && CI > 0 && RO > 0 && CO > 0);
+        assert(I > 0);
+        assert(O > 0);
+        assert(RI > 0);
+        assert(CI > 0);
+        assert(RO > 0);
+        assert(CO > 0);
 
         this->I = I;
         this->O = O;
