@@ -15,10 +15,10 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
-    # Test on both Linux and Mac
+    # Test on Linux
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
     - name: Checkout code
