@@ -2,7 +2,7 @@ name: CMake and CTest verification for Release
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "base-dir-tests" ]
   pull_request:
     branches: [ "main"  ]
 
