@@ -2,7 +2,7 @@ name: CMake and CTest verification for Release
 
 on:
   push:
-    branches: [ "main", "add-ci-cd" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main"  ]
 
