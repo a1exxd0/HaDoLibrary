@@ -70,7 +70,7 @@ public:
 
     // Clone returning unique pointer of class
     unique_ptr<LayerVector<T>> clone() const {
-        unique_ptr<LayerVector<T>> res(new LayerVector<T>());
+        unique_ptr<LayerVector<T>> res = std::make_unique<LayerVector<T>>();
         for (auto& layer : layers) {
             res->layers.push_back(layer->clone());
             res->entry_depth = entry_depth;

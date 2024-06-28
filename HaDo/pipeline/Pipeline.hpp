@@ -46,7 +46,7 @@ public:
 
     // Default constructor
     Pipeline() {
-        layervector = std::unique_ptr<LayerVector<T>>(new LayerVector<T>());
+        layervector = std::make_unique<LayerVector<T>>();
         endlayer = nullptr;
     }
 
@@ -108,7 +108,7 @@ public:
             }
 
         // Allocate memory and push
-        this->endlayer = std::unique_ptr<EndLayerType>(new EndLayerType(end));
+        this->endlayer = std::make_unique<EndLayerType>(end);
     }
 
     /**
