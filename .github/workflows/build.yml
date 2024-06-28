@@ -41,7 +41,12 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
+    - name: Test without Valgrind
+      working-directory: ${{github.workspace}}/build
+      # Execute tests defined by the CMake configuration.
+      run: ctest -V -C ${{env.BUILD_TYPE}}
+
+    - name: Test with Valgrind
       working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.
       run: valgrind ctest -V -C ${{env.BUILD_TYPE}}
