@@ -13,7 +13,7 @@ namespace hado {
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct relu {
-    T operator()(T x) const {
+    [[nodiscard]] inline T operator()(T x) const {
         return x > 0 ? x : 0;
     }
 };
@@ -26,7 +26,7 @@ struct relu {
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct relu_prime {
-    T operator()(T x) const {
+    [[nodiscard]] inline T operator()(T x) const {
         return x > 0 ? 1 : 0;
     }
 };
@@ -39,7 +39,7 @@ struct relu_prime {
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct sigmoid {
-    T operator()(T x) const {
+    [[nodiscard]] inline T operator()(T x) const {
         return 1 / (1 + exp(-x));
     }
 };
@@ -52,7 +52,7 @@ struct sigmoid {
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct sigmoid_prime {
-    T operator()(T inp) const {
+    [[nodiscard]] inline T operator()(T inp) const {
         sigmoid<T> f;
         T x = f(inp);
         return x * (1 - x);
@@ -67,7 +67,7 @@ struct sigmoid_prime {
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct f_tanh {
-    T operator()(T x) const {
+    [[nodiscard]] inline T operator()(T x) const {
         return std::tanh(x);
     }
 };
@@ -80,7 +80,7 @@ struct f_tanh {
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct f_tanh_prime {
-    T operator()(T x) const {
+    [[nodiscard]] inline T operator()(T x) const {
         T tanhx = std::tanh(x);
         return 1 - tanhx * tanhx;
     }
