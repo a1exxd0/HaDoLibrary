@@ -12,8 +12,6 @@ Will support soon:
 
 Example usages are stored in src folder to run. See "XorModel.cpp", for example. 
 
-Looking to properly integrate unit testing functionality for smoother scalability in future.
-
 # Usage
 You'll need the Eigen library inside of your project, as well as everything in the HaDo/ subdirectory. See the Makefile for a general idea of how to compile it all. Use "-fopenmp" for compilation with multithreading enabled, if you have OpenMP installed on your system. The MakeFile provided gives an example using 'make omp' as a target.
 
@@ -57,6 +55,22 @@ void TwoCategoryMNIST(){
 }
 ```
 
+# Contributions
+Feel free to for the repository and set up a pull request, either to resolve an existing issue, or add a new feature. All help is appreciated here with the team of just 2 of us!
+
+Code should pass tests before requesting to merge, and if you write fully new code, it would be awesome to see some tests made for that too!
+
+In order to make and build for tests, run:
+```sh
+cd ${PROJECT_SOURCE_DIR}/
+mkdir build && cd build
+cmake ..
+cmake  --build .
+ctest
+```
+This is more of a learning project for new C++ers, so there's no real strict requirements here. Feel free to reach out to either myself or other contributros for help on this.
+
+Happy coding!
 
 # TODO
   - [X] Image -> Bitmap formatting ??? Maybe use PPM for raw RGB
