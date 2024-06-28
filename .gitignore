@@ -1,9 +1,2 @@
-.vscode/c_cpp_properties.json
-.vscode/launch.json
-.vscode/settings.json
-bin/libhado.a
-bin/main
-obj/XorModel.o
-obj/main.o
-obj/DoubleOut.o
-obj/TwoCategoryMNIST.o
+.vscode/
+build/

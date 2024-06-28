@@ -1,7 +1,7 @@
 #ifndef CONVOLUTIONAL_LAYER_HPP
 #define CONVOLUTIONAL_LAYER_HPP
 
-#include "Layer.hpp"
+#include "HaDo/base/Layer.hpp"
 #include <Eigen/Dense>
 #include <vector>
 #include <memory>

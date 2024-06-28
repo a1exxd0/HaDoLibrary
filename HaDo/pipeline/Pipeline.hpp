@@ -4,8 +4,8 @@
 #include <vector>
 #include <utility>
 #include <Eigen/Dense>
-#include "Layer.hpp"
-#include "EndLayer.hpp"
+#include "HaDo/base/Layer.hpp"
+#include "HaDo/base/EndLayer.hpp"
 #include "LayerVector.hpp"
 #include <memory>
 

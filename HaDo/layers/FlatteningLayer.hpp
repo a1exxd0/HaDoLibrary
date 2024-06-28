@@ -1,6 +1,6 @@
 #ifndef FLATTENING_LAYER_HPP
 #define FLATTENING_LAYER_HPP
-#include "Layer.hpp"
+#include "HaDo/base/Layer.hpp"
 
 namespace hado {
 
