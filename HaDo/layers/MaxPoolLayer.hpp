@@ -1,7 +1,7 @@
 #ifndef MAX_POOL_LAYER_HPP
 #define MAX_POOL_LAYER_HPP
 
-#include "Layer.hpp"
+#include "HaDo/base/Layer.hpp"
 #include <Eigen/Dense>
 #include <vector>
 #include <memory>

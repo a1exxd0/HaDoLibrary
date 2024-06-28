@@ -4,8 +4,8 @@
 #include <vector>
 #include <utility>
 #include <Eigen/Dense>
-#include "Layer.hpp"
-#include "EndLayer.hpp"
+#include "HaDo/base/Layer.hpp"
+#include "HaDo/base/EndLayer.hpp"
 #include "LayerVector.hpp"
 #include "Pipeline.hpp"
 #include <memory>
@@ -171,7 +171,7 @@ public:
      * 
      * @param to_print number of tests to print error for. Defaults to all.
     */
-    void run_tests(int to_print=-1){
+    double run_tests(int to_print=-1){
         if (to_print < 0) to_print = test_data.size();
         cout << "\n\nRunning tests...\n\n";
 
@@ -195,6 +195,7 @@ public:
         }
         // Return average error
         cout << "Average error: " << (cumulative_error / n) << endl;
+        return (cumulative_error / n);
     }
 
 };

@@ -3,8 +3,8 @@
 
 #include <Eigen/Dense>
 #include <vector>
-#include "Layer.hpp"
-#include "EndLayer.hpp"
+#include "HaDo/base/Layer.hpp"
+#include "HaDo/base/EndLayer.hpp"
 #include <memory>
 #include <type_traits>
 
