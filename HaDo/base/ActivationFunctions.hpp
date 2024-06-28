@@ -52,7 +52,9 @@ struct sigmoid {
 template<typename T=float, typename = 
     typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 struct sigmoid_prime {
-    T operator()(T x) const {
+    T operator()(T inp) const {
+        sigmoid<T> f;
+        T x = f(inp);
         return x * (1 - x);
     }
 };
