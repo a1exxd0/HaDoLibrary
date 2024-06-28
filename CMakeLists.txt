@@ -13,7 +13,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
 
 # Add more optimization flags for an actual build, and remove sanitize
 # Good idea for debugging steps to use this though!
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O0 -g -fsanitize=address -fopenmp")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O0 -g")
 
 # Add testing directory
 enable_testing()
