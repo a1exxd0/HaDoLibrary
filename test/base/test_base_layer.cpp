@@ -2,8 +2,7 @@
 #include <HaDo/base/Layer.hpp>
 
 TEST(empty, emp) {
-    int a = 0, b = 0;
-    ASSERT_EQ(a, b);
+    ASSERT_EQ(0, 0);
 }
 
 int main(int argc, char **argv) 
