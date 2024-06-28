@@ -9,7 +9,11 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -O0 -g -fsanitize=address")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+
+# Add more optimization flags for an actual build, and remove sanitize
+# Good idea for debugging steps to use this though!
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O0 -g -fsanitize=address -fopenmp")
 
 # Add testing directory
 enable_testing()
