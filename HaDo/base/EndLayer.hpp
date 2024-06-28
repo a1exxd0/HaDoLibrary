@@ -3,7 +3,6 @@
 
 #include <Eigen/Dense>
 #include <vector>
-#include "Layer.hpp"
 #include <memory>
 #include <iostream>
 
