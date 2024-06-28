@@ -30,6 +30,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake libgtest-dev
+        sudo apt-get install valgrind
 
     # Configure, build, and test project
     - name: Configure CMake
@@ -43,4 +44,4 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.
-      run: ctest -V -C ${{env.BUILD_TYPE}}
+      run: valgrind ctest -V -C ${{env.BUILD_TYPE}}
