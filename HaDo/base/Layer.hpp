@@ -58,12 +58,12 @@ protected:
     Layer(int I, int O, int RI, int CI, int RO, int CO) : inp(I), out(O)
     {
         // Assert positivity of dimensions
-        assert(I > 0);
-        assert(O > 0);
-        assert(RI > 0);
-        assert(CI > 0);
-        assert(RO > 0);
-        assert(CO > 0);
+        assert(I > 0 && "Input tensor depth must be positive and nonzero.");
+        assert(O > 0 && "Output tensor depth must be positive and nonzero.");
+        assert(RI > 0 && "Input tensor rows must be positive and nonzero.");
+        assert(CI > 0 && "Input tensor columns must be positive and nonzero.");
+        assert(RO > 0 && "Output tensor rows must be positive and nonzero.");
+        assert(CO > 0 && "Output tensor columns must be positive and nonzero.");
 
         this->I = I;
         this->O = O;

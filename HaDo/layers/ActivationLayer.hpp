@@ -65,6 +65,7 @@ public:
      * @param C Columns in input/output tensor
     */
     ActivationLayer(int D, int R, int C) : Layer<T>(D, D, R, C, R, C) {
+
         this->D = D;
         this->R = R;
         this->C = C;
