@@ -3,6 +3,11 @@
 # Include the main source directory to access headers
 include_directories(${PROJECT_SOURCE_DIR}/)
 
+# Set memory leak checkers
+include(CTest)
+set(CTEST_MEMORYCHECK_COMMAND "valgrind")
+set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --suppressions=${PROJECT_SOURCE_DIR}/.github/workflows/valgrind.supp")
+
 # Find the testing framework
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
@@ -26,4 +31,5 @@ foreach(TEST_FILE ${TEST_FILES})
     
     # Add a test with the same name as the executable
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+    
 endforeach()

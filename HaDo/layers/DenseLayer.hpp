@@ -80,9 +80,10 @@ public:
         }
 
     // Clone returning unique ptr
-    virtual unique_ptr<Layer<T>> clone() const override {
-        return unique_ptr<DenseLayer<T>>(new DenseLayer<T>(*this));
+    virtual std::unique_ptr<Layer<T>> clone() const override {
+        return std::make_unique<DenseLayer<T>>(*this);
     }
+
 
     // Destructor
     ~DenseLayer() {}

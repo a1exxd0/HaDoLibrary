@@ -66,7 +66,7 @@ TEST(XOR_MODEL, XOR_MODEL_RUN) {
     model.add_test_data({input4}, {true_res1});
 
     // Train and test model
-    model.run_epochs(1000, 0.01, 10);
+    model.run_epochs(200, 0.01, 10);
     //model.run_epochs(1000, 0.001, 0);
     auto err = model.run_tests();
 
