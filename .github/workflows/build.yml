@@ -9,8 +9,8 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
+  BUILD_TYPE: Debug
+  
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -30,6 +30,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake libgtest-dev
+        sudo apt-get install valgrind
 
     # Configure, build, and test project
     - name: Configure CMake
@@ -40,7 +41,7 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
+    - name: Test with Valgrind
       working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.
-      run: ctest -V -C ${{env.BUILD_TYPE}}
+      run: ctest -V -C -T memcheck

@@ -66,7 +66,8 @@ cd ${PROJECT_SOURCE_DIR}/
 mkdir build && cd build
 cmake ..
 cmake  --build .
-ctest
+ctest -V -C -T memcheck
+# or just ctest -V -C if you want a quick check
 ```
 This is more of a learning project for new C++ers, so there's no real strict requirements here. Feel free to reach out to either myself or other contributros for help on this.
 
