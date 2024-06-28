@@ -1,7 +1,7 @@
 #ifndef TENSOR_SERIALIZER_HPP
 #define TENSOR_SERIALIZER_HPP
 
-#include "json/json.hpp"
+#include <json/json.hpp>
 #include <Eigen/Dense>
 #include <vector>
 #include <iostream>
