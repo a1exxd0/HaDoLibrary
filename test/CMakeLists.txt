@@ -2,7 +2,6 @@
 
 # Include the main source directory to access headers
 include_directories(${PROJECT_SOURCE_DIR}/)
-include_directories(${PROJECT_SOURCE_DIR}/HaDo)
 
 # Find the testing framework
 find_package(GTest REQUIRED)

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <DeepNeuralNetwork>
+#include <HaDo/DeepNeuralNetwork>
 using Eigen::Matrix, Eigen::MatrixXf;
 
 using namespace hado;
