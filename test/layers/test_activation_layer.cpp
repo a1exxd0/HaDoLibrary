@@ -23,7 +23,7 @@ TEST(CONSTRUCTOR, Check_Negative_Zero_Sizes) {
 TEST(CONSTRUCTOR, Standard_Constructor) {
     // This should check subclass attributes
     
-    Activation layer(2, 3, 4);
+    const Activation layer(2, 3, 4);
     ASSERT_EQ(layer.getInputDepth(), 2);
     ASSERT_EQ(layer.getInputCols(), 4);
     ASSERT_EQ(layer.getInputRows(), 3);
@@ -33,9 +33,9 @@ TEST(CONSTRUCTOR, Standard_Constructor) {
 }
 
 TEST(CONSTRUCTOR, Copy_Constructor) {
-    Activation layer(3, 10, 10);
+    const Activation layer(3, 10, 10);
 
-    Activation result(layer);
+    const Activation result(layer);
 
     ASSERT_EQ(result.getInputDepth(), 3);
     ASSERT_EQ(result.getInputCols(), 10);
@@ -47,9 +47,9 @@ TEST(CONSTRUCTOR, Copy_Constructor) {
 }
 
 TEST(CONSTRUCTOR, Clone_Constructor) {
-    Activation layer(3, 10, 10);
+    const Activation layer(3, 10, 10);
 
-    auto result = layer.clone();
+    const auto result = layer.clone();
 
     ASSERT_EQ(result->getInputDepth(), 3);
     ASSERT_EQ(result->getInputCols(), 10);

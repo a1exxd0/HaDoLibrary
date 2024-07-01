@@ -35,10 +35,14 @@ class Layer
 private:
     // Layer dimensions
     int I, O, RI, CI, RO, CO;
+
     // Assert that T is either float, double, or long double at compiler time
-    #pragma GCC diagnostic ignored "-Wparentheses"
     static_assert(
-        std::is_same<T, float>::value || std::is_same<T, double>::value || std::is_same<T, long double>::value, "T must be either float, double, or long double.");
+        std::is_same_v<T, float>
+        || std::is_same_v<T, double>
+        || std::is_same_v<T, long double>,
+        "T must be either float, double, or long double."
+    );
 
 protected:
 
@@ -99,7 +103,7 @@ public:
 
     // Assert input tensor dimensions
     void constexpr assertInputDimensions(const vector<MatrixD> &input_tensor) const {
-        if (input_tensor.size() != (size_t) this->I 
+        if (input_tensor.size() != static_cast<size_t>(this->I)
             || input_tensor[0].rows() != this->RI
             || input_tensor[0].cols() != this->CI){
             std::cerr << "Expected depth " << this->I << " but got depth " << input_tensor.size() << endl;
@@ -111,7 +115,7 @@ public:
 
     // Assert output tensor dimensions
     void constexpr assertOutputDimensions(const vector<MatrixD> &output_tensor) const {
-        if (output_tensor.size() != (size_t) this->O
+        if (output_tensor.size() != static_cast<size_t>(this->O)
             || output_tensor[0].rows() != this->RO
             || output_tensor[0].cols() != this->CO){
             std::cerr << "Expected depth " << this->O << " but got depth " << output_tensor.size() << endl;
