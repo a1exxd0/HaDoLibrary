@@ -38,20 +38,20 @@ private:
 
     // Assert that T is either float, double, or long double at compiler time
     static_assert(
-        std::is_same<T, float>::value 
-        || std::is_same<T, double>::value
-        || std::is_same<T, long double>::value,
+        std::is_same_v<T, float>
+        || std::is_same_v<T, double>
+        || std::is_same_v<T, long double>,
         "T must be either float, double, or long double."
     );
 
     // Assert that Activation and ActivationPrime are functions that take a scalar and return a scalar
     static_assert(
-        std::is_invocable_r<T, Activation, T>::value,
-        "Activation must be a function that takes a scalar and returns a scalar."
+        std::is_invocable_r_v<T, Activation, T>,
+        "Activation must be a functor that takes a scalar and returns a scalar."
     );
     static_assert(
-        std::is_invocable_r<T, ActivationPrime, T>::value,
-        "ActivationPrime must be a function that takes a scalar and returns a scalar."
+        std::is_invocable_r_v<T, ActivationPrime, T>,
+        "ActivationPrime must be a functor that takes a scalar and returns a scalar."
     );
 
 public:
@@ -65,6 +65,7 @@ public:
      * @param C Columns in input/output tensor
     */
     ActivationLayer(int D, int R, int C) : Layer<T>(D, D, R, C, R, C) {
+
         this->D = D;
         this->R = R;
         this->C = C;

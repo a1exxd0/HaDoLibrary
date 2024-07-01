@@ -6,7 +6,6 @@
 #include "HaDo/base/Layer.hpp"
 #include <memory>
 #include <iostream>
-#include <chrono>
 #include <random>
 
 using Eigen::Matrix;
@@ -33,12 +32,12 @@ private:
     // Convenience private variables
     int I, O;
 
-    // Check if T is float, double, or long double
+    // Assert that T is either float, double, or long double at compiler time
     static_assert(
-        std::is_same<T, float>::value 
-        || std::is_same<T, double>::value
-        || std::is_same<T, long double>::value,
-        "T (first template param) must be either float, double, or long double."
+        std::is_same_v<T, float>
+        || std::is_same_v<T, double>
+        || std::is_same_v<T, long double>,
+        "T must be either float, double, or long double."
     );
 
     // Weights and bias tensors
@@ -86,7 +85,7 @@ public:
 
 
     // Destructor
-    ~DenseLayer() {}
+    ~DenseLayer() override {}
 
     /**
      * @brief Forward pass of the dense layer. Input tensor must be a size 1 vector

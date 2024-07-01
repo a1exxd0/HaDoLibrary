@@ -35,10 +35,14 @@ class Layer
 private:
     // Layer dimensions
     int I, O, RI, CI, RO, CO;
+
     // Assert that T is either float, double, or long double at compiler time
-    #pragma GCC diagnostic ignored "-Wparentheses"
     static_assert(
-        std::is_same<T, float>::value || std::is_same<T, double>::value || std::is_same<T, long double>::value, "T must be either float, double, or long double.");
+        std::is_same_v<T, float>
+        || std::is_same_v<T, double>
+        || std::is_same_v<T, long double>,
+        "T must be either float, double, or long double."
+    );
 
 protected:
 
@@ -58,7 +62,12 @@ protected:
     Layer(int I, int O, int RI, int CI, int RO, int CO) : inp(I), out(O)
     {
         // Assert positivity of dimensions
-        assert(I > 0 && O > 0 && RI > 0 && CI > 0 && RO > 0 && CO > 0);
+        assert(I > 0 && "Input tensor depth must be positive and nonzero.");
+        assert(O > 0 && "Output tensor depth must be positive and nonzero.");
+        assert(RI > 0 && "Input tensor rows must be positive and nonzero.");
+        assert(CI > 0 && "Input tensor columns must be positive and nonzero.");
+        assert(RO > 0 && "Output tensor rows must be positive and nonzero.");
+        assert(CO > 0 && "Output tensor columns must be positive and nonzero.");
 
         this->I = I;
         this->O = O;
@@ -94,7 +103,7 @@ public:
 
     // Assert input tensor dimensions
     void constexpr assertInputDimensions(const vector<MatrixD> &input_tensor) const {
-        if (input_tensor.size() != (size_t) this->I 
+        if (input_tensor.size() != static_cast<size_t>(this->I)
             || input_tensor[0].rows() != this->RI
             || input_tensor[0].cols() != this->CI){
             std::cerr << "Expected depth " << this->I << " but got depth " << input_tensor.size() << endl;
@@ -106,7 +115,7 @@ public:
 
     // Assert output tensor dimensions
     void constexpr assertOutputDimensions(const vector<MatrixD> &output_tensor) const {
-        if (output_tensor.size() != (size_t) this->O
+        if (output_tensor.size() != static_cast<size_t>(this->O)
             || output_tensor[0].rows() != this->RO
             || output_tensor[0].cols() != this->CO){
             std::cerr << "Expected depth " << this->O << " but got depth " << output_tensor.size() << endl;
