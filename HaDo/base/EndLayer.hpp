@@ -4,7 +4,6 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <memory>
-#include <iostream>
 
 using Eigen::Matrix;
 using std::vector;
@@ -53,9 +52,9 @@ protected:
 public:
 
     // Getters
-    int getDepth() const { return D; }
-    int getRows() const { return R; }
-    int getCols() const { return C; }
+    [[nodiscard]] int getDepth() const { return D; }
+    [[nodiscard]] int getRows() const { return R; }
+    [[nodiscard]] int getCols() const { return C; }
 
     // Copy constructor
     EndLayer(const EndLayer& el) {
