@@ -164,57 +164,61 @@ public:
 
 #pragma GCC push_options
 #pragma GCC optimize("O3")
-    virtual vector<MatrixD> backward(vector<MatrixD> &output_gradient, T learning_rate) override
+virtual vector<MatrixD> backward(vector<MatrixD> &output_gradient, T learning_rate) override
+{
+    vector<MatrixD> input_gradient(this->inputDepth, MatrixD::Zero(this->inputRows, this->inputCols));
+    vector<vector<MatrixD>> filter_gradients(this->outputDepth, vector<MatrixD>(this->inputDepth, MatrixD::Zero(this->kernelSize, this->kernelSize)));
+
+    // Compute filter gradients and update filters
+    for (int od = 0; od < this->outputDepth; ++od)
     {
-        vector<MatrixD> input_gradient(this->inputDepth, MatrixD::Zero(this->inputRows, this->inputCols));
-        vector<vector<MatrixD>> filter_gradients(this->outputDepth, vector<MatrixD>(this->inputDepth, MatrixD::Zero(this->kernelSize, this->kernelSize)));
-
-        for (int od = 0; od < this->outputDepth; ++od)
-        {
-            for (int id = 0; id < this->inputDepth; ++id)
-            {
-                MatrixD paddedInput = MatrixD::Zero(this->inputRows + 2 * this->padding, this->inputCols + 2 * this->padding);
-                paddedInput.block(this->padding, this->padding, this->inputRows, this->inputCols) = this->inp[id];
-
-                for (int y = 0; y <= this->inputRows - this->kernelSize + 2 * this->padding; y += this->stride)
-                {
-                    for (int x = 0; x <= this->inputCols - this->kernelSize + 2 * this->padding; x += this->stride)
-                    {
-                        MatrixD subInput = paddedInput.block(y, x, this->kernelSize, this->kernelSize);
-                        filter_gradients[od][id] += subInput * output_gradient[od](y / this->stride, x / this->stride);
-                    }
-                }
-
-                this->filters[od][id] -= learning_rate * filter_gradients[od][id];
-            }
-        }
-
         for (int id = 0; id < this->inputDepth; ++id)
         {
-            for (int od = 0; od < this->outputDepth; ++od)
+            MatrixD paddedInput = MatrixD::Zero(this->inputRows + 2 * this->padding, this->inputCols + 2 * this->padding);
+            paddedInput.block(this->padding, this->padding, this->inputRows, this->inputCols) = this->inp[id];
+
+            for (int y = 0; y < this->outputRows; ++y)
             {
-                MatrixD rotated_filter = this->filters[od][id];
-                std::reverse(rotated_filter.data(), rotated_filter.data() + rotated_filter.size());
-
-                MatrixD padded_output_grad = MatrixD::Zero(output_gradient[od].rows() + 2 * this->padding, output_gradient[od].cols() + 2 * this->padding);
-                padded_output_grad.block(this->padding, this->padding, output_gradient[od].rows(), output_gradient[od].cols()) = output_gradient[od];
-
-                for (int y = 0; y <= padded_output_grad.rows() - this->kernelSize; ++y)
+                for (int x = 0; x < this->outputCols; ++x)
                 {
-                    for (int x = 0; x <= padded_output_grad.cols() - this->kernelSize; ++x)
-                    {
-                        MatrixD subGrad = padded_output_grad.block(y, x, this->kernelSize, this->kernelSize);
-                        input_gradient[id](y / this->stride, x / this->stride) += (subGrad.array() * rotated_filter.array()).sum();
-                    }
+                    MatrixD subInput = paddedInput.block(y * this->stride, x * this->stride, this->kernelSize, this->kernelSize);
+                    filter_gradients[od][id] += subInput * output_gradient[od](y, x);
                 }
+            }
 
-                input_gradient[id] = input_gradient[id].unaryExpr(ActivationPrime());
+            // Update the filters
+            this->filters[od][id] -= learning_rate * filter_gradients[od][id];
+        }
+    }
+
+    // Compute input gradients
+    for (int id = 0; id < this->inputDepth; ++id)
+    {
+        for (int od = 0; od < this->outputDepth; ++od)
+        {
+            MatrixD rotated_filter = this->filters[od][id].reverse();
+
+            MatrixD padded_output_grad = MatrixD::Zero(output_gradient[od].rows() + 2 * this->padding, output_gradient[od].cols() + 2 * this->padding);
+            padded_output_grad.block(this->padding, this->padding, output_gradient[od].rows(), output_gradient[od].cols()) = output_gradient[od];
+
+            for (int y = 0; y <= padded_output_grad.rows() - this->kernelSize; y += this->stride)
+            {
+                for (int x = 0; x <= padded_output_grad.cols() - this->kernelSize; x += this->stride)
+                {
+                    MatrixD subGrad = padded_output_grad.block(y, x, this->kernelSize, this->kernelSize);
+                    input_gradient[id](y / this->stride, x / this->stride) += (subGrad.array() * rotated_filter.array()).sum();
+                }
             }
         }
 
-        return input_gradient;
+        // Apply the derivative of the activation function to the input gradient
+        input_gradient[id] = input_gradient[id].unaryExpr(ActivationPrime());
     }
+
+    return input_gradient;
+}
 #pragma GCC pop_options
+
 
 private:
 #pragma GCC push_options
