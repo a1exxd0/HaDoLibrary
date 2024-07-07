@@ -75,7 +75,7 @@ cmake  --build .
 ctest -V -C -T memcheck
 # or just ctest -V -C if you want a quick check
 ```
-This is more of a learning project for new C++ers, so there's no real strict requirements here. Feel free to reach out to either myself or other contributros for help on this.
+This is more of a learning project for new C++ers, so there's no real strict requirements here. Feel free to reach out to either myself or other contributors for help on this.
 
 Happy coding!
 
@@ -87,7 +87,7 @@ Happy coding!
   - [X] Cross-Entropy Loss implementation
   - [X] Method to pass through and verify layer setup
   - [X] Pipeline class
-  - [ ] Convolutional Layers
+  - [X] Convolutional Layers
   - [X] Pooling Layers
   - [ ] Saving a model (JSON or binary?)
   - [ ] Getting it running on a GPU
