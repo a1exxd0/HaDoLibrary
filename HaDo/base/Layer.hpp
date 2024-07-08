@@ -15,10 +15,7 @@ using Eigen::Matrix;
 using nlohmann::json;
 using std::cout;
 using std::vector;
-
-#ifndef endl
-#define endl "\n"
-#endif
+using std::endl;
 
 namespace hado {
 
@@ -126,12 +123,12 @@ public:
     }
 
     // Trivial getters
-    int getInputDepth() const { return I; }
-    int getOutputDepth() const { return O; }
-    int getInputRows() const { return RI; }
-    int getInputCols() const { return CI; }
-    int getOutputRows() const { return RO; }
-    int getOutputCols() const { return CO; }
+    constexpr int getInputDepth() const { return I; }
+    constexpr int getOutputDepth() const { return O; }
+    constexpr int getInputRows() const { return RI; }
+    constexpr int getInputCols() const { return CI; }
+    constexpr int getOutputRows() const { return RO; }
+    constexpr int getOutputCols() const { return CO; }
 
     // Forward propagation
     virtual vector<MatrixD> forward(
