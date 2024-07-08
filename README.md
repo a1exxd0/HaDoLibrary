@@ -3,16 +3,16 @@ Lightweight, templated, highly vectorised (through Eigen backend), and optimised
 
 Supports models for:
  - Deep Neural Networks
+ - Convolutional Neural Networks
 
 Will support soon:
- - Convolutional Neural Networks
  - RNN Networks
  - LSTM Networks
  - Transformer Networks
 
 Example usages are stored in src folder to run. See "XorModel.cpp", for example. 
 
-# Usage
+# Quickstart
 You'll need the Eigen library inside of your project, as well as everything in the HaDo/ subdirectory. See the Makefile for a general idea of how to compile it all. Use "-fopenmp" for compilation with multithreading enabled, if you have OpenMP installed on your system. The MakeFile provided gives an example using 'make omp' as a target.
 
 You could have for an example file structure:
@@ -89,6 +89,8 @@ Happy coding!
   - [X] Pipeline class
   - [X] Convolutional Layers
   - [X] Pooling Layers
+  - [ ] Get MNIST working
+  - [ ] Get egg categorization working
   - [ ] Saving a model (JSON or binary?)
   - [ ] Getting it running on a GPU
   - [ ] Getting it running on a cluster
