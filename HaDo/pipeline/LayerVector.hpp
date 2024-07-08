@@ -66,7 +66,7 @@ public:
     int getFinalCols() { return final_cols; }
 
     // Default constructor
-    LayerVector() {};
+    LayerVector() = default;
 
     // Clone returning unique pointer of class
     unique_ptr<LayerVector<T>> clone() const {
@@ -168,7 +168,7 @@ public:
     vector<MatrixD> backward(vector<MatrixD> output_gradient, const T learning_rate){
 
         // Dimension check
-        if (output_gradient.size() != (size_t) final_depth 
+        if (output_gradient.size() != static_cast<size_t>(final_depth)
             || output_gradient[0].rows() != final_rows 
             || output_gradient[0].cols() != final_cols) {
                 cout << "Output gradient tensor must have depth " << final_depth 

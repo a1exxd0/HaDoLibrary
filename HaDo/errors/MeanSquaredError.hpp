@@ -48,7 +48,7 @@ public:
     }
 
     // Destructor
-    ~MeanSquaredError() {}
+    ~MeanSquaredError() override {}
 
     /**
      * @brief Calculate mean squared error and return of type T
@@ -63,6 +63,8 @@ public:
             throw std::invalid_argument("Result and true result must be of same size.");
         }
         if ((res[0]).rows() != (true_res[0]).rows() || (res[0]).cols() != (true_res[0]).cols()) {
+            cout << "Result rows: " << res[0].rows() << ", True res rows: " << true_res[0].rows() << "\n";
+            cout << "Result cols: " << res[0].cols() << ", True res cols: " << true_res[0].cols() << "\n";
             throw std::invalid_argument("Result and true result must be of same dimensions.");
         }
 
@@ -86,7 +88,10 @@ public:
         if (res.size() != true_res.size()) {
             throw std::invalid_argument("Result and true result must be of same size.");
         }
+
         if ((res[0]).rows() != (true_res[0]).rows() || (res[0]).cols() != (true_res[0]).cols()) {
+            cout << "Result rows: " << res[0].rows() << ", True res rows: " << true_res[0].rows() << "\n";
+            cout << "Result cols: " << res[0].cols() << ", True res cols: " << true_res[0].cols() << "\n";
             throw std::invalid_argument("Result and true result must be of same dimensions.");
         }
 

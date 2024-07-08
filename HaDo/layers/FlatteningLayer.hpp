@@ -12,8 +12,7 @@ private:
 public:
     FlatteningLayer(int I, int RI, int CI)
         : Layer<T>(I, 1, RI, CI, 1, I * RI * CI) // Output depth is 1, output rows is 1, output columns is product of input dimensions
-    {
-    }
+    {}
 
     virtual std::unique_ptr<Layer<T>> clone() const override
     {
@@ -28,16 +27,17 @@ public:
         this->assertInputDimensions(input_tensor);
 
         // Flatten the input tensor
-        MatrixD flattened(this->CI * this->RI * this->I, 1);
+        MatrixD flattened(this->getInputCols() * this->getInputRows() * this->getInputDepth(), 1);
         size_t currentRow = 0;
         for (size_t i = 0; i < input_tensor.size(); ++i)
         {
-            Eigen::Map<MatrixD>(flattened.data() + currentRow, this->RI * this->CI, 1) = Eigen::Map<const MatrixD>(input_tensor[i].data(), this->RI * this->CI, 1);
-            currentRow += this->RI * this->CI;
+            Eigen::Map<MatrixD>(
+                flattened.data() + currentRow, this->getInputRows() * this->getInputCols(), 1)
+                    = Eigen::Map<const MatrixD>(input_tensor[i].data(), this->getInputRows() * this->getInputCols(), 1);
+            currentRow += this->getInputRows() * this->getInputCols();
         }
-
         this->out.clear();
-        this->out.push_back(flattened);
+        this->out.push_back(flattened.transpose());
         return this->out;
     }
 #pragma GCC pop_options
@@ -51,10 +51,16 @@ public:
         // For a flattening layer, the backward propagation simply involves reshaping
         // the gradient to match the input tensor's shape. The learning rate is not used
 
-        vector<MatrixD> input_gradient(this->I);
-        for (size_t i = 0; i < this->I; ++i)
+        vector<MatrixD> input_gradient(this->getInputDepth());
+        for (size_t i = 0; i < static_cast<size_t>(this->getInputDepth()); ++i)
         {
-            input_gradient[i] = Eigen::Map<MatrixD>(output_gradient[0].data() + i * this->RI * this->CI, this->RI, this->CI);
+            input_gradient[i]
+                = Eigen::Map<MatrixD>(
+                    output_gradient[0].data() + i * this->getInputRows() * this->getInputCols()
+                    , this->getInputRows(), this->getInputCols()
+                    );
+
+            input_gradient[i].transposeInPlace();
         }
 
         return input_gradient;

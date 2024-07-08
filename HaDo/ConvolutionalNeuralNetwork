@@ -4,5 +4,6 @@
 #include "DeepNeuralNetwork"
 #include "layers/ConvolutionalLayer.hpp"
 #include "layers/MaxPoolLayer.hpp"
+#include "layers/FlatteningLayer.hpp"
 
 #endif
