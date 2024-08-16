@@ -57,6 +57,9 @@ public:
      * @param true_res True result tensor
     */
     virtual T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
+        // Assert tensor dimensions
+        this->assertInputDimensions(res);
+        this->assertInputDimensions(true_res);
 
         // Check they must be of same size & dimensions
         if (res.size() != true_res.size()) {

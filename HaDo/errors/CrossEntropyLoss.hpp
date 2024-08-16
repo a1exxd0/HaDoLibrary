@@ -71,6 +71,10 @@ public:
      * @return T loss for that input
     */
     virtual T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
+        // Assert tensor dimensions
+        this->assertInputDimensions(res);
+        this->assertInputDimensions(true_res);
+
         T loss = 0;
 
         // Essentially the difference between true_res and the log of res (cross entropy loss definition)
