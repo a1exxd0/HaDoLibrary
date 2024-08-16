@@ -33,8 +33,14 @@ protected:
     // Convenience typedef
     typedef Matrix<T, Dynamic, Dynamic> MatrixD;
 
-    // Enforce that these are constructed
-    int D, R, C;
+    // Depth of input matrix
+    int D;
+
+    // Rows in input matrix
+    int R;
+
+    // Columns in input matrix
+    int C;
 
     /**
      * @brief Constructor for basic end layer of neural network
