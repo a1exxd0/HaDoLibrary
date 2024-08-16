@@ -49,11 +49,7 @@ protected:
      * @param R Number of rows of end node
      * @param C Number of columns of end node
     */
-    EndLayer(int D, int R, int C) {
-        this->D = D;
-        this->R = R;
-        this->C = C;
-    }
+    EndLayer(const int D, const int R, const int C) : D(D), R(R), C(C) {}
 
 public:
 
@@ -73,7 +69,7 @@ public:
     virtual std::unique_ptr<EndLayer<T>> clone() const = 0;
 
     // Virtual destructor
-    virtual ~EndLayer(){}
+    virtual ~EndLayer() = default;
 
     // Assert input tensor dimensions
     void constexpr assertInputDimensions(const vector<MatrixD> &input_tensor) const {
