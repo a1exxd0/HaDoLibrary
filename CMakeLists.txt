@@ -18,3 +18,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O0 -g")
 # Add testing directory
 enable_testing()
 add_subdirectory(test)
+
+# Add source directory
+add_subdirectory(src)
