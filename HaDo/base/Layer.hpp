@@ -103,9 +103,9 @@ public:
         if (input_tensor.size() != static_cast<size_t>(this->I)
             || input_tensor[0].rows() != this->RI
             || input_tensor[0].cols() != this->CI){
-            std::cerr << "Expected depth " << this->I << " but got depth " << input_tensor.size() << endl;
-            std::cerr << "Expected rows " << this->RI << " but got rows " << input_tensor[0].rows() << endl;
-            std::cerr << "Expected cols " << this->CI << " but got cols " << input_tensor[0].cols() << endl;
+            std::cerr << "Expected depth " << this->I << ", got depth " << input_tensor.size() << endl;
+            std::cerr << "Expected rows " << this->RI << ", got rows " << input_tensor[0].rows() << endl;
+            std::cerr << "Expected cols " << this->CI << ", got cols " << input_tensor[0].cols() << endl;
             throw std::invalid_argument("Input tensor match dimensions of layer.");
         }
     }
@@ -115,9 +115,9 @@ public:
         if (output_tensor.size() != static_cast<size_t>(this->O)
             || output_tensor[0].rows() != this->RO
             || output_tensor[0].cols() != this->CO){
-            std::cerr << "Expected depth " << this->O << " but got depth " << output_tensor.size() << endl;
-            std::cerr << "Expected rows " << this->RO << " but got rows " << output_tensor[0].rows() << endl;
-            std::cerr << "Expected cols " << this->CO << " but got cols " << output_tensor[0].cols() << endl;
+            std::cerr << "Expected depth " << this->O << ", got depth " << output_tensor.size() << endl;
+            std::cerr << "Expected rows " << this->RO << ", got rows " << output_tensor[0].rows() << endl;
+            std::cerr << "Expected cols " << this->CO << ", got cols " << output_tensor[0].cols() << endl;
             throw std::invalid_argument("Output tensor match dimensions of layer.");
         }
     }
