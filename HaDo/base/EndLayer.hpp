@@ -75,6 +75,18 @@ public:
     // Virtual destructor
     virtual ~EndLayer(){}
 
+    // Assert input tensor dimensions
+    void constexpr assertInputDimensions(const vector<MatrixD> &input_tensor) const {
+        if (input_tensor.size() != D
+            || input_tensor[0].rows() != this->R
+            || input_tensor[0].cols() != this->C){
+            std::cerr << "Expected depth " << this->D << ", got depth " << input_tensor.size() << endl;
+            std::cerr << "Expected rows " << this->R << ", got rows " << input_tensor[0].rows() << endl;
+            std::cerr << "Expected cols " << this->C << ", got cols " << input_tensor[0].cols() << endl;
+            throw std::invalid_argument("Input tensor match dimensions of layer.");
+            }
+    }
+
     // Calculate error w.r.t results
     virtual T forward(
         vector<MatrixD>& res, vector<MatrixD>& true_res) = 0;
