@@ -77,7 +77,7 @@ public:
 
     // Assert input tensor dimensions
     void constexpr assertInputDimensions(const vector<MatrixD> &input_tensor) const {
-        if (input_tensor.size() != D
+        if (input_tensor.size() != static_cast<size_t>(D)
             || input_tensor[0].rows() != this->R
             || input_tensor[0].cols() != this->C){
             std::cerr << "Expected depth " << this->D << ", got depth " << input_tensor.size() << endl;
