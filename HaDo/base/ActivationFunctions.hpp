@@ -11,7 +11,7 @@ namespace hado {
  * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
-    typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    std::enable_if_t<std::is_arithmetic_v<T>, T>>
 struct relu {
     [[nodiscard]] inline T operator()(T x) const {
         return x > 0 ? x : 0;
@@ -24,7 +24,7 @@ struct relu {
  * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
-    typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    std::enable_if_t<std::is_arithmetic_v<T>, T>>
 struct relu_prime {
     [[nodiscard]] inline T operator()(T x) const {
         return x > 0 ? 1 : 0;
@@ -37,7 +37,7 @@ struct relu_prime {
  * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
-    typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    std::enable_if_t<std::is_arithmetic_v<T>, T>>
 struct sigmoid {
     [[nodiscard]] inline T operator()(T x) const {
         return 1 / (1 + exp(-x));
@@ -50,7 +50,7 @@ struct sigmoid {
  * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
-    typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    std::enable_if_t<std::is_arithmetic_v<T>, T>>
 struct sigmoid_prime {
     [[nodiscard]] inline T operator()(T inp) const {
         sigmoid<T> f;
@@ -65,7 +65,7 @@ struct sigmoid_prime {
  * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
-    typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    std::enable_if_t<std::is_arithmetic_v<T>, T>>
 struct f_tanh {
     [[nodiscard]] inline T operator()(T x) const {
         return std::tanh(x);
@@ -78,7 +78,7 @@ struct f_tanh {
  * @tparam T Data type (float, double, long double) (optional)
 */
 template<typename T=float, typename = 
-    typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    std::enable_if_t<std::is_arithmetic_v<T>, T>>
 struct f_tanh_prime {
     [[nodiscard]] inline T operator()(T x) const {
         T tanhx = std::tanh(x);
