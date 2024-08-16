@@ -17,9 +17,9 @@ TEST(CONSTRUCTOR, Check_Negative_Zero_Sizes) {
         ConvolutionalLayerReLU layer(1, 10, -1, 3, 3, 1, 1);
     }, "");
 
-    EXPECT_ANY_THROW({
+    EXPECT_DEATH({
         ConvolutionalLayerReLU layer(-1, 10, 3, 3, 3, 1, 1);
-    });
+    }, "");
 }
 
 TEST(CONSTRUCTOR, Standard_Constructor) {

@@ -15,9 +15,9 @@ TEST(CONSTRUCTOR, Check_Negative_Zero_Sizes) {
         Activation x(1,10,-1); 
     }, "");
 
-    EXPECT_ANY_THROW({
+    EXPECT_DEATH({
         Activation x(-1, 10, 3); 
-    });
+    }, "");
 }
 
 TEST(CONSTRUCTOR, Standard_Constructor) {
