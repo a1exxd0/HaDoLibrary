@@ -30,8 +30,23 @@ template <typename T = float>
 class Layer
 {
 private:
-    // Layer dimensions
-    int I, O, RI, CI, RO, CO;
+    // Input depth
+    int I;
+
+    // Output depth
+    int O;
+
+    // Input rows
+    int RI;
+
+    // Input columns
+    int CI;
+
+    // Output rows
+    int RO;
+
+    // Output columns
+    int CO;
 
     // Assert that T is either float, double, or long double at compiler time
     static_assert(
@@ -56,7 +71,8 @@ protected:
      * @param RO Rows in output tensor
      * @param CO Columns in output tensor
      */
-    Layer(int I, int O, int RI, int CI, int RO, int CO) : inp(I), out(O)
+    Layer(const int I, const int O, const int RI, const int CI, const int RO, const int CO)
+        : I(I), O(O), RI(RI), CI(CI), RO(RO), CO(CO)
     {
         // Assert positivity of dimensions
         assert(I > 0 && "Input tensor depth must be positive and nonzero.");
@@ -65,13 +81,6 @@ protected:
         assert(CI > 0 && "Input tensor columns must be positive and nonzero.");
         assert(RO > 0 && "Output tensor rows must be positive and nonzero.");
         assert(CO > 0 && "Output tensor columns must be positive and nonzero.");
-
-        this->I = I;
-        this->O = O;
-        this->RI = RI;
-        this->CI = CI;
-        this->RO = RO;
-        this->CO = CO;
     }
 
     // Copy constructor
@@ -136,7 +145,7 @@ public:
 
     // Backward propagation
     virtual vector<MatrixD> backward(
-        vector<MatrixD> &output_gradient, const T learning_rate) = 0;
+        vector<MatrixD> &output_gradient, T learning_rate) = 0;
 };
 
 }
