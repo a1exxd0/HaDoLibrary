@@ -123,12 +123,12 @@ public:
     }
 
     // Trivial getters
-    constexpr int getInputDepth() const { return I; }
-    constexpr int getOutputDepth() const { return O; }
-    constexpr int getInputRows() const { return RI; }
-    constexpr int getInputCols() const { return CI; }
-    constexpr int getOutputRows() const { return RO; }
-    constexpr int getOutputCols() const { return CO; }
+    [[nodiscard]] int32_t getInputDepth() const { return I; }
+    [[nodiscard]] int32_t getOutputDepth() const { return O; }
+    [[nodiscard]] int32_t getInputRows() const { return RI; }
+    [[nodiscard]] int32_t getInputCols() const { return CI; }
+    [[nodiscard]] int32_t getOutputRows() const { return RO; }
+    [[nodiscard]] int32_t getOutputCols() const { return CO; }
 
     // Forward propagation
     virtual vector<MatrixD> forward(
