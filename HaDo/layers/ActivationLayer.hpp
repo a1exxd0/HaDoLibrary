@@ -33,7 +33,16 @@ private:
     using typename Layer<T>::MatrixD;
 
     // Convenience variables inaccessible from outside
-    int D, R, C;
+    // Depth of input and output
+    int D;
+
+    // Rows in input and output
+    int R;
+
+    // Columns in input and output
+    int C;
+
+    // Product of rows and columns to decide whether to thread
     int prod;
 
     // Assert that Activation and ActivationPrime are functions that take a scalar and return a scalar
@@ -56,12 +65,10 @@ public:
      * @param R Rows in input/output tensor
      * @param C Columns in input/output tensor
     */
-    ActivationLayer(int D, int R, int C) : Layer<T>(D, D, R, C, R, C) {
-
-        this->D = D;
-        this->R = R;
-        this->C = C;
-        this->prod = R * C;
+    ActivationLayer(int D, int R, int C) :
+        Layer<T>(D, D, R, C, R, C),
+        D(D), R(R), C(C), prod(R*C)
+    {
         this->inp = vector<MatrixD>(D);
         this->out = vector<MatrixD>(D);
     }
@@ -70,18 +77,18 @@ public:
     ActivationLayer(const ActivationLayer<Activation, ActivationPrime, T>& other) 
         : Layer<T>(other.getInputDepth(), other.getOutputDepth(), 
             other.getInputRows(), other.getInputCols(), 
-            other.getOutputRows(), other.getOutputCols()) {
-
-            this->D = other.getInputDepth();
-            this->R = other.getInputRows();
-            this->C = other.getInputCols();
-            this->prod = other.getInputRows() * other.getInputCols();
-            this->inp = other.inp;
-            this->out = other.out;
-        }
+            other.getOutputRows(), other.getOutputCols()),
+            D(other.getInputDepth()),
+            R(other.getInputRows()),
+            C(other.getInputCols()),
+            prod(other.getInputRows() * other.getInputCols())
+    {
+        this->inp = other.inp;
+        this->out = other.out;
+    }
 
     // Clone returning unique pointer
-    virtual unique_ptr<Layer<T>> clone() const override {
+    unique_ptr<Layer<T>> clone() const override {
         return std::make_unique<ActivationLayer<Activation, ActivationPrime, T>>(*this);
     }
 
@@ -96,7 +103,7 @@ public:
     */
     #pragma GCC push_options
     #pragma GCC optimize("O2")
-    virtual vector<MatrixD> forward(vector<MatrixD>& input_tensor) override {
+    vector<MatrixD> forward(vector<MatrixD>& input_tensor) override {
 
         // Assert input tensor dimensions
         this->assertInputDimensions(input_tensor);
@@ -139,7 +146,7 @@ public:
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     #pragma GCC push_options
     #pragma GCC optimize("O2")
-    virtual vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) override{
+    vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) override{
 
         // Assert that output gradient tensor is the same size as the input tensor
         this->assertOutputDimensions(output_gradient);
