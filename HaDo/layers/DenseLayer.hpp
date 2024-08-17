@@ -30,7 +30,7 @@ private:
     using typename Layer<T>::MatrixD;
 
     // Convenience private variables
-    int I, O;
+    int I{}, O{};
 
     // Weights and bias tensors
     MatrixD weights;
@@ -71,13 +71,13 @@ public:
         }
 
     // Clone returning unique ptr
-    virtual std::unique_ptr<Layer<T>> clone() const override {
+    std::unique_ptr<Layer<T>> clone() const override {
         return std::make_unique<DenseLayer<T>>(*this);
     }
 
 
     // Destructor
-    ~DenseLayer() override {}
+    ~DenseLayer() override = default;
 
     /**
      * @brief Forward pass of the dense layer. Input tensor must be a size 1 vector
@@ -86,7 +86,7 @@ public:
      * @param input_tensor Input tensor (one dimensional, must have right size)
      * @return vector<MatrixD> Output tensor
     */
-    virtual vector<MatrixD> forward(vector<MatrixD>& input_tensor) override {
+    vector<MatrixD> forward(vector<MatrixD>& input_tensor) override {
 
         // Validity check
         this->assertInputDimensions(input_tensor);
@@ -109,7 +109,7 @@ public:
      * @param learning_rate Learning rate for gradient descent (0 < learning_rate < 1)
      * @return vector<MatrixD> Input gradient tensor
     */
-    virtual vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) override {
+    vector<MatrixD> backward(vector<MatrixD>& output_gradient, const T learning_rate) override {
 
         // Validity check
         this->assertOutputDimensions(output_gradient);
