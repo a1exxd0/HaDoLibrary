@@ -14,14 +14,14 @@ public:
         : Layer<T>(I, 1, RI, CI, 1, I * RI * CI) // Output depth is 1, output rows is 1, output columns is product of input dimensions
     {}
 
-    virtual std::unique_ptr<Layer<T>> clone() const override
+    std::unique_ptr<Layer<T>> clone() const override
     {
         return std::make_unique<FlatteningLayer>(*this);
     }
 
-#pragma GCC push_options
-#pragma GCC optimize("O2")
-    virtual vector<MatrixD> forward(
+    #pragma GCC push_options
+    #pragma GCC optimize("O2")
+    vector<MatrixD> forward(
         vector<MatrixD> &input_tensor) override
     {
         this->assertInputDimensions(input_tensor);
@@ -40,12 +40,12 @@ public:
         this->out.push_back(flattened.transpose());
         return this->out;
     }
-#pragma GCC pop_options
+    #pragma GCC pop_options
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC push_options
-#pragma GCC optimize("O2")
-    virtual vector<MatrixD> backward(
+    #pragma GCC diagnostic ignored "-Wunused-parameter"
+    #pragma GCC push_options
+    #pragma GCC optimize("O2")
+    vector<MatrixD> backward(
         vector<MatrixD> &output_gradient, const T learning_rate) override
     {
         // For a flattening layer, the backward propagation simply involves reshaping
@@ -65,8 +65,8 @@ public:
 
         return input_gradient;
     }
+    #pragma GCC pop_options
 };
-#pragma GCC pop_options
 
 }
 
