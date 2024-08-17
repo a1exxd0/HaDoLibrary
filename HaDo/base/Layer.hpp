@@ -105,7 +105,7 @@ public:
     virtual std::unique_ptr<Layer<T>> clone() const = 0;
 
     // Virtual Destructor
-    virtual ~Layer() {}
+    virtual ~Layer() = default;
 
     // Assert input tensor dimensions
     void constexpr assertInputDimensions(const vector<MatrixD> &input_tensor) const {
