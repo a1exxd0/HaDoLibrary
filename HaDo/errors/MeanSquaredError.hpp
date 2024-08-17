@@ -35,12 +35,12 @@ public:
     MeanSquaredError(const MeanSquaredError& mse) : EndLayer<T>(mse.getDepth(), mse.getRows(), mse.getCols()) {}
 
     // Clone returning unique ptr
-    virtual std::unique_ptr<EndLayer<T>> clone() const override {
+    std::unique_ptr<EndLayer<T>> clone() const override {
         return std::make_unique<MeanSquaredError>(*this);
     }
 
     // Destructor
-    ~MeanSquaredError() override {}
+    ~MeanSquaredError() override = default;
 
     /**
      * @brief Calculate mean squared error and return of type T
@@ -48,7 +48,7 @@ public:
      * @param res Result tensor
      * @param true_res True result tensor
     */
-    virtual T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
+    T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
         // Assert tensor dimensions
         this->assertInputDimensions(res);
         this->assertInputDimensions(true_res);
@@ -77,7 +77,7 @@ public:
      * @param res Result vector from model
      * @param true_res True value (label for data)
     */
-    virtual vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
+    vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
 
         // Check they must be of same size & dimensions
         if (res.size() != true_res.size()) {
@@ -100,7 +100,7 @@ public:
         }
 
         // Return gradient matrix
-        return (grad);
+        return grad;
     }
 };
 
