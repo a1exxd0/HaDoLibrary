@@ -3,7 +3,6 @@
 
 #include <Eigen/Dense>
 #include <vector>
-#include "HaDo/base/Layer.hpp"
 #include "HaDo/base/EndLayer.hpp"
 #include <memory>
 #include <iostream>
@@ -26,14 +25,6 @@ private:
     // Convenience typedef
     using typename EndLayer<T>::MatrixD;
 
-    // Check if T is a valid type
-    static_assert(
-        std::is_same<T, float>::value 
-        || std::is_same<T, double>::value
-        || std::is_same<T, long double>::value,
-        "T must be either float, double, or long double."
-    );
-
 public:
 
     /**
@@ -44,7 +35,7 @@ public:
      * 
      * @param R number of classes/rows in output
     */
-    CrossEntropyLoss(int R) : EndLayer<T>(1, R, 1) {
+    explicit CrossEntropyLoss(int R) : EndLayer<T>(1, R, 1) {
         if (R < 2){
             std::cerr << "Must be a classification of 2 outputs minimum." << endl;
             assert(R >= 2);
@@ -55,12 +46,12 @@ public:
     CrossEntropyLoss(const CrossEntropyLoss& cel) : EndLayer<T>(cel) {}
 
     // Clone
-    virtual unique_ptr<EndLayer<T>> clone() const override {
+    unique_ptr<EndLayer<T>> clone() const override {
         return std::make_unique<CrossEntropyLoss<T>>(*this);
     }
 
     // Destructor
-    ~CrossEntropyLoss() {}
+    ~CrossEntropyLoss() override = default;
 
     /**
      * @brief Forward pass of the CrossEntropyLoss layer. True res must be a single
@@ -70,7 +61,7 @@ public:
      * @param true_res vector of matrices containing the true output of the network
      * @return T loss for that input
     */
-    virtual T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
+    T forward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
         // Assert tensor dimensions
         this->assertInputDimensions(res);
         this->assertInputDimensions(true_res);
@@ -90,7 +81,7 @@ public:
      * @param true_res vector of matrices containing the true output of the network
      * @return vector<MatrixD> gradient of the loss with respect to the input
     */
-    virtual vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
+    vector<MatrixD> backward(vector<MatrixD>& res, vector<MatrixD>& true_res) override {
         vector<MatrixD> grad;
 
         // Provable derivative of loss w.r.t inputs into CrossEntropyLoss
