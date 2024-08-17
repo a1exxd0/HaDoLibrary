@@ -25,14 +25,6 @@ private:
     
     vector<vector<MatrixD>> filters;             // Filters used for the convolution
 
-    // Assert that T is either float, double, or long double at compiler time
-    static_assert(
-        std::is_same_v<T, float>
-        || std::is_same_v<T, double>
-        || std::is_same_v<T, long double>,
-        "T must be either float, double, or long double."
-    );
-
     // Assert that Activation and ActivationPrime are functions that take a scalar and return a scalar
     static_assert(
         std::is_invocable_r<T, Activation, T>::value,

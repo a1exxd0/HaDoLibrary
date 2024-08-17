@@ -30,14 +30,6 @@ private:
     // Number of rows in input tensor (and output)
     int rows;
 
-    // Assert that T is either float, double, or long double at compiler time
-    static_assert(
-        std::is_same_v<T, float>
-        || std::is_same_v<T, double>
-        || std::is_same_v<T, long double>,
-        "T must be either float, double, or long double."
-    );
-
 public:
 
     /**

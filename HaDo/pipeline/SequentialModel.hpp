@@ -30,11 +30,11 @@ private:
     typedef Matrix<T, Dynamic, Dynamic> MatrixD;
 
     // Assert that T is either float, double, or long double at compiler time
-    #pragma GCC diagnostic ignored "-Wparentheses"
     static_assert(
-        std::is_same<T, float>::value 
-        || std::is_same<T, double>::value
-        || std::is_same<T, long double>::value
+        std::is_same_v<T, float>
+        || std::is_same_v<T, double>
+        || std::is_same_v<T, long double>,
+        "T must be either float, double, or long double."
     );
 
     // Data holders for automatic training and testing

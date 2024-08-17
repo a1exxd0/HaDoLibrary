@@ -26,14 +26,6 @@ private:
 
     using typename EndLayer<T>::MatrixD;
 
-    // Assert that T is either float, double, or long double at compiler time
-    static_assert(
-        std::is_same<T, float>::value 
-        || std::is_same<T, double>::value
-        || std::is_same<T, long double>::value,
-        "T must be either float, double, or long double."
-    );
-
 public:
 
     // Default constructor
