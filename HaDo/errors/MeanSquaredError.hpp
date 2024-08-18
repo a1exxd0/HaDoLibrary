@@ -53,16 +53,6 @@ public:
         this->assertInputDimensions(res);
         this->assertInputDimensions(true_res);
 
-        // Check they must be of same size & dimensions
-        if (res.size() != true_res.size()) {
-            throw std::invalid_argument("Result and true result must be of same size.");
-        }
-        if ((res[0]).rows() != (true_res[0]).rows() || (res[0]).cols() != (true_res[0]).cols()) {
-            cout << "Result rows: " << res[0].rows() << ", True res rows: " << true_res[0].rows() << "\n";
-            cout << "Result cols: " << res[0].cols() << ", True res cols: " << true_res[0].cols() << "\n";
-            throw std::invalid_argument("Result and true result must be of same dimensions.");
-        }
-
         // Calculate statistical mean square sum of all matrices in tensor
         T error = 0;
         for (int i = 0; i < this->D; i++) {
