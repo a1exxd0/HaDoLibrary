@@ -84,6 +84,30 @@ TEST(FORWARD_BACKWARD, BOTH_DIRECTIONS) {
     ASSERT_EQ(static_cast<int>(res[0].size()), 1000);
 }
 
+TEST(FORWARD_BACKWARD, INCORRECT_DIMS) {
+    Dense layer {100, 100};
+
+    vector<MatrixD> inp = {MatrixD::Random(10, 1)};
+
+    EXPECT_ANY_THROW({
+        auto in = layer.forward(inp);
+    });
+
+    EXPECT_ANY_THROW({
+        auto out = layer.backward(inp, 0.1);
+    });
+
+    vector<MatrixD> inp2 = {MatrixD::Random(100, 10)};
+
+    EXPECT_ANY_THROW({
+        auto in = layer.forward(inp2);
+    });
+
+    EXPECT_ANY_THROW({
+        auto out = layer.backward(inp2, 0.01);
+    });
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
