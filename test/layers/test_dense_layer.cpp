@@ -72,6 +72,18 @@ TEST(FORWARD_BACKWARD, FORWARD_ONLY) {
     }
 }
 
+TEST(FORWARD_BACKWARD, BOTH_DIRECTIONS) {
+    Dense x {1000, 900};
+
+    vector<MatrixD> inp = {MatrixD::Random(1000, 1)};
+    vector<MatrixD> backward = {MatrixD::Random(900, 1)};
+
+    std::ignore = x.forward(inp);
+    const auto res = x.backward(backward, 0.01);
+
+    ASSERT_EQ(static_cast<int>(res[0].size()), 1000);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
