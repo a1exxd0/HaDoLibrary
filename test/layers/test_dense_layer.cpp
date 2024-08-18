@@ -3,6 +3,7 @@
 
 using namespace hado;
 using Dense = DenseLayer<float>;
+using MatrixD = Matrix<float, Dynamic, Dynamic>;
 
 TEST(CONSTRUCTOR, CheckNegativeZeroSize) {
     EXPECT_DEATH({
@@ -52,6 +53,23 @@ TEST(CONSTRUCTOR, CloneConstructor) {
     ASSERT_EQ(x.getOutputCols(), y.getOutputCols());
     ASSERT_EQ(x.getOutputDepth(), y.getOutputDepth());
     ASSERT_EQ(x.getOutputRows(), y.getOutputRows());
+}
+
+TEST(FORWARD_BACKWARD, FORWARD_ONLY) {
+    Dense x {50,70};
+    vector<MatrixD> inp = {MatrixD::Random(50, 1)};
+    vector<MatrixD> zeroInp = {MatrixD::Zero(50, 1)};
+
+    auto res1 = x.forward(inp);
+    auto res2 = x.forward(zeroInp);
+
+    // Random is untestable for specific values.
+    ASSERT_EQ(static_cast<int>(res1[0].rows()), 70);
+
+    // For a zero matrix, output should only be the bias
+    for (int i = 0; i < 70; i++) {
+        ASSERT_EQ(x.getBias()(i, 0), res2[0](i, 0));
+    }
 }
 
 int main(int argc, char **argv) {
