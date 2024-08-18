@@ -3,10 +3,8 @@
 
 #include <Eigen/Dense>
 #include <vector>
-#include "HaDo/base/Layer.hpp"
 #include "HaDo/base/EndLayer.hpp"
 #include <memory>
-#include <iostream>
 
 using Eigen::Matrix;
 using std::vector;
